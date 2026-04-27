@@ -9,6 +9,15 @@ import os
 import uuid
 
 
+AD_WORDS = [
+    "career247", "career 247", "discount", "course", "courses",
+    "offer", "sale", "promotion", "coupon", "register",
+    "call now", "email id", "phone number", "comment section",
+    "link", "interview", "job focused", "certificate", "price increase",
+    "flat discount", "mega savings", "golden opportunity"
+]
+
+
 def safe_float(x, default=0.0):
     try:
         return round(float(x), 2)
@@ -26,6 +35,30 @@ def safe_get(d, key):
     if not isinstance(d, dict):
         return None
     return d.get(key)
+
+
+def is_ad_segment(text):
+    text = str(text).lower()
+    matches = 0
+
+    for word in AD_WORDS:
+        if word in text:
+            matches += 1
+
+    return matches >= 2
+
+
+def get_nearby_text(segments, start, end, window=25):
+    parts = []
+
+    for s in safe_dict_list(segments):
+        ss = safe_float(s.get("start"))
+        ee = safe_float(s.get("end"))
+
+        if ee >= start - window and ss <= end + window:
+            parts.append(str(s.get("text", "")))
+
+    return " ".join(parts)
 
 
 def get_captions_for_clip(captions, clip_start, clip_end):
@@ -91,11 +124,19 @@ def build_final_clips(viral, segments):
     viral = safe_dict_list(viral)
     segments = safe_dict_list(segments)
 
-    for v in viral[:12]:
+    for v in viral[:20]:
         start = safe_float(v.get("start"))
         end = safe_float(v.get("end"))
+        text = str(v.get("text", "")).strip()
 
         if start < 0 or end <= start:
+            continue
+
+        nearby_text = get_nearby_text(segments, start, end, window=35)
+        combined_text = f"{text} {nearby_text}"
+
+        if is_ad_segment(combined_text):
+            print(f"❌ Ad/CTA segment rejected: {text[:120]}")
             continue
 
         duration = end - start
@@ -110,7 +151,7 @@ def build_final_clips(viral, segments):
         clips.append({
             "start": round(start, 2),
             "end": round(final_end, 2),
-            "source_text": v.get("text", ""),
+            "source_text": text,
             "title": v.get("title", "Untitled Viral Clip"),
             "hashtags": v.get("hashtags", ["#viral"]),
             "niche": v.get("niche", "general"),
@@ -118,25 +159,8 @@ def build_final_clips(viral, segments):
             "score_breakdown": v.get("score_breakdown", {})
         })
 
-    if len(clips) < 3:
-        print("⚠ Using fallback clips")
-
-        for s in segments[:8]:
-            start = safe_float(s.get("start"))
-
-            if start < 0:
-                continue
-
-            clips.append({
-                "start": round(start, 2),
-                "end": round(start + 20, 2),
-                "source_text": s.get("text", ""),
-                "title": "Auto Generated Clip",
-                "hashtags": ["#shorts", "#viral"],
-                "niche": "general",
-                "score": 0,
-                "score_breakdown": {}
-            })
+    if len(clips) == 0:
+        raise Exception("No valid viral clips found after ad/CTA filtering")
 
     unique = []
 
@@ -371,7 +395,7 @@ def run_pipeline(job_id, file_path, JOBS):
             })
 
         if not enhanced_clips:
-            raise Exception("All clips rejected by speech density filter")
+            raise Exception("All clips rejected by speech density/ad filter")
 
         JOBS[job_id]["status"] = "completed"
 

@@ -2,7 +2,7 @@ import random
 
 
 # -------------------------
-# SPONSOR FILTER
+# HARD SPONSOR / CTA FILTER
 # -------------------------
 SPONSOR_WORDS = [
     "subscribe",
@@ -14,6 +14,30 @@ SPONSOR_WORDS = [
     "link in bio",
     "promo code",
     "join telegram",
+
+    # course/ad/CTA blocks
+    "career247",
+    "career 247",
+    "discount",
+    "course",
+    "courses",
+    "offer",
+    "sale",
+    "mega savings",
+    "flat discount",
+    "price increase",
+    "comment section",
+    "click on this link",
+    "register now",
+    "call now",
+    "email id",
+    "phone number",
+    "certificate",
+    "certificates",
+    "interview",
+    "interviews",
+    "job focused",
+    "golden opportunity",
 ]
 
 
@@ -24,11 +48,13 @@ NICHE_KEYWORDS = {
     "geopolitics": [
         "war", "russia", "ukraine", "china", "india",
         "america", "usa", "iran", "israel", "nato",
-        "missile", "drone", "military"
+        "missile", "drone", "military", "nuclear",
+        "scientist", "scientists", "white house", "fbi",
+        "foreign power", "conflict", "crisis"
     ],
     "finance": [
         "money", "stock", "crypto", "market",
-        "investment", "business"
+        "investment", "business", "profit", "loss"
     ],
     "podcast": [
         "podcast", "interview", "guest", "host"
@@ -50,9 +76,18 @@ def clean_text(text):
     return str(text).strip().lower()
 
 
-# -------------------------
-# NICHE DETECTION
-# -------------------------
+def is_sponsor_segment(text):
+    text = clean_text(text)
+
+    matches = 0
+
+    for word in SPONSOR_WORDS:
+        if word in text:
+            matches += 1
+
+    return matches >= 2
+
+
 def detect_niche(text):
     text = clean_text(text)
 
@@ -69,9 +104,6 @@ def detect_niche(text):
     return best_niche
 
 
-# -------------------------
-# HOOK SCORE
-# -------------------------
 def hook_score(text):
     text = clean_text(text)
 
@@ -83,50 +115,49 @@ def hook_score(text):
         "real reason",
         "what happened",
         "nobody knows",
-        "big mistake",
         "hidden",
         "exposed",
-        "breaking"
+        "breaking",
+        "mysterious",
+        "suddenly",
+        "who is",
+        "what is",
     ]
 
     score = 0
 
     for hook in hook_words:
         if hook in text:
-            score += 20
+            score += 12
 
-    return score
+    return min(score, 36)
 
 
-# -------------------------
-# EMOTION SCORE
-# -------------------------
 def emotion_score(text):
     text = clean_text(text)
 
     words = [
         "death",
+        "dead",
         "fear",
         "destroyed",
-        "revenge",
-        "betrayal",
         "danger",
         "panic",
-        "attack"
+        "attack",
+        "killed",
+        "missing",
+        "weak",
     ]
 
     score = 0
 
     for word in words:
         if word in text:
-            score += 15
+            score += 12
 
-    return score
+    return min(score, 36)
 
 
-# -------------------------
-# CONTROVERSY SCORE
-# -------------------------
 def controversy_score(text):
     text = clean_text(text)
 
@@ -138,36 +169,33 @@ def controversy_score(text):
         "conflict",
         "nuclear",
         "missile",
-        "crisis"
+        "crisis",
+        "foreign power",
+        "assassinate",
+        "targeted",
     ]
 
     score = 0
 
     for word in words:
         if word in text:
-            score += 18
+            score += 15
 
-    return score
+    return min(score, 45)
 
 
-# -------------------------
-# RETENTION SCORE
-# -------------------------
 def retention_score(text):
     length = len(clean_text(text).split())
 
-    if 12 <= length <= 45:
-        return 40
+    if 10 <= length <= 42:
+        return 35
 
     if 8 <= length <= 60:
-        return 25
+        return 22
 
-    return 10
+    return 8
 
 
-# -------------------------
-# STORY SCORE
-# -------------------------
 def story_score(text):
     text = clean_text(text)
 
@@ -176,21 +204,19 @@ def story_score(text):
         "after that",
         "suddenly",
         "finally",
-        "because"
+        "because",
+        "one by one",
     ]
 
     score = 0
 
     for word in words:
         if word in text:
-            score += 10
+            score += 8
 
-    return score
+    return min(score, 24)
 
 
-# -------------------------
-# SPONSOR PENALTY
-# -------------------------
 def sponsor_penalty(text):
     text = clean_text(text)
 
@@ -203,15 +229,26 @@ def sponsor_penalty(text):
     return penalty
 
 
-# -------------------------
-# TITLE GENERATION
-# -------------------------
-def generate_title(niche):
+def generate_title(text, niche):
+    text = clean_text(text)
+
+    if "nuclear" in text and ("scientist" in text or "scientists" in text):
+        return "Why Nuclear Scientists Are Dying"
+
+    if "china" in text and ("america" in text or "usa" in text):
+        return "US vs China Just Got Darker"
+
+    if "foreign power" in text:
+        return "A Foreign Power Is Targeting Them"
+
+    if "war" in text:
+        return "This War Just Changed Everything"
+
     titles = {
         "geopolitics": [
             "Nobody Expected This Power Shift",
             "The Real Reason Behind This Crisis",
-            "This War Just Changed Everything"
+            "This Global Crisis Is Getting Worse"
         ],
         "finance": [
             "This Money Move Changed Everything"
@@ -222,20 +259,18 @@ def generate_title(niche):
         "motivation": [
             "This Mindset Will Change Your Life"
         ],
+        "story": [
+            "What Happened Next Is Crazy"
+        ],
         "general": [
             "This Changed Everything",
             "What Happened Next Is Crazy"
         ]
     }
 
-    return random.choice(
-        titles.get(niche, titles["general"])
-    )
+    return random.choice(titles.get(niche, titles["general"]))
 
 
-# -------------------------
-# HASHTAGS
-# -------------------------
 def generate_hashtags(niche):
     tags = {
         "geopolitics": [
@@ -247,12 +282,25 @@ def generate_hashtags(niche):
         "finance": [
             "#finance",
             "#money",
-            "#viral"
+            "#viral",
+            "#shorts"
         ],
         "podcast": [
             "#podcast",
             "#clips",
-            "#viral"
+            "#viral",
+            "#shorts"
+        ],
+        "motivation": [
+            "#motivation",
+            "#mindset",
+            "#viral",
+            "#shorts"
+        ],
+        "story": [
+            "#story",
+            "#viral",
+            "#shorts"
         ],
         "general": [
             "#viral",
@@ -263,13 +311,13 @@ def generate_hashtags(niche):
     return tags.get(niche, tags["general"])
 
 
-# -------------------------
-# SCORE SEGMENT
-# -------------------------
 def score_segment(segment):
     text = segment.get("text", "")
     start = float(segment.get("start", 0))
     end = float(segment.get("end", start + 15))
+
+    if is_sponsor_segment(text):
+        return None
 
     niche = detect_niche(text)
 
@@ -279,26 +327,26 @@ def score_segment(segment):
         "controversy_score": controversy_score(text),
         "retention_score": retention_score(text),
         "story_score": story_score(text),
-        "sponsor_penalty": sponsor_penalty(text)
+        "sponsor_penalty": sponsor_penalty(text),
     }
 
     final_score = sum(scores.values())
+
+    if final_score < 25:
+        return None
 
     return {
         "text": text,
         "start": start,
         "end": end,
         "niche": niche,
-        "title": generate_title(niche),
+        "title": generate_title(text, niche),
         "hashtags": generate_hashtags(niche),
         "score_breakdown": scores,
         "final_score": final_score
     }
 
 
-# -------------------------
-# DUPLICATE REMOVAL
-# -------------------------
 def remove_duplicates(scored):
     unique = []
 
@@ -306,9 +354,7 @@ def remove_duplicates(scored):
         duplicate = False
 
         for existing in unique:
-            if abs(
-                clip["start"] - existing["start"]
-            ) < 25:
+            if abs(clip["start"] - existing["start"]) < 22:
                 duplicate = True
                 break
 
@@ -318,14 +364,14 @@ def remove_duplicates(scored):
     return unique
 
 
-# -------------------------
-# FIND VIRAL SEGMENTS
-# -------------------------
 def find_viral_segments(transcript_segments):
     scored = []
 
     for segment in transcript_segments:
         result = score_segment(segment)
+
+        if not result:
+            continue
 
         duration = result["end"] - result["start"]
 
@@ -342,30 +388,11 @@ def find_viral_segments(transcript_segments):
 
     scored = remove_duplicates(scored)
 
-    if not scored:
-        return []
-
-    avg_score = sum(
-        x["final_score"] for x in scored
-    ) / len(scored)
-
-    if avg_score > 100:
-        clip_count = 8
-    elif avg_score > 65:
-        clip_count = 5
-    else:
-        clip_count = 4
-
-    return scored[:clip_count]
+    return scored[:5]
 
 
-# -------------------------
-# MAIN ENTRY
-# -------------------------
 def analyze_video(transcript_segments):
-    viral_segments = find_viral_segments(
-        transcript_segments
-    )
+    viral_segments = find_viral_segments(transcript_segments)
 
     formatted = []
 
