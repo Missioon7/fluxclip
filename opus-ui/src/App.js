@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const API = "https://web-production-9c211.up.railway.app";
+const API = "http://127.0.0.1:8000";
 
 function fixVideoUrl(path) {
   if (!path) return "";
@@ -94,7 +94,13 @@ function App() {
         padding: "28px",
       }}
     >
-      <div style={{ maxWidth: "1180px", margin: "0 auto" }}>
+      <div
+        style={{
+          maxWidth: "1180px",
+          margin: "0 auto",
+        }}
+      >
+        {/* NAV */}
         <div
           style={{
             display: "flex",
@@ -121,6 +127,7 @@ function App() {
           </div>
         </div>
 
+        {/* HERO */}
         <div
           style={{
             display: "grid",
@@ -205,6 +212,7 @@ function App() {
             </div>
           </div>
 
+          {/* UPLOAD CARD */}
           <div
             style={{
               background: "rgba(15,23,42,0.9)",
@@ -280,6 +288,7 @@ function App() {
           </div>
         </div>
 
+        {/* STATS */}
         <div
           style={{
             display: "grid",
@@ -322,7 +331,8 @@ function App() {
           >
             <h3>🔥 AI is cooking your viral clips...</h3>
             <p style={{ color: "#cbd5e1" }}>
-              Transcribing → Viral Detection → Smart Crop → Captions → Final Shorts
+              Transcribing → Viral Detection → Smart Crop → Captions → Final
+              Shorts
             </p>
           </div>
         )}

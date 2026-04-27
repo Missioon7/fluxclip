@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import uuid
 import os
+import torch
+import whisper
 import traceback
 import threading
 
@@ -29,40 +31,27 @@ app.mount("/outputs", StaticFiles(directory=OUTPUT_DIR), name="outputs")
 
 JOBS = {}
 
-print("🔥 FluxClip full pipeline server starting")
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print("🔥 DEVICE:", device)
+
+model = whisper.load_model("base").to(device)
+print("🔥 Whisper model loaded successfully")
 
 
 @app.get("/")
 def home():
-    return {
-        "status": "FluxClip backend running 🚀",
-        "mode": "full-pipeline",
-        "pipeline": "enabled",
-    }
-
-
-@app.get("/health")
-def health():
-    return {
-        "ok": True,
-        "service": "fluxclip-backend",
-        "mode": "full-pipeline",
-    }
+    return {"status": "OPUS AI running 🚀"}
 
 
 def start_pipeline(job_id, file_path):
     try:
-        JOBS[job_id]["status"] = "processing"
-        JOBS[job_id]["progress"] = 5
-
         run_pipeline(job_id, file_path, JOBS)
-
     except Exception as e:
         JOBS[job_id] = {
             "status": "failed",
             "progress": 0,
             "error": str(e),
-            "trace": traceback.format_exc(),
+            "trace": traceback.format_exc()
         }
 
 
@@ -78,7 +67,7 @@ async def upload(file: UploadFile = File(...)):
         "status": "queued",
         "progress": 0,
         "file": file.filename,
-        "path": file_path,
+        "path": file_path
     }
 
     print(f"📤 Uploaded: {file.filename} | Job: {job_id}")
@@ -86,37 +75,28 @@ async def upload(file: UploadFile = File(...)):
     thread = threading.Thread(
         target=start_pipeline,
         args=(job_id, file_path),
-        daemon=True,
+        daemon=True
     )
     thread.start()
 
     return {
         "job_id": job_id,
-        "status": "queued",
-        "mode": "full-pipeline",
+        "status": "queued"
     }
 
 
 @app.get("/status/{job_id}")
 def status(job_id: str):
-    return JOBS.get(
-        job_id,
-        {
-            "status": "not_found",
-            "error": "job not found",
-        },
-    )
+    return JOBS.get(job_id, {"status": "not_found", "error": "job not found"})
 
 
 if __name__ == "__main__":
     import uvicorn
 
-    port = int(os.environ.get("PORT", 8000))
-
     uvicorn.run(
         app,
-        host="0.0.0.0",
-        port=port,
+        host="127.0.0.1",
+        port=8000,
         reload=False,
-        workers=1,
+        workers=1
     )
