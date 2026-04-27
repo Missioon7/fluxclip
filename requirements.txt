@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+python-multipart
+openai-whisper
+torch
+torchvision
+torchaudio
+opencv-python-headless
+numpy
+moviepy
+pydantic
