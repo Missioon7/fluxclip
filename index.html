@@ -1,0 +1,18 @@
+<input type="file" id="file"/>
+<button onclick="upload()">Upload</button>
+
+<script>
+async function upload(){
+    let file = document.getElementById("file").files[0]
+    let form = new FormData()
+    form.append("file", file)
+
+    let res = await fetch("https://YOUR_BACKEND_URL/upload", {
+        method: "POST",
+        body: form
+    })
+
+    let data = await res.json()
+    alert("Job started: " + data.job_id)
+}
+</script>
