@@ -385,6 +385,7 @@ def run_pipeline(job_id, file_path, JOBS):
                 ),
                 "video_path": video_path,
                 "download_url": video_path,
+                "thumbnail_url": os.path.abspath(f"uploads/thumbnail_{i}.jpg"),
                 "source_text": clip.get("source_text", ""),
                 "title": clip.get("title", "Untitled Viral Clip"),
                 "hashtags": clip.get("hashtags", ["#viral"]),
