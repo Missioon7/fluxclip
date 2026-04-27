@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import uuid
 import os
-import torch
-import whisper
+
+
 import traceback
 import threading
 
