@@ -3,12 +3,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import uuid
 import os
-
-
 import traceback
 import threading
 
-from pipeline_runner import run_pipeline
+try:
+    from pipeline_runner import run_pipeline
+    PIPELINE_AVAILABLE = True
+except Exception as e:
+    run_pipeline = None
+    PIPELINE_AVAILABLE = False
+    PIPELINE_IMPORT_ERROR = str(e)
 
 app = FastAPI()
 
@@ -31,19 +35,28 @@ app.mount("/outputs", StaticFiles(directory=OUTPUT_DIR), name="outputs")
 
 JOBS = {}
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print("🔥 DEVICE:", device)
-
-model = whisper.load_model("base").to(device)
-print("🔥 Whisper model loaded successfully")
+print("⚠️ Railway lightweight mode: torch/whisper disabled")
 
 
 @app.get("/")
 def home():
-    return {"status": "OPUS AI running 🚀"}
+    return {
+        "status": "FluxClip backend running 🚀",
+        "mode": "railway-lightweight",
+        "pipeline_available": PIPELINE_AVAILABLE,
+    }
 
 
 def start_pipeline(job_id, file_path):
+    if not PIPELINE_AVAILABLE or run_pipeline is None:
+        JOBS[job_id] = {
+            "status": "failed",
+            "progress": 0,
+            "error": "Pipeline disabled in Railway lightweight mode",
+            "message": "Heavy AI processing will run on GPU worker/local machine later."
+        }
+        return
+
     try:
         run_pipeline(job_id, file_path, JOBS)
     except Exception as e:
@@ -81,7 +94,8 @@ async def upload(file: UploadFile = File(...)):
 
     return {
         "job_id": job_id,
-        "status": "queued"
+        "status": "queued",
+        "mode": "railway-lightweight"
     }
 
 
@@ -90,13 +104,20 @@ def status(job_id: str):
     return JOBS.get(job_id, {"status": "not_found", "error": "job not found"})
 
 
+@app.get("/health")
+def health():
+    return {"ok": True, "service": "fluxclip-backend"}
+
+
 if __name__ == "__main__":
     import uvicorn
 
+    port = int(os.environ.get("PORT", 8000))
+
     uvicorn.run(
         app,
-        host="127.0.0.1",
-        port=8000,
+        host="0.0.0.0",
+        port=port,
         reload=False,
         workers=1
     )
