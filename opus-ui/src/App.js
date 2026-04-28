@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const API =
-  process.env.REACT_APP_API_URL || "http://35.193.139.173:8000";
+const API = "/api";
+  
 
 function fixVideoUrl(path) {
   if (!path) return "";
