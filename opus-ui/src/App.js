@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const API = "http://127.0.0.1:8000";
+const API =
+  process.env.REACT_APP_API_URL || "http://35.193.139.173:8000";
 
 function fixVideoUrl(path) {
   if (!path) return "";
@@ -31,12 +32,27 @@ function App() {
         const res = await axios.get(`${API}/status/${id}`);
         const data = res.data;
 
+        console.log("Polling response:", data);
+
         setStatus(data.status || "processing");
 
-        if (data.status === "completed") {
+        if (
+          data.status === "completed" ||
+          data.status === "done" ||
+          data.final_clips ||
+          data.result ||
+          data.clips
+        ) {
           clearInterval(timer);
           setLoading(false);
-          setResult(data.result);
+
+          setResult({
+            clips:
+              data.result?.clips ||
+              data.final_clips ||
+              data.clips ||
+              [],
+          });
         }
 
         if (data.status === "failed" || data.status === "error") {
@@ -45,11 +61,9 @@ function App() {
           setError(data.error || "Processing failed");
         }
       } catch (err) {
-        clearInterval(timer);
-        setLoading(false);
-        setError("Could not fetch job status");
+        console.log("Polling retry...", err);
       }
-    }, 3000);
+    }, 5000);
   };
 
   const uploadFile = async () => {
@@ -77,7 +91,7 @@ function App() {
     } catch (err) {
       console.error(err);
       setLoading(false);
-      setError("Upload failed");
+      setError("Upload failed. Backend may be busy or browser blocked the request.");
     }
   };
 
@@ -88,42 +102,50 @@ function App() {
       style={{
         minHeight: "100vh",
         background:
-          "radial-gradient(circle at top left, #1e293b, #020617 55%)",
+          "radial-gradient(circle at top left, #064e3b 0%, #020617 42%, #020617 100%)",
         color: "white",
         fontFamily: "Inter, Arial, sans-serif",
         padding: "28px",
       }}
     >
-      <div
-        style={{
-          maxWidth: "1180px",
-          margin: "0 auto",
-        }}
-      >
+      <div style={{ maxWidth: "1220px", margin: "0 auto" }}>
         {/* NAV */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "40px",
+            marginBottom: "34px",
           }}
         >
-          <div style={{ fontSize: "28px", fontWeight: "900" }}>
-            FluxClip ☠️✂️
+          <div style={{ fontSize: "30px", fontWeight: "950" }}>
+            FluxClip 🚀✂️
           </div>
 
           <div
             style={{
               display: "flex",
-              gap: "12px",
+              gap: "14px",
               color: "#cbd5e1",
               fontSize: "14px",
+              alignItems: "center",
             }}
           >
             <span>Dashboard</span>
             <span>Pricing</span>
             <span>Docs</span>
+            <span
+              style={{
+                background: "rgba(34,197,94,0.16)",
+                border: "1px solid rgba(34,197,94,0.45)",
+                color: "#86efac",
+                padding: "8px 12px",
+                borderRadius: "999px",
+                fontWeight: "800",
+              }}
+            >
+              Cloud Live
+            </span>
           </div>
         </div>
 
@@ -139,11 +161,11 @@ function App() {
           <div
             style={{
               background:
-                "linear-gradient(135deg, rgba(34,197,94,0.18), rgba(59,130,246,0.12))",
-              border: "1px solid rgba(148,163,184,0.25)",
-              borderRadius: "24px",
-              padding: "34px",
-              boxShadow: "0 25px 80px rgba(0,0,0,0.35)",
+                "linear-gradient(135deg, rgba(34,197,94,0.20), rgba(59,130,246,0.13), rgba(168,85,247,0.10))",
+              border: "1px solid rgba(148,163,184,0.28)",
+              borderRadius: "28px",
+              padding: "38px",
+              boxShadow: "0 30px 100px rgba(0,0,0,0.42)",
             }}
           >
             <div
@@ -153,20 +175,21 @@ function App() {
                 color: "#86efac",
                 padding: "8px 14px",
                 borderRadius: "999px",
-                fontWeight: "700",
+                fontWeight: "800",
                 fontSize: "13px",
                 marginBottom: "20px",
               }}
             >
-              AI Viral Shorts Engine
+              AI Viral Shorts Engine • V6 Cloud
             </div>
 
             <h1
               style={{
-                fontSize: "56px",
-                lineHeight: "1.05",
+                fontSize: "58px",
+                lineHeight: "1.03",
                 margin: "0 0 18px",
                 fontWeight: "950",
+                letterSpacing: "-1.5px",
               }}
             >
               Turn long videos into viral-ready shorts.
@@ -176,13 +199,13 @@ function App() {
               style={{
                 color: "#cbd5e1",
                 fontSize: "18px",
-                lineHeight: "1.6",
-                maxWidth: "650px",
+                lineHeight: "1.65",
+                maxWidth: "680px",
               }}
             >
               Upload a long video. FluxClip detects viral moments, creates
               shorts, adds captions, scores clips, generates titles, hashtags
-              and export-ready packages.
+              and export-ready creator packages.
             </p>
 
             <div
@@ -193,16 +216,17 @@ function App() {
                 flexWrap: "wrap",
               }}
             >
-              {["Smart Crop", "Captions", "Thumbnails", "Hashtags"].map(
+              {["Smart Crop", "Captions", "Thumbnails", "Hashtags", "Cloud Processing"].map(
                 (item) => (
                   <div
                     key={item}
                     style={{
-                      background: "rgba(15,23,42,0.75)",
-                      border: "1px solid rgba(148,163,184,0.2)",
+                      background: "rgba(15,23,42,0.76)",
+                      border: "1px solid rgba(148,163,184,0.22)",
                       padding: "10px 14px",
-                      borderRadius: "12px",
+                      borderRadius: "14px",
                       color: "#e2e8f0",
+                      fontWeight: "700",
                     }}
                   >
                     ✅ {item}
@@ -215,31 +239,35 @@ function App() {
           {/* UPLOAD CARD */}
           <div
             style={{
-              background: "rgba(15,23,42,0.9)",
-              border: "1px solid rgba(148,163,184,0.25)",
-              borderRadius: "24px",
-              padding: "28px",
-              boxShadow: "0 25px 80px rgba(0,0,0,0.35)",
+              background: "rgba(15,23,42,0.92)",
+              border: "1px solid rgba(148,163,184,0.28)",
+              borderRadius: "28px",
+              padding: "30px",
+              boxShadow: "0 30px 100px rgba(0,0,0,0.42)",
             }}
           >
-            <h2 style={{ marginTop: 0 }}>Create New Viral Pack</h2>
-            <p style={{ color: "#94a3b8" }}>
+            <h2 style={{ marginTop: 0, fontSize: "28px" }}>
+              Create New Viral Pack
+            </h2>
+            <p style={{ color: "#94a3b8", lineHeight: "1.6" }}>
               Upload one long-form video to generate AI-selected short clips.
+              CPU processing may take time, but the cloud worker keeps running.
             </p>
 
             <div
               style={{
                 border: "2px dashed rgba(148,163,184,0.35)",
-                borderRadius: "18px",
-                padding: "28px",
+                borderRadius: "20px",
+                padding: "30px",
                 textAlign: "center",
-                background: "rgba(30,41,59,0.65)",
+                background: "rgba(30,41,59,0.66)",
                 margin: "24px 0",
               }}
             >
-              <div style={{ fontSize: "42px", marginBottom: "12px" }}>🎬</div>
+              <div style={{ fontSize: "46px", marginBottom: "12px" }}>🎬</div>
               <input
                 type="file"
+                accept="video/*"
                 onChange={(e) => setFile(e.target.files[0])}
               />
               <p style={{ color: "#cbd5e1", fontSize: "14px" }}>
@@ -257,23 +285,25 @@ function App() {
                   : "linear-gradient(135deg, #22c55e, #16a34a)",
                 color: "white",
                 border: "none",
-                padding: "16px 20px",
-                borderRadius: "14px",
+                padding: "17px 20px",
+                borderRadius: "16px",
                 cursor: loading ? "not-allowed" : "pointer",
-                fontWeight: "900",
+                fontWeight: "950",
                 fontSize: "16px",
+                boxShadow: loading ? "none" : "0 14px 35px rgba(34,197,94,0.28)",
               }}
             >
-              {loading ? "Processing..." : "Generate Viral Shorts"}
+              {loading ? "Processing in Cloud..." : "Generate Viral Shorts"}
             </button>
 
             {jobId && (
               <div
                 style={{
                   marginTop: "18px",
-                  background: "rgba(30,41,59,0.8)",
-                  borderRadius: "14px",
-                  padding: "14px",
+                  background: "rgba(30,41,59,0.84)",
+                  border: "1px solid rgba(148,163,184,0.18)",
+                  borderRadius: "16px",
+                  padding: "15px",
                   fontSize: "14px",
                 }}
               >
@@ -288,6 +318,36 @@ function App() {
           </div>
         </div>
 
+        {/* TRUST / SEO */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "16px",
+            marginBottom: "28px",
+          }}
+        >
+          {[
+            ["Creator SaaS", "Built for YouTubers, editors and short-form creators"],
+            ["24/7 Cloud", "Runs on GCP even when your laptop is off"],
+            ["Viral DNA", "Hook detection, ranking, captions and export pack"],
+          ].map(([title, sub]) => (
+            <div
+              key={title}
+              style={{
+                background: "rgba(15,23,42,0.84)",
+                border: "1px solid rgba(148,163,184,0.18)",
+                borderRadius: "20px",
+                padding: "24px",
+                textAlign: "center",
+              }}
+            >
+              <h2 style={{ margin: 0, fontSize: "24px" }}>{title}</h2>
+              <p style={{ color: "#94a3b8", marginBottom: 0 }}>{sub}</p>
+            </div>
+          ))}
+        </div>
+
         {/* STATS */}
         <div
           style={{
@@ -298,7 +358,7 @@ function App() {
           }}
         >
           {[
-            ["⚡", "Fast ASR", "GPU optimized"],
+            ["⚡", "Fast ASR", "GPU-ready pipeline"],
             ["🧠", "Viral Brain", "Hook ranking"],
             ["🎯", "Smart Export", "Captions + titles"],
             ["📦", "Creator Pack", "Download ready"],
@@ -306,13 +366,13 @@ function App() {
             <div
               key={title}
               style={{
-                background: "rgba(15,23,42,0.8)",
+                background: "rgba(15,23,42,0.84)",
                 border: "1px solid rgba(148,163,184,0.18)",
-                borderRadius: "18px",
-                padding: "20px",
+                borderRadius: "20px",
+                padding: "22px",
               }}
             >
-              <div style={{ fontSize: "30px" }}>{icon}</div>
+              <div style={{ fontSize: "32px" }}>{icon}</div>
               <h3 style={{ margin: "10px 0 6px" }}>{title}</h3>
               <p style={{ color: "#94a3b8", margin: 0 }}>{sub}</p>
             </div>
@@ -324,15 +384,19 @@ function App() {
             style={{
               background: "rgba(34,197,94,0.12)",
               border: "1px solid rgba(34,197,94,0.35)",
-              padding: "22px",
-              borderRadius: "18px",
+              padding: "24px",
+              borderRadius: "20px",
               marginBottom: "28px",
             }}
           >
-            <h3>🔥 AI is cooking your viral clips...</h3>
-            <p style={{ color: "#cbd5e1" }}>
-              Transcribing → Viral Detection → Smart Crop → Captions → Final
-              Shorts
+            <h3>🔥 FluxClip Cloud AI is processing your content...</h3>
+            <p style={{ color: "#cbd5e1", lineHeight: "1.6" }}>
+              Transcribing → Hook Detection → Viral Ranking → Smart Crop →
+              Captions → Export Pack
+            </p>
+            <p style={{ color: "#94a3b8", marginBottom: 0 }}>
+              Keep this page open. Long videos can take time on CPU, but backend
+              processing continues on the cloud server.
             </p>
           </div>
         )}
@@ -352,7 +416,7 @@ function App() {
 
         {clips.length > 0 && (
           <div>
-            <h2 style={{ fontSize: "34px" }}>Your Viral Clips</h2>
+            <h2 style={{ fontSize: "36px" }}>Your Viral Clips</h2>
 
             <div
               style={{
@@ -363,17 +427,17 @@ function App() {
             >
               {clips.map((clip, index) => {
                 const videoUrl = fixVideoUrl(
-                  clip.video_path || clip.download_url
+                  clip.video_path || clip.download_url || clip.url
                 );
 
                 return (
                   <div
                     key={index}
                     style={{
-                      background: "rgba(15,23,42,0.9)",
+                      background: "rgba(15,23,42,0.92)",
                       border: "1px solid rgba(148,163,184,0.22)",
                       padding: "20px",
-                      borderRadius: "22px",
+                      borderRadius: "24px",
                     }}
                   >
                     <div
@@ -393,21 +457,21 @@ function App() {
                           color: "#052e16",
                           padding: "6px 10px",
                           borderRadius: "999px",
-                          fontWeight: "900",
+                          fontWeight: "950",
                         }}
                       >
-                        Score {clip.score}
+                        Score {clip.score || "AI"}
                       </span>
                     </div>
 
                     <p>
-                      <strong>Title:</strong> {clip.title}
+                      <strong>Title:</strong> {clip.title || "Viral short clip"}
                     </p>
                     <p>
-                      <strong>Niche:</strong> {clip.niche}
+                      <strong>Niche:</strong> {clip.niche || "Auto-detected"}
                     </p>
                     <p>
-                      <strong>Duration:</strong> {clip.duration}s
+                      <strong>Duration:</strong> {clip.duration || "short"}s
                     </p>
 
                     <p style={{ color: "#86efac" }}>
@@ -440,7 +504,7 @@ function App() {
                             padding: "12px 16px",
                             borderRadius: "12px",
                             textDecoration: "none",
-                            fontWeight: "900",
+                            fontWeight: "950",
                           }}
                         >
                           Download Clip
@@ -451,14 +515,14 @@ function App() {
                     <div
                       style={{
                         marginTop: "16px",
-                        background: "rgba(51,65,85,0.8)",
+                        background: "rgba(51,65,85,0.82)",
                         padding: "12px",
                         borderRadius: "14px",
                       }}
                     >
                       <strong>Score Breakdown</strong>
                       <pre style={{ overflowX: "auto" }}>
-                        {JSON.stringify(clip.score_breakdown, null, 2)}
+                        {JSON.stringify(clip.score_breakdown || {}, null, 2)}
                       </pre>
                     </div>
                   </div>
