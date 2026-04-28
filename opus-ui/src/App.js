@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const API = "/api";
-  
 
 function fixVideoUrl(path) {
   if (!path) return "";
@@ -25,11 +24,12 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const pollJob = async (id) => {
     const timer = setInterval(async () => {
       try {
-        const res = await axios.get(`${API}/status/${id}`);
+        const res = await axios.get(`${API}/status/${id}`, { timeout: 0 });
         const data = res.data;
 
         console.log("Polling response:", data);
@@ -45,6 +45,7 @@ function App() {
         ) {
           clearInterval(timer);
           setLoading(false);
+          setUploadProgress(100);
 
           setResult({
             clips:
@@ -79,19 +80,43 @@ function App() {
       setLoading(true);
       setResult(null);
       setError("");
+      setJobId("");
+      setUploadProgress(0);
       setStatus("uploading");
 
       const res = await axios.post(`${API}/upload`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        timeout: 0,
+        maxBodyLength: Infinity,
+        maxContentLength: Infinity,
+        onUploadProgress: (progressEvent) => {
+          if (!progressEvent.total) return;
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setUploadProgress(percent);
+        },
       });
 
-      setJobId(res.data.job_id);
+      const newJobId = res.data.job_id || res.data.id;
+
+      if (!newJobId) {
+        throw new Error("Backend did not return job_id");
+      }
+
+      setJobId(newJobId);
       setStatus("queued");
-      pollJob(res.data.job_id);
+      pollJob(newJobId);
     } catch (err) {
-      console.error(err);
+      console.error("Upload error:", err);
       setLoading(false);
-      setError("Upload failed. Backend may be busy or browser blocked the request.");
+
+      const backendMessage =
+        err.response?.data?.detail ||
+        err.response?.data?.error ||
+        err.message ||
+        "Upload failed";
+
+      setError(`Upload failed: ${backendMessage}`);
     }
   };
 
@@ -109,7 +134,6 @@ function App() {
       }}
     >
       <div style={{ maxWidth: "1220px", margin: "0 auto" }}>
-        {/* NAV */}
         <div
           style={{
             display: "flex",
@@ -149,7 +173,6 @@ function App() {
           </div>
         </div>
 
-        {/* HERO */}
         <div
           style={{
             display: "grid",
@@ -236,7 +259,6 @@ function App() {
             </div>
           </div>
 
-          {/* UPLOAD CARD */}
           <div
             style={{
               background: "rgba(15,23,42,0.92)",
@@ -268,11 +290,17 @@ function App() {
               <input
                 type="file"
                 accept="video/*"
-                onChange={(e) => setFile(e.target.files[0])}
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
               />
               <p style={{ color: "#cbd5e1", fontSize: "14px" }}>
                 {file ? file.name : "MP4, MOV, MKV supported"}
               </p>
+
+              {file && (
+                <p style={{ color: "#94a3b8", fontSize: "13px" }}>
+                  Size: {(file.size / (1024 * 1024)).toFixed(2)} MB
+                </p>
+              )}
             </div>
 
             <button
@@ -296,7 +324,31 @@ function App() {
               {loading ? "Processing in Cloud..." : "Generate Viral Shorts"}
             </button>
 
-            {jobId && (
+            {loading && (
+              <div style={{ marginTop: "16px" }}>
+                <div
+                  style={{
+                    height: "10px",
+                    background: "rgba(148,163,184,0.22)",
+                    borderRadius: "999px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${uploadProgress}%`,
+                      height: "100%",
+                      background: "linear-gradient(135deg, #22c55e, #16a34a)",
+                    }}
+                  />
+                </div>
+                <p style={{ color: "#cbd5e1", fontSize: "13px" }}>
+                  Upload progress: {uploadProgress}%
+                </p>
+              </div>
+            )}
+
+            {(jobId || status) && (
               <div
                 style={{
                   marginTop: "18px",
@@ -310,15 +362,16 @@ function App() {
                 <div>
                   <strong>Status:</strong> {status}
                 </div>
-                <div style={{ color: "#94a3b8", marginTop: "6px" }}>
-                  Job: {jobId}
-                </div>
+                {jobId && (
+                  <div style={{ color: "#94a3b8", marginTop: "6px" }}>
+                    Job: {jobId}
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
 
-        {/* TRUST / SEO */}
         <div
           style={{
             display: "grid",
@@ -348,7 +401,6 @@ function App() {
           ))}
         </div>
 
-        {/* STATS */}
         <div
           style={{
             display: "grid",
@@ -391,8 +443,8 @@ function App() {
           >
             <h3>🔥 FluxClip Cloud AI is processing your content...</h3>
             <p style={{ color: "#cbd5e1", lineHeight: "1.6" }}>
-              Transcribing → Hook Detection → Viral Ranking → Smart Crop →
-              Captions → Export Pack
+              Uploading → Transcribing → Hook Detection → Viral Ranking → Smart
+              Crop → Captions → Export Pack
             </p>
             <p style={{ color: "#94a3b8", marginBottom: 0 }}>
               Keep this page open. Long videos can take time on CPU, but backend
@@ -408,6 +460,7 @@ function App() {
               padding: "18px",
               borderRadius: "16px",
               marginBottom: "24px",
+              whiteSpace: "pre-wrap",
             }}
           >
             {error}
