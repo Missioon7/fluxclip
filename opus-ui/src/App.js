@@ -18,6 +18,13 @@ function fixVideoUrl(path) {
 }
 
 function App() {
+  React.useEffect(() => {
+    const saved = localStorage.getItem('job_id');
+    if (saved) {
+      setJobId(saved);
+      pollJob(saved);
+    }
+  }, []);
   const [file, setFile] = useState(null);
   const [jobId, setJobId] = useState("");
   const [status, setStatus] = useState("");
@@ -47,6 +54,7 @@ function App() {
           setLoading(false);
           setUploadProgress(100);
 
+          localStorage.removeItem('job_id');
           setResult({
             clips:
               data.result?.clips ||
@@ -103,6 +111,7 @@ function App() {
         throw new Error("Backend did not return job_id");
       }
 
+      localStorage.setItem('job_id', newJobId);
       setJobId(newJobId);
       setStatus("queued");
       pollJob(newJobId);
@@ -590,3 +599,4 @@ function App() {
 }
 
 export default App;
+
