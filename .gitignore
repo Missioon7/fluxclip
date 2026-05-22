@@ -1,0 +1,66 @@
+# Python/runtime
+venv/
+.venv/
+env/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Generated job media and transient outputs
+uploads/
+outputs/
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.wav
+*.mp3
+*.aac
+*.srt
+*.ass
+
+# Logs and large backups/checkpoints
+*.log
+*.tar.gz
+*.BACKUP*
+*.BEFORE*
+*.diffbase
+backups_graveyard/
+
+# Audit reports: keep scripts and written reports, ignore generated runtime artifacts
+audit_reports/*
+!audit_reports/
+!audit_reports/*.py
+!audit_reports/*.md
+!audit_reports/*REPORT*.json
+!audit_reports/*RESULT*.json
+!audit_reports/*DECISION*.json
+!audit_reports/*AUDIT*.json
+audit_reports/asr_segments_*.json
+audit_reports/asr_fw_retry_*.json
+audit_reports/asr_fw_retry_*.jsonl
+audit_reports/asr_quality_breakdown_*.json
+audit_reports/asr_repaired_window_*.json
+audit_reports/*stdout.log
+audit_reports/*stderr.log
+audit_reports/*.csv
+
+# Analytics/runtime learning data
+analytics/*.jsonl
+analytics/*.log
+analytics/*.BROKEN_BACKUP*
+
+# Frontend dependencies/build outputs
+opus-ui/node_modules/
+opus-ui/build/
+opus-ui/dist/
+
+# Local/editor/OS
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

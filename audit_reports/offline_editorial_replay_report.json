@@ -1,0 +1,507 @@
+{
+  "import_error": null,
+  "job_ids": [
+    "e0926df0-8fdb-4441-9d95-af58ba1a3ec5",
+    "5fb7dd32-fe17-4b6b-9c0e-01ac2b8ac3a3",
+    "ac65f75c-9f61-4ecd-8593-2c6a8918c41f"
+  ],
+  "clip_count": 9,
+  "qa_row_count": 11,
+  "expected_rejected": 9,
+  "replay_rejected": 9,
+  "summary": {},
+  "comparisons": [
+    {
+      "job_id": "e0926df0-8fdb-4441-9d95-af58ba1a3ec5",
+      "stage": "pre_creator_qa",
+      "start": 63.44,
+      "end": 89.44,
+      "title": "8 10",
+      "old_decision": "reject",
+      "replayed_decision": "reject",
+      "old_reasons": [
+        "no_hook_no_payoff"
+      ],
+      "replayed_reasons": [
+        "no_hook_no_payoff"
+      ],
+      "reason_delta": {
+        "added": [],
+        "removed": [],
+        "same": [
+          "no_hook_no_payoff"
+        ],
+        "changed": false
+      },
+      "qa_changed": false,
+      "payoff": {
+        "stored_payoff_bonus": 0.0,
+        "stored_payoff_strength": 0.0,
+        "stored_v43_bonus": 0.0,
+        "stored_v43_reasons": [],
+        "stored_v44_score": 0.0,
+        "stored_v44_reasons": [],
+        "stored_v44_confidence": null,
+        "replayed_payoff_bonus": 0.0,
+        "replayed_v43_bonus": 0.0,
+        "replayed_v43_reasons": [],
+        "replayed_v44_score": 0.0,
+        "replayed_v44_reasons": [],
+        "replayed_v44_confidence": "none",
+        "delta_payoff_bonus": 0.0
+      },
+      "continuation": {
+        "stored_continuation_risk": 0.0,
+        "replayed_continuation_risk": 0.0,
+        "stored_story_completeness": 43.0,
+        "replayed_story_completeness": 37.0,
+        "stored_context_density": "balanced",
+        "replayed_context_density": "balanced"
+      },
+      "low_confidence_asr": false,
+      "preview": "आपको उसको होन करते रहना चाहिए और चैसे ही पहला दर्वाजा खिडकी कही भी अपको वो अपने स्किल सेट या वो वेपन्स लेकर के इंटर करना चाहिया. आपको लगता है आपको वो समया आचुका है? महनत..."
+    },
+    {
+      "job_id": "e0926df0-8fdb-4441-9d95-af58ba1a3ec5",
+      "stage": "pre_creator_qa",
+      "start": 232.8,
+      "end": 249.8,
+      "title": "Untitled Clip",
+      "old_decision": "reject",
+      "replayed_decision": "reject",
+      "old_reasons": [
+        "no_hook_no_payoff"
+      ],
+      "replayed_reasons": [
+        "no_hook_no_payoff"
+      ],
+      "reason_delta": {
+        "added": [],
+        "removed": [],
+        "same": [
+          "no_hook_no_payoff"
+        ],
+        "changed": false
+      },
+      "qa_changed": false,
+      "payoff": {
+        "stored_payoff_bonus": 0.0,
+        "stored_payoff_strength": 0.0,
+        "stored_v43_bonus": 0.0,
+        "stored_v43_reasons": [],
+        "stored_v44_score": 0.0,
+        "stored_v44_reasons": [],
+        "stored_v44_confidence": null,
+        "replayed_payoff_bonus": 0.0,
+        "replayed_v43_bonus": 0.0,
+        "replayed_v43_reasons": [],
+        "replayed_v44_score": 0.0,
+        "replayed_v44_reasons": [],
+        "replayed_v44_confidence": "none",
+        "delta_payoff_bonus": 0.0
+      },
+      "continuation": {
+        "stored_continuation_risk": 0.0,
+        "replayed_continuation_risk": 0.0,
+        "stored_story_completeness": 29.0,
+        "replayed_story_completeness": 29.0,
+        "stored_context_density": "balanced",
+        "replayed_context_density": "balanced"
+      },
+      "low_confidence_asr": false,
+      "preview": "कुछ दिन में लिखते हैं। उस बक्त आपका टाइम, फ्रेम आप माइंड में उस बक्त आप कैसे ये कहाणिया लिखते थे? इत्ते दिस्टरबड माइंद में। मैं, अच्छालि वो कहाणी न, स्पिती जी, मैं पब्लिक..."
+    },
+    {
+      "job_id": "e0926df0-8fdb-4441-9d95-af58ba1a3ec5",
+      "stage": "pre_creator_qa",
+      "start": 90.44,
+      "end": 134.8,
+      "title": "Unreasonable",
+      "old_decision": "reject",
+      "replayed_decision": "reject",
+      "old_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "replayed_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "reason_delta": {
+        "added": [],
+        "removed": [],
+        "same": [
+          "no_hook_no_payoff",
+          "weak_standalone_context"
+        ],
+        "changed": false
+      },
+      "qa_changed": false,
+      "payoff": {
+        "stored_payoff_bonus": 0.0,
+        "stored_payoff_strength": 0.0,
+        "stored_v43_bonus": 0.0,
+        "stored_v43_reasons": [],
+        "stored_v44_score": 0.0,
+        "stored_v44_reasons": [],
+        "stored_v44_confidence": null,
+        "replayed_payoff_bonus": 0.0,
+        "replayed_v43_bonus": 0.0,
+        "replayed_v43_reasons": [],
+        "replayed_v44_score": 0.0,
+        "replayed_v44_reasons": [],
+        "replayed_v44_confidence": "none",
+        "delta_payoff_bonus": 0.0
+      },
+      "continuation": {
+        "stored_continuation_risk": 0.0,
+        "replayed_continuation_risk": 0.0,
+        "stored_story_completeness": 54.0,
+        "replayed_story_completeness": 42.0,
+        "stored_context_density": "balanced",
+        "replayed_context_density": "balanced"
+      },
+      "low_confidence_asr": false,
+      "preview": "मेरे तो लगता है आपको पर अपना टाइम आग絵 अपना बेटा आगया हुता. जिस दिन अपना बेटा आगा यह आपको ब unreasonable कि आपका आपको डुमी. अभी आपकी महनत, चिद्धत और पौहुच में कहीं नकही को..."
+    },
+    {
+      "job_id": "e0926df0-8fdb-4441-9d95-af58ba1a3ec5",
+      "stage": "pre_creator_qa",
+      "start": 0.0,
+      "end": 49.12,
+      "title": "Untitled Clip",
+      "old_decision": "reject",
+      "replayed_decision": "reject",
+      "old_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "replayed_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "reason_delta": {
+        "added": [],
+        "removed": [],
+        "same": [
+          "no_hook_no_payoff",
+          "weak_standalone_context"
+        ],
+        "changed": false
+      },
+      "qa_changed": false,
+      "payoff": {
+        "stored_payoff_bonus": 0.0,
+        "stored_payoff_strength": 0.0,
+        "stored_v43_bonus": 0.0,
+        "stored_v43_reasons": [],
+        "stored_v44_score": 0.0,
+        "stored_v44_reasons": [],
+        "stored_v44_confidence": null,
+        "replayed_payoff_bonus": 0.0,
+        "replayed_v43_bonus": 0.0,
+        "replayed_v43_reasons": [],
+        "replayed_v44_score": 0.0,
+        "replayed_v44_reasons": [],
+        "replayed_v44_confidence": "none",
+        "delta_payoff_bonus": 0.0
+      },
+      "continuation": {
+        "stored_continuation_risk": 0.0,
+        "replayed_continuation_risk": 0.0,
+        "stored_story_completeness": 29.0,
+        "replayed_story_completeness": 29.0,
+        "stored_context_density": "balanced",
+        "replayed_context_density": "balanced"
+      },
+      "low_confidence_asr": false,
+      "preview": "तो मीटिंगे बीच में एर्पॉट के लाउज में कहीं बी लिख से था। तो मैं कहीं बी लिख लेता हूँ। आपको लगता है अक्षर्च जी कि अपना टाइम आयेगा वो अपना टाइम आगया है किसी का इंटर्विद शुन..."
+    },
+    {
+      "job_id": "e0926df0-8fdb-4441-9d95-af58ba1a3ec5",
+      "stage": "pre_creator_qa",
+      "start": 148.8,
+      "end": 203.66,
+      "title": "Untitled Clip",
+      "old_decision": "reject",
+      "replayed_decision": "reject",
+      "old_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "replayed_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "reason_delta": {
+        "added": [],
+        "removed": [],
+        "same": [
+          "no_hook_no_payoff",
+          "weak_standalone_context"
+        ],
+        "changed": false
+      },
+      "qa_changed": false,
+      "payoff": {
+        "stored_payoff_bonus": 0.0,
+        "stored_payoff_strength": 0.0,
+        "stored_v43_bonus": 0.0,
+        "stored_v43_reasons": [],
+        "stored_v44_score": 0.0,
+        "stored_v44_reasons": [],
+        "stored_v44_confidence": null,
+        "replayed_payoff_bonus": 0.0,
+        "replayed_v43_bonus": 0.0,
+        "replayed_v43_reasons": [],
+        "replayed_v44_score": 0.0,
+        "replayed_v44_reasons": [],
+        "replayed_v44_confidence": "none",
+        "delta_payoff_bonus": 0.0
+      },
+      "continuation": {
+        "stored_continuation_risk": 0.0,
+        "replayed_continuation_risk": 0.0,
+        "stored_story_completeness": 17.0,
+        "replayed_story_completeness": 11.0,
+        "stored_context_density": "balanced",
+        "replayed_context_density": "balanced"
+      },
+      "low_confidence_asr": false,
+      "preview": "उस दिन सही माइने में पूरी महनत का जो क्रक्स है न ओउईक बून अम्रिद जो एक वो उस दिन मिलेगा तब तक मैं लगरा हुं आपका बेटे से मतलब आपका जो आपकी फरस्त वाईव के साथ जो आपके बेटे ह..."
+    },
+    {
+      "job_id": "5fb7dd32-fe17-4b6b-9c0e-01ac2b8ac3a3",
+      "stage": "pre_creator_qa",
+      "start": 0.0,
+      "end": 17.32,
+      "title": "Untitled Clip",
+      "old_decision": "reject",
+      "replayed_decision": "reject",
+      "old_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff"
+      ],
+      "replayed_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff"
+      ],
+      "reason_delta": {
+        "added": [],
+        "removed": [],
+        "same": [
+          "asr_low_confidence",
+          "no_hook_no_payoff"
+        ],
+        "changed": false
+      },
+      "qa_changed": false,
+      "payoff": {
+        "stored_payoff_bonus": 0.0,
+        "stored_payoff_strength": 0.0,
+        "stored_v43_bonus": 0.0,
+        "stored_v43_reasons": [],
+        "stored_v44_score": 0.0,
+        "stored_v44_reasons": [],
+        "stored_v44_confidence": null,
+        "replayed_payoff_bonus": 0.0,
+        "replayed_v43_bonus": 0.0,
+        "replayed_v43_reasons": [],
+        "replayed_v44_score": 0.0,
+        "replayed_v44_reasons": [],
+        "replayed_v44_confidence": "none",
+        "delta_payoff_bonus": 0.0
+      },
+      "continuation": {
+        "stored_continuation_risk": 0.0,
+        "replayed_continuation_risk": 0.0,
+        "stored_story_completeness": 29.0,
+        "replayed_story_completeness": 29.0,
+        "stored_context_density": "balanced",
+        "replayed_context_density": "balanced"
+      },
+      "low_confidence_asr": true,
+      "preview": "तो में बीच में एर्पोट के लाँज में कही बिलिख से. तो में कही बिलिख लिख. अपको लकता अख्शजी की अपना टाईम आएगा वो अपना टाईम आगा एग इतने पोटकास यतने अंटेवूँज अपना शाँए फिल्म दहि..."
+    },
+    {
+      "job_id": "5fb7dd32-fe17-4b6b-9c0e-01ac2b8ac3a3",
+      "stage": "pre_creator_qa",
+      "start": 97.32,
+      "end": 109.32,
+      "title": "Untitled Clip",
+      "old_decision": "reject",
+      "replayed_decision": "reject",
+      "old_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff"
+      ],
+      "replayed_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff"
+      ],
+      "reason_delta": {
+        "added": [],
+        "removed": [],
+        "same": [
+          "asr_low_confidence",
+          "no_hook_no_payoff"
+        ],
+        "changed": false
+      },
+      "qa_changed": false,
+      "payoff": {
+        "stored_payoff_bonus": 0.0,
+        "stored_payoff_strength": 0.0,
+        "stored_v43_bonus": 0.0,
+        "stored_v43_reasons": [],
+        "stored_v44_score": 0.0,
+        "stored_v44_reasons": [],
+        "stored_v44_confidence": null,
+        "replayed_payoff_bonus": 0.0,
+        "replayed_v43_bonus": 0.0,
+        "replayed_v43_reasons": [],
+        "replayed_v44_score": 0.0,
+        "replayed_v44_reasons": [],
+        "replayed_v44_confidence": "none",
+        "delta_payoff_bonus": 0.0
+      },
+      "continuation": {
+        "stored_continuation_risk": 0.0,
+        "replayed_continuation_risk": 0.0,
+        "stored_story_completeness": 29.0,
+        "replayed_story_completeness": 29.0,
+        "stored_context_density": "balanced",
+        "replayed_context_density": "balanced"
+      },
+      "low_confidence_asr": true,
+      "preview": "खिल कि अगर भी अबही भी अपकी मेहनेद शिद्धत और पहुच में कही नकही कोई कमी होगी अपी दिवाँ में जोला है, मेरी पुरी महनत, मेरा फैवरेट कोटेशन हमेशाच़ है,"
+    },
+    {
+      "job_id": "5fb7dd32-fe17-4b6b-9c0e-01ac2b8ac3a3",
+      "stage": "pre_creator_qa",
+      "start": 184.32,
+      "end": 198.32,
+      "title": "Untitled Clip",
+      "old_decision": "reject",
+      "replayed_decision": "reject",
+      "old_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "replayed_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "reason_delta": {
+        "added": [],
+        "removed": [],
+        "same": [
+          "asr_low_confidence",
+          "no_hook_no_payoff",
+          "weak_standalone_context"
+        ],
+        "changed": false
+      },
+      "qa_changed": false,
+      "payoff": {
+        "stored_payoff_bonus": 0.0,
+        "stored_payoff_strength": 0.0,
+        "stored_v43_bonus": 0.0,
+        "stored_v43_reasons": [],
+        "stored_v44_score": 0.0,
+        "stored_v44_reasons": [],
+        "stored_v44_confidence": null,
+        "replayed_payoff_bonus": 0.0,
+        "replayed_v43_bonus": 0.0,
+        "replayed_v43_reasons": [],
+        "replayed_v44_score": 0.0,
+        "replayed_v44_reasons": [],
+        "replayed_v44_confidence": "none",
+        "delta_payoff_bonus": 0.0
+      },
+      "continuation": {
+        "stored_continuation_risk": 0.0,
+        "replayed_continuation_risk": 0.0,
+        "stored_story_completeness": 29.0,
+        "replayed_story_completeness": 29.0,
+        "stored_context_density": "balanced",
+        "replayed_context_density": "balanced"
+      },
+      "low_confidence_asr": true,
+      "preview": "अगर अक्ष्द गुप्ता की एक मन्शा है एक जो ख़ाएश है अगर वो पूरी करने में जागरन मन्तन और अमारा दैनिक जागरन का पलाट्फोम"
+    },
+    {
+      "job_id": "5fb7dd32-fe17-4b6b-9c0e-01ac2b8ac3a3",
+      "stage": "pre_creator_qa",
+      "start": 205.32,
+      "end": 241.32,
+      "title": "Untitled Clip",
+      "old_decision": "reject",
+      "replayed_decision": "reject",
+      "old_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "replayed_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "reason_delta": {
+        "added": [],
+        "removed": [],
+        "same": [
+          "asr_low_confidence",
+          "no_hook_no_payoff",
+          "weak_standalone_context"
+        ],
+        "changed": false
+      },
+      "qa_changed": false,
+      "payoff": {
+        "stored_payoff_bonus": 0.0,
+        "stored_payoff_strength": 0.0,
+        "stored_v43_bonus": 0.0,
+        "stored_v43_reasons": [],
+        "stored_v44_score": 0.0,
+        "stored_v44_reasons": [],
+        "stored_v44_confidence": null,
+        "replayed_payoff_bonus": 0.0,
+        "replayed_v43_bonus": 0.0,
+        "replayed_v43_reasons": [],
+        "replayed_v44_score": 0.0,
+        "replayed_v44_reasons": [],
+        "replayed_v44_confidence": "none",
+        "delta_payoff_bonus": 0.0
+      },
+      "continuation": {
+        "stored_continuation_risk": 0.0,
+        "replayed_continuation_risk": 0.0,
+        "stored_story_completeness": 29.0,
+        "replayed_story_completeness": 29.0,
+        "stored_context_density": "balanced",
+        "replayed_context_density": "balanced"
+      },
+      "low_confidence_asr": true,
+      "preview": "लिकन आप ने जब ये कहानिया लिख ही, एक रह्टर्स का लिखने का कोई श्पेस नहीं होता, नी जब ये कहानिया लिख ही एक इमपोट्ट़न बात है कि अपका फ्रेम अप माँँँँँँँँँँँँँँँँँँँँँँँँँँ"
+    }
+  ],
+  "false_positive_candidates": [],
+  "incomplete_runs": [
+    {
+      "job_id": "ac65f75c-9f61-4ecd-8593-2c6a8918c41f",
+      "upload_seen": true,
+      "asr_started": true,
+      "asr_completed": true,
+      "creator_qa_seen_in_logs": false,
+      "analytics_rows": 0,
+      "zero_safe_rows": 0,
+      "files": [
+        "audit_reports\\v43_clean_attempts_server_stdout.log"
+      ]
+    }
+  ]
+}

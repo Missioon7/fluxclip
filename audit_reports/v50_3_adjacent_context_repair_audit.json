@@ -1,0 +1,166 @@
+{
+  "scope": "offline_adjacent_context_repair_replay_no_video_rerun",
+  "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+  "asr_artifact": "audit_reports\\asr_segments_2efbe27a-4f64-41aa-9077-6f483e00fc4f_native_pre_retry.json",
+  "video_path": "uploads\\2efbe27a-4f64-41aa-9077-6f483e00fc4f.mp4",
+  "summary": {
+    "adjacent_windows_tested": 4,
+    "adjacent_windows_repaired": 0,
+    "context_expansion_possible_after_repair": 0,
+    "no_hook_no_payoff_before": 2,
+    "no_hook_no_payoff_after": 2,
+    "creator_safe_before": 0,
+    "creator_safe_after": 0,
+    "predicted_final_clean": 2,
+    "predicted_final_unstable": 0,
+    "video_rerun_justified": false
+  },
+  "adjacent_windows": [
+    {
+      "role": "setup",
+      "candidate_window": [
+        350.36,
+        372.2
+      ],
+      "start": 344.56,
+      "end": 349.92,
+      "repaired_text": "जो सेमीकंडक्टर चिप्स बनाई जाती हैं, वो बनाई जाती हैं सेमीकंडक्टर वाफर से.",
+      "repaired_local_asr_label": "clean",
+      "repaired_semantic_label": "clean_semantics",
+      "repaired_semantic_score": 0,
+      "transcript_quality_score": 100,
+      "low_confidence_asr": false,
+      "topic_drift": false,
+      "filler_only": true,
+      "usable_after_repair": false,
+      "local_asr_reasons": [],
+      "semantic_reasons": [],
+      "transcript_quality_reasons": []
+    },
+    {
+      "role": "payoff",
+      "candidate_window": [
+        350.36,
+        372.2
+      ],
+      "start": 372.2,
+      "end": 390.44,
+      "repaired_text": "",
+      "repaired_local_asr_label": "failed",
+      "repaired_semantic_label": "failed",
+      "repaired_semantic_score": null,
+      "transcript_quality_score": 0,
+      "low_confidence_asr": true,
+      "topic_drift": false,
+      "filler_only": true,
+      "usable_after_repair": false,
+      "local_asr_reasons": [
+        "retry_failed=faster_whisper_child_failed"
+      ],
+      "semantic_reasons": [],
+      "transcript_quality_reasons": [
+        "retry_failed=faster_whisper_child_failed"
+      ]
+    },
+    {
+      "role": "setup",
+      "candidate_window": [
+        396.04,
+        412.36
+      ],
+      "start": 394.32,
+      "end": 396.04,
+      "repaired_text": "इस सेंड का इस्तमाल करता है।",
+      "repaired_local_asr_label": "clean",
+      "repaired_semantic_label": "clean_semantics",
+      "repaired_semantic_score": 0,
+      "transcript_quality_score": 85,
+      "low_confidence_asr": true,
+      "topic_drift": false,
+      "filler_only": true,
+      "usable_after_repair": false,
+      "local_asr_reasons": [],
+      "semantic_reasons": [],
+      "transcript_quality_reasons": [
+        "devanagari_repeated_token_ratio=0.17"
+      ]
+    },
+    {
+      "role": "payoff",
+      "candidate_window": [
+        396.04,
+        412.36
+      ],
+      "start": 413.36,
+      "end": 422.36,
+      "repaired_text": "तीके, उसी तरह से भारत जुखी इस पर एक लोंग टरम स्टाइजी लेके चल रहा है, बाद में देखेंगे कैसे अक्साइचिन को वापस हतिया नाये.",
+      "repaired_local_asr_label": "clean",
+      "repaired_semantic_label": "clean_semantics",
+      "repaired_semantic_score": 0,
+      "transcript_quality_score": 100,
+      "low_confidence_asr": false,
+      "topic_drift": false,
+      "filler_only": true,
+      "usable_after_repair": false,
+      "local_asr_reasons": [],
+      "semantic_reasons": [],
+      "transcript_quality_reasons": []
+    }
+  ],
+  "candidates": [
+    {
+      "window": [
+        350.36,
+        372.2
+      ],
+      "before_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "after_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "creator_safe_before": false,
+      "creator_safe_after": false,
+      "context_expansion_possible_after_repair": false,
+      "expanded_window": [
+        350.36,
+        372.2
+      ],
+      "setup_used": false,
+      "payoff_used": false,
+      "rejected_reason": "no_usable_adjacent_repair",
+      "local_asr_confidence_label": "clean",
+      "semantic_asr_confidence_label": "clean_semantics",
+      "expanded_text_preview": "और ये जो वेफर है, ये वेफर बनता है, वेफर याने की एक टुकड़ा टाइप का, ये टुकड़ा बनता है सेंड से, इसमें सेंड इस्तमाल होती हैं. और एक 30 सेंटिमेटर का सेमी कुंड़क्टर वेफर बनाने के लिए, करिब 10,000 लिटर स्वक्ष पानी च़िये होता है, जो ग्लेश्टेर से पेगला गौग पानी होता ह"
+    },
+    {
+      "window": [
+        396.04,
+        412.36
+      ],
+      "before_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "after_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "creator_safe_before": false,
+      "creator_safe_after": false,
+      "context_expansion_possible_after_repair": false,
+      "expanded_window": [
+        396.04,
+        412.36
+      ],
+      "setup_used": false,
+      "payoff_used": false,
+      "rejected_reason": "no_usable_adjacent_repair",
+      "local_asr_confidence_label": "clean",
+      "semantic_asr_confidence_label": "clean_semantics",
+      "expanded_text_preview": "और बड़े स्थर पर सेमीकंडॉक्टर वेफर वनाता हैं जो आगे जा कर के चिप्स बनती हैं और आईटी डपाटमेंट में यूज होती हैं इसलिए ये चेत्र चाइना की नजर में इस तरह से बसा हुगा हैं कि चाइना इसे छोडता नहीं हैं गलवान कुन्फलिक्ट हो, समझ पे आखें दिखाना हो चाइना इसलिए ही ये सब करता"
+    }
+  ]
+}

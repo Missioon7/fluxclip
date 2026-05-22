@@ -1,0 +1,266 @@
+{
+  "reports_used": [
+    "V49_7_SALVAGE_REPLAY_AUDIT_REPORT.md",
+    "V49_8_TARGETED_ASR_REPAIR_REPLAY_AUDIT_REPORT.md",
+    "V49_9_REPAIRED_WINDOW_RETRY_AUDIT_REPORT.md",
+    "V50_REPAIRED_TEXT_REPLAY_AUDIT_REPORT.md",
+    "V50_1_PAYOFF_SETUP_REPLAY_AUDIT_REPORT.md",
+    "V50_2_CONTEXT_SHAPING_REPLAY_AUDIT_REPORT.md",
+    "V50_3_ADJACENT_CONTEXT_REPAIR_AUDIT_REPORT.md",
+    "V51_FRESH_SOURCE_VALIDATION_AUDIT_REPORT.md",
+    "V52_PAYOFF_NATIVE_GENERATION_AUDIT_REPORT.md",
+    "V53_SOURCE_QUALITY_GATE_AUDIT_REPORT.md",
+    "V54_MULTI_SOURCE_BENCHMARK_AUDIT_REPORT.md",
+    "V54_1_UNSCORED_SOURCE_PREFLIGHT_AUDIT_REPORT.md"
+  ],
+  "recommendation": "collect_stronger_sources",
+  "decision_constraints": {
+    "do_not_weaken_creator_qa": true,
+    "do_not_relax_asr_thresholds": true,
+    "do_not_patch_candidate_generation": true,
+    "do_not_run_full_generation_on_this_batch": true
+  },
+  "v54_1_batch_summary": {
+    "total_unscored_sources": 5,
+    "sources_attempted_this_run": 0,
+    "sources_preflighted": 5,
+    "sources_completed": 5,
+    "sources_failed": 0,
+    "sources_remaining": 0,
+    "good_sources": 0,
+    "borderline_sources": 0,
+    "poor_sources": 5,
+    "best_source_for_full_generation": null,
+    "expected_clip_yield": "low",
+    "recommended_next_action": "do_not_run_full_generation_on_this_batch_collect_stronger_sources"
+  },
+  "findings": {
+    "working": [
+      "Fail-closed ASR quarantine and salvage logic reduce unstable finalists without weakening Creator QA.",
+      "Targeted and audio-backed ASR repair can improve local ASR and semantic cleanliness on some exact windows.",
+      "Resume-safe source preflight now scores raw sources one at a time and reuses existing ASR artifacts.",
+      "Source-quality scoring is consistently identifying weak uploads before any full-generation run."
+    ],
+    "still_failing": [
+      "Creator-safe output remains zero across the repair, replay, and fresh-source audits.",
+      "The batch still has no source rated good or borderline after V54.1 completed all five unscored sources.",
+      "Payoff and standalone-context failures persist after repaired text replay, payoff override replay, and context shaping replay.",
+      "No audit in this chain justifies full generation on the current batch."
+    ],
+    "asr_source_quality_failures": [
+      "V49.9 completed only 2 audio-backed repairs while 2 failed, so ASR cleanup is partial.",
+      "V51 fresh-source validation still showed asr_quality_score=62 with low_confidence_asr=True.",
+      "V54.1 finished with sources_completed=5, good_sources=0, borderline_sources=0, poor_sources=5.",
+      "Observed source-quality dominant failures across V54.1: filler_heavy_source, missing_standalone_payoff, semantic_degradation."
+    ],
+    "payoff_context_failures": [
+      "V50 repaired-text replay kept creator_safe_after=0 and no_hook_no_payoff_after=6.",
+      "V50.1 payoff setup replay found override_count=0 and creator_safe_after=0.",
+      "V50.2 context shaping replay expanded 0 candidates and still left creator_safe_after=0.",
+      "V50.3 adjacent context repair produced context_expansion_possible_after_repair=0.",
+      "V52 payoff-native generation found payoff_anchors_found=0 and candidates_generated_from_payoff=0."
+    ],
+    "batch_assessment": {
+      "worth_full_generation": false,
+      "reason": "No source in the completed V54.1 batch is good or borderline, and the repair/replay chain never produced creator-safe candidates.",
+      "poor_source_jobs": [
+        "42007af6-770d-4192-bed6-1fbe7588c168",
+        "44198754-4f75-4428-9926-616c0ce170c9",
+        "646ad490-6470-4d8f-ace2-7b3ddceb49d7",
+        "833d13b2-a3aa-4fae-97da-f715a5ee3149",
+        "c537ca42-8d0d-4f67-a279-7e63156f32ea"
+      ]
+    }
+  },
+  "source_quality_snapshot": [
+    {
+      "job_id": "42007af6-770d-4192-bed6-1fbe7588c168",
+      "label": "poor",
+      "score": 0,
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "filler_heavy_source",
+      "creator_safe_count": 0
+    },
+    {
+      "job_id": "44198754-4f75-4428-9926-616c0ce170c9",
+      "label": "poor",
+      "score": 0,
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "filler_heavy_source",
+      "creator_safe_count": 0
+    },
+    {
+      "job_id": "646ad490-6470-4d8f-ace2-7b3ddceb49d7",
+      "label": "poor",
+      "score": 0,
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "semantic_degradation",
+      "creator_safe_count": 0
+    },
+    {
+      "job_id": "833d13b2-a3aa-4fae-97da-f715a5ee3149",
+      "label": "poor",
+      "score": 0,
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "filler_heavy_source",
+      "creator_safe_count": 0
+    },
+    {
+      "job_id": "c537ca42-8d0d-4f67-a279-7e63156f32ea",
+      "label": "poor",
+      "score": 0,
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "missing_standalone_payoff",
+      "creator_safe_count": 0
+    }
+  ],
+  "report_summaries": {
+    "V49_7_SALVAGE_REPLAY_AUDIT_REPORT.md": {
+      "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+      "replayable candidates": "17",
+      "current finalists": "6",
+      "current finalists quarantined": "4",
+      "remaining clean/borderline candidates": "2",
+      "current final clean/borderline/unstable": "2 / 0 / 4",
+      "predicted final clean/borderline/unstable": "2 / 0 / 0",
+      "final unstable candidates decrease": "True",
+      "semantic degraded finalists increase": "False",
+      "video rerun justified": "True"
+    },
+    "V49_8_TARGETED_ASR_REPAIR_REPLAY_AUDIT_REPORT.md": {
+      "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+      "replayable candidates": "17",
+      "current finalists quarantined": "4",
+      "repair attempted unstable candidates": "15",
+      "repair improved candidates": "11",
+      "repair label improved candidates": "11",
+      "degraded before/after repair": "9 / 1",
+      "repaired window available candidates": "0",
+      "repair export safe candidates": "0",
+      "predicted final clean/unstable after fail-closed repair": "2 / 0",
+      "semantic degraded finalists increase": "False",
+      "unstable garbage export risk": "False"
+    },
+    "V49_9_REPAIRED_WINDOW_RETRY_AUDIT_REPORT.md": {
+      "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+      "current quarantined finalists": "4",
+      "audio-backed repairs completed": "2",
+      "audio-backed repairs failed": "2",
+      "repaired window available candidates": "2",
+      "repair export safe candidates": "2",
+      "would be creator-safe after ASR repair": "0",
+      "predicted final clean from repaired windows": "2",
+      "predicted final unstable from repaired windows": "2",
+      "video rerun justified": "True"
+    },
+    "V50_REPAIRED_TEXT_REPLAY_AUDIT_REPORT.md": {
+      "finalists analyzed": "6",
+      "repaired_text_applied_count": "2",
+      "no_hook_no_payoff_before": "6",
+      "no_hook_no_payoff_after": "6",
+      "creator_safe_before": "0",
+      "creator_safe_after": "0",
+      "predicted_final_clean": "4",
+      "predicted_final_unstable": "2",
+      "semantic_degraded_before/after": "2 / 2",
+      "video_rerun_justified": "True"
+    },
+    "V50_1_PAYOFF_SETUP_REPLAY_AUDIT_REPORT.md": {
+      "finalists analyzed": "6",
+      "no_hook_no_payoff_before": "6",
+      "no_hook_no_payoff_after": "6",
+      "creator_safe_before": "0",
+      "creator_safe_after": "0",
+      "predicted_final_clean": "4",
+      "predicted_final_unstable": "2",
+      "override_count": "0",
+      "false_positive_risk": "low",
+      "video_rerun_justified": "False"
+    },
+    "V50_2_CONTEXT_SHAPING_REPLAY_AUDIT_REPORT.md": {
+      "candidates_tested": "4",
+      "candidates_expanded": "0",
+      "no_hook_no_payoff_before": "4",
+      "no_hook_no_payoff_after": "4",
+      "creator_safe_before": "0",
+      "creator_safe_after": "0",
+      "predicted_final_clean": "4",
+      "predicted_final_unstable": "0",
+      "video_rerun_justified": "False"
+    },
+    "V50_3_ADJACENT_CONTEXT_REPAIR_AUDIT_REPORT.md": {
+      "adjacent_windows_tested": "4",
+      "adjacent_windows_repaired": "0",
+      "context_expansion_possible_after_repair": "0",
+      "no_hook_no_payoff_before": "2",
+      "no_hook_no_payoff_after": "2",
+      "creator_safe_before": "0",
+      "creator_safe_after": "0",
+      "predicted_final_clean": "2",
+      "predicted_final_unstable": "0",
+      "video_rerun_justified": "False"
+    },
+    "V51_FRESH_SOURCE_VALIDATION_AUDIT_REPORT.md": {
+      "job_id": "v51_fresh_source_23f21012",
+      "asr_mode": "native_transcribe",
+      "asr_quality_score": "62",
+      "low_confidence_asr": "True",
+      "asr_quality_reasons": "['replacement_chars=2', 'repeated_hindi_phrase=अपको अपको']",
+      "candidates_found": "11",
+      "candidates_quarantined": "6",
+      "repaired_window_needed": "6",
+      "pre_creator_qa_candidates": "2",
+      "creator_safe_count": "0",
+      "final_clips_count": "0",
+      "salvage_allowed_clean": "1",
+      "salvage_allowed_borderline": "2",
+      "salvage_quarantined_unstable": "6",
+      "baseline_job_id": "23f21012-b025-4521-93c0-e13d15271343",
+      "baseline_pre_creator_qa_candidates": "5",
+      "baseline_creator_safe_count": "0",
+      "baseline_final_clips_count": "0",
+      "baseline_rejection_reasons": "[('no_hook_no_payoff', 5), ('weak_standalone_context', 1)]",
+      "v49_7_to_v50_3_assessment": "helped_not_overblocked",
+      "recommendation": "target_payoff_candidate_generation_on_clean_or_borderline_windows",
+      "reason": "ASR quarantine removed unstable junk, but surviving clean/borderline candidates still fail on no_hook_no_payoff"
+    },
+    "V52_PAYOFF_NATIVE_GENERATION_AUDIT_REPORT.md": {
+      "payoff_anchors_found": "0",
+      "candidates_generated_from_payoff": "0",
+      "creator_safe_before": "0",
+      "creator_safe_after": "0",
+      "no_hook_no_payoff_before": "2",
+      "no_hook_no_payoff_after": "0",
+      "predicted_final_clean": "0",
+      "predicted_final_unstable": "0",
+      "false_positive_risk": "low",
+      "video_rerun_justified": "False"
+    },
+    "V53_SOURCE_QUALITY_GATE_AUDIT_REPORT.md": {
+      "jobs_evaluated": "6"
+    },
+    "V54_MULTI_SOURCE_BENCHMARK_AUDIT_REPORT.md": {
+      "total_sources_tested": "10",
+      "good_sources": "0",
+      "borderline_sources": "0",
+      "poor_sources": "5",
+      "unscored_sources": "5",
+      "best_source_for_full_rerun": "None",
+      "expected_clip_yield": "low",
+      "recommended_next_action": "preload_v53_scoring_on_unscored_sources_before_any_full_generation"
+    },
+    "V54_1_UNSCORED_SOURCE_PREFLIGHT_AUDIT_REPORT.md": {
+      "total_unscored_sources": "5",
+      "sources_attempted_this_run": "0",
+      "sources_preflighted": "5",
+      "sources_failed": "0",
+      "sources_remaining": "0",
+      "good_sources": "0",
+      "borderline_sources": "0",
+      "poor_sources": "5",
+      "best_source_for_full_generation": "None",
+      "expected_clip_yield": "low",
+      "recommended_next_action": "do_not_run_full_generation_on_this_batch_collect_stronger_sources"
+    }
+  }
+}

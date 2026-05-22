@@ -1,0 +1,987 @@
+{
+  "server.py": {
+    "exists": true,
+    "lines": 498,
+    "syntax_ok": true,
+    "functions": [
+      "home",
+      "worker_status",
+      "create_job",
+      "upload_existing_job",
+      "upload",
+      "status",
+      "submit_feedback",
+      "analytics_summary",
+      "analytics_deep_summary",
+      "system_health",
+      "cleanup_preview",
+      "cleanup_execute",
+      "read_jsonl",
+      "count_by",
+      "file_count"
+    ],
+    "matches": {
+      "server_routes": {
+        "worker-status": [
+          {
+            "line": 47,
+            "text": "@app.get(\"/worker-status\")"
+          }
+        ],
+        "status/{job_id}": [
+          {
+            "line": 162,
+            "text": "@app.get(\"/status/{job_id}\")"
+          }
+        ],
+        "feedback": [
+          {
+            "line": 179,
+            "text": "# \ud83d\udd25 V21 Creator Feedback + Learning API"
+          },
+          {
+            "line": 182,
+            "text": "@app.post(\"/feedback\")"
+          },
+          {
+            "line": 183,
+            "text": "async def submit_feedback(payload: dict):"
+          },
+          {
+            "line": 185,
+            "text": "Stores creator/user feedback for future scoring auto-tuning."
+          },
+          {
+            "line": 206,
+            "text": "with open(\"analytics/creator_feedback.jsonl\", \"a\", encoding=\"utf-8\") as f:"
+          },
+          {
+            "line": 218,
+            "text": "feedback_path = \"analytics/creator_feedback.jsonl\""
+          },
+          {
+            "line": 221,
+            "text": "feedback = []"
+          },
+          {
+            "line": 224,
+            "text": "if os.path.exists(feedback_path):"
+          },
+          {
+            "line": 225,
+            "text": "with open(feedback_path, \"r\", encoding=\"utf-8\") as f:"
+          },
+          {
+            "line": 226,
+            "text": "feedback = [json.loads(x) for x in f if x.strip()]"
+          }
+        ],
+        "cleanup-preview": [
+          {
+            "line": 358,
+            "text": "@app.get(\"/system/cleanup-preview\")"
+          }
+        ],
+        "deep": [
+          {
+            "line": 258,
+            "text": "@app.get(\"/analytics/deep-summary\")"
+          },
+          {
+            "line": 259,
+            "text": "async def analytics_deep_summary():"
+          }
+        ],
+        "analytics": [
+          {
+            "line": 196,
+            "text": "os.makedirs(\"analytics\", exist_ok=True)"
+          },
+          {
+            "line": 206,
+            "text": "with open(\"analytics/creator_feedback.jsonl\", \"a\", encoding=\"utf-8\") as f:"
+          },
+          {
+            "line": 215,
+            "text": "@app.get(\"/analytics/summary\")"
+          },
+          {
+            "line": 216,
+            "text": "async def analytics_summary():"
+          },
+          {
+            "line": 218,
+            "text": "feedback_path = \"analytics/creator_feedback.jsonl\""
+          },
+          {
+            "line": 219,
+            "text": "clip_path = \"analytics/clip_intelligence.jsonl\""
+          },
+          {
+            "line": 258,
+            "text": "@app.get(\"/analytics/deep-summary\")"
+          },
+          {
+            "line": 259,
+            "text": "async def analytics_deep_summary():"
+          },
+          {
+            "line": 275,
+            "text": "clips = read_jsonl(\"analytics/clip_intelligence.jsonl\")"
+          },
+          {
+            "line": 276,
+            "text": "feedback = read_jsonl(\"analytics/creator_feedback.jsonl\")"
+          }
+        ],
+        "production-health": []
+      },
+      "pipeline_features": {
+        "v19_niche_native_signals": [],
+        "v23_visual_clip_score": [],
+        "v25_feedback_learning_boost": [],
+        "v33_story_arc_score": [],
+        "v34_creator_pack_metadata": [],
+        "extract_best_thumbnail_frames": [],
+        "log_visual_intelligence": [],
+        "creator_pack": [],
+        "score_breakdown": [],
+        "detected_niche": [],
+        "payoff_bonus": [],
+        "story_score": [],
+        "visual_score": []
+      },
+      "quality_risks": {
+        "No valid viral clips found": [],
+        "weak_creator_start": [],
+        "weak_creator_ending": [],
+        "sponsor": [],
+        "CTA": [],
+        "ad": [
+          {
+            "line": 1,
+            "text": "from fastapi import FastAPI, UploadFile, File"
+          },
+          {
+            "line": 9,
+            "text": "import threading"
+          },
+          {
+            "line": 14,
+            "text": "app.add_middleware("
+          },
+          {
+            "line": 19,
+            "text": "allow_headers=[\"*\"],"
+          },
+          {
+            "line": 22,
+            "text": "UPLOAD_DIR = \"/home/sahilthakur3912k/fluxclip/uploads\""
+          },
+          {
+            "line": 23,
+            "text": "OUTPUT_DIR = \"/home/sahilthakur3912k/fluxclip/uploads\""
+          },
+          {
+            "line": 24,
+            "text": "os.makedirs(UPLOAD_DIR, exist_ok=True)"
+          },
+          {
+            "line": 27,
+            "text": "print(\"\ud83d\udd25 STATIC UPLOAD DIR:\", UPLOAD_DIR)"
+          },
+          {
+            "line": 30,
+            "text": "\"/uploads\","
+          },
+          {
+            "line": 31,
+            "text": "StaticFiles(directory=UPLOAD_DIR),"
+          }
+        ],
+        "rejected": [],
+        "continue": [
+          {
+            "line": 268,
+            "text": "continue"
+          },
+          {
+            "line": 272,
+            "text": "continue"
+          },
+          {
+            "line": 376,
+            "text": "continue"
+          },
+          {
+            "line": 436,
+            "text": "continue"
+          },
+          {
+            "line": 440,
+            "text": "continue"
+          },
+          {
+            "line": 447,
+            "text": "continue"
+          }
+        ],
+        "return []": []
+      },
+      "asr_safety": {
+        "signal.alarm": [],
+        "threading.current_thread": [],
+        "main_thread": [],
+        "ASRTimeout": [],
+        "transcribe": [],
+        "task=\"transcribe\"": []
+      }
+    }
+  },
+  "pipeline_runner.py": {
+    "exists": true,
+    "lines": 3033,
+    "syntax_ok": true,
+    "functions": [
+      "safe_float",
+      "safe_dict_list",
+      "safe_get",
+      "is_ad_segment",
+      "get_nearby_text",
+      "get_captions_for_clip",
+      "generate_social_caption",
+      "_v7_segment_energy",
+      "_v7_is_drift",
+      "_v7_is_payoff",
+      "expand_story_clip",
+      "is_strong_hook",
+      "is_weak_hook",
+      "v17_empty_curiosity_bait",
+      "viral_quality_boost",
+      "v6_emotional_momentum_bonus",
+      "v6_dead_zone_penalty",
+      "v6_creator_pacing_bonus",
+      "v6_payoff_bonus",
+      "v6_story_arc_bonus",
+      "v6_hook_aligned_start",
+      "v6_clean_unique_title",
+      "v7_creator_title_from_context",
+      "v7_context_quality_score",
+      "v7_better_payoff_bonus",
+      "v7_stronger_dead_zone_penalty",
+      "_v8_first_last_segment_text",
+      "_v8_bad_start",
+      "_v8_bad_end",
+      "_v8_word_set",
+      "_v8_context_overlap",
+      "v8_natural_editor_grade",
+      "v8_diverse_title",
+      "v9_start_hook_score",
+      "v9_end_payoff_score",
+      "v9_clean_start_time",
+      "v11_is_hard_bad_ending",
+      "v9_clean_end_time",
+      "v9_true_creator_grade",
+      "v10_detect_creator_niche",
+      "v10_emotional_spike_score",
+      "v10_replayability_score",
+      "v15_human_reaction_score",
+      "v10_creator_retention_score",
+      "v9_editorial_title",
+      "smooth_clip_end",
+      "v19_text_hits",
+      "v19_niche_native_signals",
+      "v19_is_clean_boundary",
+      "v19_universal_clip_ok",
+      "v19_recover_fallback_clips",
+      "build_final_clips",
+      "generate_raw_clips_safe",
+      "find_test_video",
+      "clean_generated_files",
+      "v13_delayed_job_cleanup",
+      "v18_cleanup_old_files",
+      "v18_preview_text",
+      "v18_safe_score_breakdown",
+      "v34_creator_pack_metadata",
+      "v33_story_arc_score",
+      "v27_normalize_asr_text",
+      "v27_normalize_segments",
+      "v26_log_failure_snapshot",
+      "v25_feedback_learning_boost",
+      "v23_visual_clip_score",
+      "v20_log_clip_intelligence",
+      "run_pipeline"
+    ],
+    "matches": {
+      "server_routes": {
+        "worker-status": [],
+        "status/{job_id}": [],
+        "feedback": [
+          {
+            "line": 2053,
+            "text": "feedback_boost, feedback_reasons = v25_feedback_learning_boost(detected_niche)"
+          },
+          {
+            "line": 2646,
+            "text": "# \ud83d\udd25 V25 Feedback-Based Auto Learning"
+          },
+          {
+            "line": 2649,
+            "text": "def v25_feedback_learning_boost(niche):"
+          },
+          {
+            "line": 2651,
+            "text": "path = Path(\"analytics\") / \"creator_feedback.jsonl\""
+          },
+          {
+            "line": 2653,
+            "text": "return 0, [\"no_feedback_yet\"]"
+          },
+          {
+            "line": 2676,
+            "text": "return 0, [\"no_niche_feedback\"]"
+          },
+          {
+            "line": 2679,
+            "text": "reasons = [f\"feedback_good={good}\", f\"feedback_bad={bad}\"]"
+          },
+          {
+            "line": 2684,
+            "text": "print(f\"\u26a0 V25 feedback learning failed: {e}\")"
+          },
+          {
+            "line": 2685,
+            "text": "return 0, [\"feedback_error\"]"
+          }
+        ],
+        "cleanup-preview": [],
+        "deep": [],
+        "analytics": [
+          {
+            "line": 2630,
+            "text": "Path(\"analytics\").mkdir(exist_ok=True)"
+          },
+          {
+            "line": 2638,
+            "text": "with open(\"analytics/failure_snapshots.jsonl\", \"a\", encoding=\"utf-8\") as f:"
+          },
+          {
+            "line": 2651,
+            "text": "path = Path(\"analytics\") / \"creator_feedback.jsonl\""
+          },
+          {
+            "line": 2737,
+            "text": "Path(\"analytics\").mkdir(exist_ok=True)"
+          },
+          {
+            "line": 2738,
+            "text": "path = Path(\"analytics\") / \"clip_intelligence.jsonl\""
+          },
+          {
+            "line": 2764,
+            "text": "print(f\"\u2705 V20 analytics logged: {len(clips)} clips stage={stage}\")"
+          },
+          {
+            "line": 2766,
+            "text": "print(f\"\u26a0 V20 analytics logging failed: {e}\")"
+          }
+        ],
+        "production-health": []
+      },
+      "pipeline_features": {
+        "v19_niche_native_signals": [
+          {
+            "line": 1749,
+            "text": "def v19_niche_native_signals(text, niche):"
+          },
+          {
+            "line": 1892,
+            "text": "native_score, native_reasons = v19_niche_native_signals(combined_text, niche)"
+          },
+          {
+            "line": 2042,
+            "text": "v19_native_score, v19_native_reasons = v19_niche_native_signals("
+          }
+        ],
+        "v23_visual_clip_score": [
+          {
+            "line": 2047,
+            "text": "visual_score, visual_reasons = v23_visual_clip_score("
+          },
+          {
+            "line": 2692,
+            "text": "def v23_visual_clip_score(start, end, visual_data):"
+          }
+        ],
+        "v25_feedback_learning_boost": [
+          {
+            "line": 2053,
+            "text": "feedback_boost, feedback_reasons = v25_feedback_learning_boost(detected_niche)"
+          },
+          {
+            "line": 2649,
+            "text": "def v25_feedback_learning_boost(niche):"
+          }
+        ],
+        "v33_story_arc_score": [
+          {
+            "line": 2036,
+            "text": "v33_story_score, v33_story_reasons = v33_story_arc_score("
+          },
+          {
+            "line": 2528,
+            "text": "def v33_story_arc_score(start_text, middle_text, end_text):"
+          }
+        ],
+        "v34_creator_pack_metadata": [
+          {
+            "line": 2484,
+            "text": "def v34_creator_pack_metadata(title, text, niche, visual_score=0, story_score=0):"
+          }
+        ],
+        "extract_best_thumbnail_frames": [
+          {
+            "line": 6,
+            "text": "from visual_engine import log_visual_intelligence, extract_best_thumbnail_frames"
+          },
+          {
+            "line": 2784,
+            "text": "thumb_data = extract_best_thumbnail_frames(file_path, job_id, top_n=5)"
+          }
+        ],
+        "log_visual_intelligence": [
+          {
+            "line": 6,
+            "text": "from visual_engine import log_visual_intelligence, extract_best_thumbnail_frames"
+          },
+          {
+            "line": 2783,
+            "text": "visual_data = log_visual_intelligence(job_id, file_path)"
+          }
+        ],
+        "creator_pack": [
+          {
+            "line": 2484,
+            "text": "def v34_creator_pack_metadata(title, text, niche, visual_score=0, story_score=0):"
+          }
+        ],
+        "score_breakdown": [
+          {
+            "line": 1909,
+            "text": "\"score_breakdown\": {"
+          },
+          {
+            "line": 1910,
+            "text": "**v.get(\"score_breakdown\", {}),"
+          },
+          {
+            "line": 2162,
+            "text": "\"score_breakdown\": {"
+          },
+          {
+            "line": 2163,
+            "text": "**v.get(\"score_breakdown\", {}),"
+          },
+          {
+            "line": 2443,
+            "text": "def v18_safe_score_breakdown(score_breakdown):"
+          },
+          {
+            "line": 2444,
+            "text": "if not isinstance(score_breakdown, dict):"
+          },
+          {
+            "line": 2456,
+            "text": "if k in score_breakdown:"
+          },
+          {
+            "line": 2457,
+            "text": "out[k] = score_breakdown[k]"
+          },
+          {
+            "line": 2460,
+            "text": "v = score_breakdown.get(k)"
+          },
+          {
+            "line": 2742,
+            "text": "sb = c.get(\"score_breakdown\", {}) if isinstance(c.get(\"score_breakdown\"), dict) else {}"
+          }
+        ],
+        "detected_niche": [
+          {
+            "line": 1911,
+            "text": "\"detected_niche\": niche,"
+          },
+          {
+            "line": 2005,
+            "text": "detected_niche = v10_detect_creator_niche(combined_text)"
+          },
+          {
+            "line": 2044,
+            "text": "detected_niche"
+          },
+          {
+            "line": 2053,
+            "text": "feedback_boost, feedback_reasons = v25_feedback_learning_boost(detected_niche)"
+          },
+          {
+            "line": 2059,
+            "text": "informational_niche = detected_niche in V19_INFORMATIONAL_NICHES"
+          },
+          {
+            "line": 2062,
+            "text": "detected_niche,"
+          },
+          {
+            "line": 2082,
+            "text": "f\"niche={detected_niche} emotional={emotional_spike} \""
+          },
+          {
+            "line": 2145,
+            "text": "\"niche\": detected_niche or v.get(\"niche\", \"general\"),"
+          },
+          {
+            "line": 2172,
+            "text": "\"detected_niche\": detected_niche,"
+          },
+          {
+            "line": 2449,
+            "text": "\"payoff_bonus\", \"dead_zone_penalty\", \"context_quality\", \"detected_niche\","
+          }
+        ],
+        "payoff_bonus": [
+          {
+            "line": 519,
+            "text": "def v6_payoff_bonus(text):"
+          },
+          {
+            "line": 728,
+            "text": "def v7_better_payoff_bonus(text):"
+          },
+          {
+            "line": 1994,
+            "text": "payoff_bonus = max("
+          },
+          {
+            "line": 1995,
+            "text": "v6_payoff_bonus(combined_text),"
+          },
+          {
+            "line": 1996,
+            "text": "v7_better_payoff_bonus(combined_text)"
+          },
+          {
+            "line": 2153,
+            "text": "+ payoff_bonus"
+          },
+          {
+            "line": 2169,
+            "text": "\"payoff_bonus\": payoff_bonus,"
+          },
+          {
+            "line": 2449,
+            "text": "\"payoff_bonus\", \"dead_zone_penalty\", \"context_quality\", \"detected_niche\","
+          }
+        ],
+        "story_score": [
+          {
+            "line": 2036,
+            "text": "v33_story_score, v33_story_reasons = v33_story_arc_score("
+          },
+          {
+            "line": 2484,
+            "text": "def v34_creator_pack_metadata(title, text, niche, visual_score=0, story_score=0):"
+          },
+          {
+            "line": 2495,
+            "text": "if story_score and story_score > 10:"
+          }
+        ],
+        "visual_score": [
+          {
+            "line": 2047,
+            "text": "visual_score, visual_reasons = v23_visual_clip_score("
+          },
+          {
+            "line": 2484,
+            "text": "def v34_creator_pack_metadata(title, text, niche, visual_score=0, story_score=0):"
+          },
+          {
+            "line": 2492,
+            "text": "if visual_score and visual_score > 10:"
+          },
+          {
+            "line": 2707,
+            "text": "vs = safe_float(m.get(\"visual_score\"))"
+          }
+        ]
+      },
+      "quality_risks": {
+        "No valid viral clips found": [
+          {
+            "line": 2195,
+            "text": "raise Exception(\"No valid viral clips found after universal V19 filtering\")"
+          }
+        ],
+        "weak_creator_start": [
+          {
+            "line": 1186,
+            "text": "reasons.append(\"weak_creator_start\")"
+          },
+          {
+            "line": 1820,
+            "text": "\"weak_creator_start\", \"weak_creator_ending\","
+          },
+          {
+            "line": 2103,
+            "text": "and \"weak_creator_start\" not in true_creator_reasons"
+          },
+          {
+            "line": 2116,
+            "text": "\"weak_creator_start\" in true_creator_reasons or"
+          }
+        ],
+        "weak_creator_ending": [
+          {
+            "line": 1004,
+            "text": "weak_creator_endings = ["
+          },
+          {
+            "line": 1015,
+            "text": "if any(x in text for x in weak_creator_endings):"
+          },
+          {
+            "line": 1188,
+            "text": "reasons.append(\"weak_creator_ending\")"
+          },
+          {
+            "line": 1820,
+            "text": "\"weak_creator_start\", \"weak_creator_ending\","
+          },
+          {
+            "line": 2104,
+            "text": "and \"weak_creator_ending\" not in true_creator_reasons"
+          },
+          {
+            "line": 2117,
+            "text": "\"weak_creator_ending\" in true_creator_reasons or"
+          }
+        ],
+        "sponsor": [
+          {
+            "line": 29,
+            "text": "\"career247\", \"career 247\", \"sponsored\", \"sponsor\", \"promo code\","
+          },
+          {
+            "line": 1983,
+            "text": "# V18 hard sponsor/ad gate after story expansion."
+          }
+        ],
+        "CTA": [
+          {
+            "line": 1961,
+            "text": "print(f\"\u274c Ad/CTA segment rejected: {text[:120]}\")"
+          },
+          {
+            "line": 1986,
+            "text": "print(f\"\u274c V18 expanded ad/CTA rejected: {combined_text[:140]}\")"
+          },
+          {
+            "line": 2517,
+            "text": "\"suggested_cta\": \"Watch till the end.\","
+          }
+        ],
+        "ad": [
+          {
+            "line": 9,
+            "text": "import threading"
+          },
+          {
+            "line": 19,
+            "text": "AD_WORDS = ["
+          },
+          {
+            "line": 25,
+            "text": "\"golden opportunity\", \"limited time\", \"enroll\", \"admission\""
+          },
+          {
+            "line": 28,
+            "text": "HARD_AD_WORDS = ["
+          },
+          {
+            "line": 54,
+            "text": "def is_ad_segment(text):"
+          },
+          {
+            "line": 57,
+            "text": "if any(word in text for word in HARD_AD_WORDS):"
+          },
+          {
+            "line": 61,
+            "text": "for word in AD_WORDS:"
+          },
+          {
+            "line": 143,
+            "text": "\"killing\", \"disappear\", \"dead body\""
+          },
+          {
+            "line": 149,
+            "text": "\"dead\", \"killed\", \"fear\", \"danger\","
+          },
+          {
+            "line": 230,
+            "text": "# \u2705 BEST START: only useful setup, never random padding"
+          }
+        ],
+        "rejected": [
+          {
+            "line": 1961,
+            "text": "print(f\"\u274c Ad/CTA segment rejected: {text[:120]}\")"
+          },
+          {
+            "line": 1986,
+            "text": "print(f\"\u274c V18 expanded ad/CTA rejected: {combined_text[:140]}\")"
+          },
+          {
+            "line": 2081,
+            "text": "f\"\u274c V10/V15 DNA rejected clip: \""
+          },
+          {
+            "line": 2124,
+            "text": "f\"\u274c Creator editor rejected clip: \""
+          },
+          {
+            "line": 2948,
+            "text": "raise Exception(\"All clips rejected by speech density/ad filter\")"
+          }
+        ],
+        "continue": [
+          {
+            "line": 91,
+            "text": "continue"
+          },
+          {
+            "line": 97,
+            "text": "continue"
+          },
+          {
+            "line": 103,
+            "text": "continue"
+          },
+          {
+            "line": 108,
+            "text": "continue"
+          },
+          {
+            "line": 240,
+            "text": "continue"
+          },
+          {
+            "line": 283,
+            "text": "continue"
+          },
+          {
+            "line": 566,
+            "text": "continue"
+          },
+          {
+            "line": 770,
+            "text": "continue"
+          },
+          {
+            "line": 1056,
+            "text": "continue"
+          },
+          {
+            "line": 1059,
+            "text": "continue"
+          }
+        ],
+        "return []": [
+          {
+            "line": 44,
+            "text": "return []"
+          }
+        ]
+      },
+      "asr_safety": {
+        "signal.alarm": [],
+        "threading.current_thread": [],
+        "main_thread": [],
+        "ASRTimeout": [],
+        "transcribe": [
+          {
+            "line": 1,
+            "text": "from asr_engine import transcribe"
+          },
+          {
+            "line": 2798,
+            "text": "data = transcribe(file_path)"
+          }
+        ],
+        "task=\"transcribe\"": []
+      }
+    }
+  },
+  "visual_engine.py": {
+    "exists": true,
+    "lines": 167,
+    "syntax_ok": true,
+    "functions": [
+      "analyze_visual_moments",
+      "log_visual_intelligence",
+      "extract_best_thumbnail_frames"
+    ],
+    "matches": {
+      "server_routes": {
+        "worker-status": [],
+        "status/{job_id}": [],
+        "feedback": [],
+        "cleanup-preview": [],
+        "deep": [],
+        "analytics": [
+          {
+            "line": 95,
+            "text": "Path(\"analytics\").mkdir(exist_ok=True)"
+          },
+          {
+            "line": 103,
+            "text": "with open(\"analytics/visual_intelligence.jsonl\", \"a\", encoding=\"utf-8\") as f:"
+          },
+          {
+            "line": 158,
+            "text": "Path(\"analytics\").mkdir(exist_ok=True)"
+          },
+          {
+            "line": 159,
+            "text": "with open(\"analytics/thumbnail_intelligence.jsonl\", \"a\", encoding=\"utf-8\") as f:"
+          }
+        ],
+        "production-health": []
+      },
+      "pipeline_features": {
+        "v19_niche_native_signals": [],
+        "v23_visual_clip_score": [],
+        "v25_feedback_learning_boost": [],
+        "v33_story_arc_score": [],
+        "v34_creator_pack_metadata": [],
+        "extract_best_thumbnail_frames": [
+          {
+            "line": 114,
+            "text": "def extract_best_thumbnail_frames(video_path, job_id, top_n=5):"
+          }
+        ],
+        "log_visual_intelligence": [
+          {
+            "line": 93,
+            "text": "def log_visual_intelligence(job_id, video_path):"
+          }
+        ],
+        "creator_pack": [],
+        "score_breakdown": [],
+        "detected_niche": [],
+        "payoff_bonus": [],
+        "story_score": [],
+        "visual_score": [
+          {
+            "line": 64,
+            "text": "visual_score = 0"
+          },
+          {
+            "line": 65,
+            "text": "visual_score += min(30, motion * 1.8)"
+          },
+          {
+            "line": 66,
+            "text": "visual_score += 10 if faces > 0 else 0"
+          },
+          {
+            "line": 67,
+            "text": "visual_score += 6 if 45 <= brightness <= 190 else -4"
+          },
+          {
+            "line": 74,
+            "text": "\"visual_score\": round(visual_score, 2),"
+          },
+          {
+            "line": 83,
+            "text": "top = sorted(moments, key=lambda x: x[\"visual_score\"], reverse=True)[:20]"
+          },
+          {
+            "line": 144,
+            "text": "\"visual_score\": m.get(\"visual_score\"),"
+          }
+        ]
+      },
+      "quality_risks": {
+        "No valid viral clips found": [],
+        "weak_creator_start": [],
+        "weak_creator_ending": [],
+        "sponsor": [],
+        "CTA": [],
+        "ad": [
+          {
+            "line": 11,
+            "text": "- face presence if haarcascade available"
+          },
+          {
+            "line": 26,
+            "text": "face_cascade = None"
+          },
+          {
+            "line": 29,
+            "text": "haar = cv2.data.haarcascades + \"haarcascade_frontalface_default.xml\""
+          },
+          {
+            "line": 30,
+            "text": "face_cascade = cv2.CascadeClassifier(haar)"
+          },
+          {
+            "line": 32,
+            "text": "face_cascade = None"
+          },
+          {
+            "line": 40,
+            "text": "ok, frame = cap.read()"
+          },
+          {
+            "line": 60,
+            "text": "if face_cascade is not None and not face_cascade.empty():"
+          },
+          {
+            "line": 61,
+            "text": "detected = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4)"
+          },
+          {
+            "line": 124,
+            "text": "out_dir = Path(\"uploads\")"
+          },
+          {
+            "line": 134,
+            "text": "ok, frame = cap.read()"
+          }
+        ],
+        "rejected": [],
+        "continue": [
+          {
+            "line": 46,
+            "text": "continue"
+          },
+          {
+            "line": 136,
+            "text": "continue"
+          }
+        ],
+        "return []": []
+      },
+      "asr_safety": {
+        "signal.alarm": [],
+        "threading.current_thread": [],
+        "main_thread": [],
+        "ASRTimeout": [],
+        "transcribe": [],
+        "task=\"transcribe\"": []
+      }
+    }
+  }
+}

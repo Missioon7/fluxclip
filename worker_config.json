@@ -1,0 +1,32 @@
+{
+  "prefer_worker": "colab_gpu",
+  "poll_interval_seconds": 8,
+  "max_wait_seconds": 1800,
+  "upload_dir": "uploads",
+  "workers": [
+    {
+      "name": "colab_gpu",
+      "url_env": "COLAB_GPU_WORKER_URL",
+      "url": "",
+      "priority": 1,
+      "enabled": true,
+      "requires_gpu": true
+    },
+    {
+      "name": "local_rtx2050",
+      "url_env": "LOCAL_GPU_WORKER_URL",
+      "url": "",
+      "priority": 2,
+      "enabled": true,
+      "requires_gpu": true
+    },
+    {
+      "name": "kaggle_gpu",
+      "url_env": "KAGGLE_GPU_WORKER_URL",
+      "url": "",
+      "priority": 3,
+      "enabled": false,
+      "requires_gpu": true
+    }
+  ]
+}

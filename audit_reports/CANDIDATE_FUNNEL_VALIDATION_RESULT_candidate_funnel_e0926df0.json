@@ -1,0 +1,353 @@
+{
+  "job_id": "candidate_funnel_e0926df0",
+  "result": {
+    "status": "done",
+    "message": "No creator-safe clips found",
+    "summary": {
+      "text_preview": "तो मीटिंगे बीच में एर्पॉट के लाउज में कहीं बी लिख से था। तो मैं कहीं बी लिख लेता हूँ। आपको लगता है अक्षर्च जी कि अपना टाइम आयेगा वो अपना टाइम आगया है इतने पाटकासच अपने इंटेविच वीजيرة आदे हैーん। प्रिशाभ वीस्ट न तीरिलूजी के फिल्म आरे हैं। धोनी इंटर्टेंट्यूनट ने यह फिल्म कि राइत्स खिताब के राइत्स ले लिए हैं। इस पर भी फिल्म आने वाले समय पे आए गै, यह दोी पाट हैं. तो इस पर भी फिल्म आने की समाबरा हैं, आपको लिखता है कि आपका वो समय आगे हैं, क्योंकि एक बार ऐसा होता है कि करियर में एक बंदे का एक सा पीरेड आथा है, किसी का इन्टर्वीज सुना था उसने बहुत अच्छी बात कही थे और इसे मैं कुद भी वासता रखती हूं जब समय खराप चल्ड रा हूँ होता है यजब समय आपको तोड़ा सा टाइम देता है समय देता है जब आपको अगर भी आपकी मेहनद, चिददत, और पौहच में कही नकही कोई कमी होगी, कि अबिदक वो एक फोन नहीं भजा रही है जिस फोन का मैं रहूँ पर इंतजार करता है। तो मिरे को लगता है कि अगर अपना टाइम आगे होता तो अपना बेटा आगे। जिस दिन अपना बेटा आगे न...",
+      "segments_count": 43,
+      "captions_count": 135,
+      "viral_segments_count": 10,
+      "asr_mode": "faster_whisper_medium_retry",
+      "asr_quality_score": 100,
+      "low_confidence_asr": false,
+      "clips_before_creator_qa": 6,
+      "clips_count": 0,
+      "rejected_by_creator_qa": 6,
+      "top_rejection_reasons": [
+        {
+          "reason": "no_hook_no_payoff",
+          "count": 6
+        },
+        {
+          "reason": "weak_standalone_context",
+          "count": 3
+        }
+      ]
+    },
+    "clips": [],
+    "final_clips": [],
+    "creator_qa": {
+      "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+      "message": "No creator-safe clips found",
+      "asr_mode": "faster_whisper_medium_retry",
+      "asr_quality_score": 100,
+      "low_confidence_asr": false,
+      "rejections": [
+        {
+          "ts": 1779278411.1208582,
+          "job_id": "candidate_funnel_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 285.38,
+          "end": 305.38,
+          "title": "Untitled Clip",
+          "reasons": [
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "metadata_reasons": [],
+          "preview": "तो वो आप दिना में इस उम्र में आता आते था का आच्छुका होता. तो वैसी मेरा एक टाइम स्लॉर्ट मेरे बच्चे के साथ जमा हुआ था कि ये टाइम है जब मैं और मेरा बेटा वक्त बिताते. अप बिना किसी हिंट के मेरे पास से अचानाक से उनको चिन लिया घया था."
+        },
+        {
+          "ts": 1779278411.1218584,
+          "job_id": "candidate_funnel_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 17.28,
+          "end": 53.38,
+          "title": "Untitled Clip",
+          "reasons": [
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "metadata_reasons": [],
+          "preview": "धोनी इंटर्टेंट्यूनट ने यह फिल्म कि राइत्स खिताब के राइत्स ले लिए हैं। इस पर भी फिल्म आने वाले समय पे आए गै, यह दोी पाट हैं. तो इस पर भी फिल्म आने की समाबरा हैं, आपको लिखता है कि आपका वो समय आगे हैं, क्योंकि एक बार ऐसा होता है कि करियर में एक बंदे का एक सा पीरे..."
+        },
+        {
+          "ts": 1779278411.1218584,
+          "job_id": "candidate_funnel_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 126.38,
+          "end": 165.38,
+          "title": "Untitled Clip",
+          "reasons": [
+            "no_hook_no_payoff"
+          ],
+          "metadata_reasons": [],
+          "preview": "तो ये एक जीस का इंतदार हैं, उस दिन मैं बोलूगा कि मैं पूरी तरीके से अपना बेटा हैं। ये दो लाइन मेरे दिमांग में थी जब मेरा स्ट्रूगल और हाडवाक शुरूआ था, कि एक अपना टाइम आगा और अपना बेटा आगा। तो मेरा माना है कि जिस दिन मैं अपने बेटे तक पहुँआ या मेरा बेटा मुझ्च तक प..."
+        },
+        {
+          "ts": 1779278411.122861,
+          "job_id": "candidate_funnel_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 30.28,
+          "end": 85.28,
+          "title": "Untitled Clip",
+          "reasons": [
+            "no_hook_no_payoff"
+          ],
+          "metadata_reasons": [],
+          "preview": "तो इस पर भी फिल्म आने की समाबरा हैं, आपको लिखता है कि आपका वो समय आगे हैं, क्योंकि एक बार ऐसा होता है कि करियर में एक बंदे का एक सा पीरेड आथा है, किसी का इन्टर्वीज सुना था उसने बहुत अच्छी बात कही थे और इसे मैं कुद भी वासता रखती हूं जब समय खराप चल्ड रा हूँ होता..."
+        },
+        {
+          "ts": 1779278411.122861,
+          "job_id": "candidate_funnel_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 229.38,
+          "end": 249.38,
+          "title": "Time",
+          "reasons": [
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "metadata_reasons": [],
+          "preview": "पहाडों पे जाकर के लिखना पश्ण करते हैं, कुछ रात में लिखते हैं, कुछ दिन में लिखते हैं, उस बक्त आपका पर time, फ्रेम आप माइंड में, उस बक्त आप कैसे ये कहाणिया लिखते थे, इत्ते डिस्टरब्द माइन में. मैं अच्छी वो कहाणी ना सबिती जी मैं पब्लिक के लिए और पब्लिशर के लिए लिख..."
+        },
+        {
+          "ts": 1779278411.1238616,
+          "job_id": "candidate_funnel_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 159.38,
+          "end": 214.38,
+          "title": "Untitled Clip",
+          "reasons": [
+            "no_hook_no_payoff"
+          ],
+          "metadata_reasons": [],
+          "preview": "महुँज शौट में कि शायद कुछ लोग एं कनेक्ट मिस कर रहे हूं, अपका बेटे से मतलब आपका जो आपकी फुर्स्ट वाइव के साथ जो आपके बेटे हैं उनसे मतलब हैं। मैं तो कैमरे पिद भी देखे हूँ आजा यार बहुत आप, नोद साल हो गया वेट करते हैं, अब आजा। अपने जब ये कहाणिया लिखी, एक इंपूर्टेंट..."
+        }
+      ],
+      "top_rejection_reasons": [
+        {
+          "reason": "no_hook_no_payoff",
+          "count": 6
+        },
+        {
+          "reason": "weak_standalone_context",
+          "count": 3
+        }
+      ]
+    }
+  },
+  "jobs": {
+    "candidate_funnel_e0926df0": {
+      "status": "completed",
+      "result": {
+        "status": "done",
+        "message": "No creator-safe clips found",
+        "summary": {
+          "text_preview": "तो मीटिंगे बीच में एर्पॉट के लाउज में कहीं बी लिख से था। तो मैं कहीं बी लिख लेता हूँ। आपको लगता है अक्षर्च जी कि अपना टाइम आयेगा वो अपना टाइम आगया है इतने पाटकासच अपने इंटेविच वीजيرة आदे हैーん। प्रिशाभ वीस्ट न तीरिलूजी के फिल्म आरे हैं। धोनी इंटर्टेंट्यूनट ने यह फिल्म कि राइत्स खिताब के राइत्स ले लिए हैं। इस पर भी फिल्म आने वाले समय पे आए गै, यह दोी पाट हैं. तो इस पर भी फिल्म आने की समाबरा हैं, आपको लिखता है कि आपका वो समय आगे हैं, क्योंकि एक बार ऐसा होता है कि करियर में एक बंदे का एक सा पीरेड आथा है, किसी का इन्टर्वीज सुना था उसने बहुत अच्छी बात कही थे और इसे मैं कुद भी वासता रखती हूं जब समय खराप चल्ड रा हूँ होता है यजब समय आपको तोड़ा सा टाइम देता है समय देता है जब आपको अगर भी आपकी मेहनद, चिददत, और पौहच में कही नकही कोई कमी होगी, कि अबिदक वो एक फोन नहीं भजा रही है जिस फोन का मैं रहूँ पर इंतजार करता है। तो मिरे को लगता है कि अगर अपना टाइम आगे होता तो अपना बेटा आगे। जिस दिन अपना बेटा आगे न...",
+          "segments_count": 43,
+          "captions_count": 135,
+          "viral_segments_count": 10,
+          "asr_mode": "faster_whisper_medium_retry",
+          "asr_quality_score": 100,
+          "low_confidence_asr": false,
+          "clips_before_creator_qa": 6,
+          "clips_count": 0,
+          "rejected_by_creator_qa": 6,
+          "top_rejection_reasons": [
+            {
+              "reason": "no_hook_no_payoff",
+              "count": 6
+            },
+            {
+              "reason": "weak_standalone_context",
+              "count": 3
+            }
+          ]
+        },
+        "clips": [],
+        "final_clips": [],
+        "creator_qa": {
+          "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+          "message": "No creator-safe clips found",
+          "asr_mode": "faster_whisper_medium_retry",
+          "asr_quality_score": 100,
+          "low_confidence_asr": false,
+          "rejections": [
+            {
+              "ts": 1779278411.1208582,
+              "job_id": "candidate_funnel_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 285.38,
+              "end": 305.38,
+              "title": "Untitled Clip",
+              "reasons": [
+                "no_hook_no_payoff",
+                "weak_standalone_context"
+              ],
+              "metadata_reasons": [],
+              "preview": "तो वो आप दिना में इस उम्र में आता आते था का आच्छुका होता. तो वैसी मेरा एक टाइम स्लॉर्ट मेरे बच्चे के साथ जमा हुआ था कि ये टाइम है जब मैं और मेरा बेटा वक्त बिताते. अप बिना किसी हिंट के मेरे पास से अचानाक से उनको चिन लिया घया था."
+            },
+            {
+              "ts": 1779278411.1218584,
+              "job_id": "candidate_funnel_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 17.28,
+              "end": 53.38,
+              "title": "Untitled Clip",
+              "reasons": [
+                "no_hook_no_payoff",
+                "weak_standalone_context"
+              ],
+              "metadata_reasons": [],
+              "preview": "धोनी इंटर्टेंट्यूनट ने यह फिल्म कि राइत्स खिताब के राइत्स ले लिए हैं। इस पर भी फिल्म आने वाले समय पे आए गै, यह दोी पाट हैं. तो इस पर भी फिल्म आने की समाबरा हैं, आपको लिखता है कि आपका वो समय आगे हैं, क्योंकि एक बार ऐसा होता है कि करियर में एक बंदे का एक सा पीरे..."
+            },
+            {
+              "ts": 1779278411.1218584,
+              "job_id": "candidate_funnel_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 126.38,
+              "end": 165.38,
+              "title": "Untitled Clip",
+              "reasons": [
+                "no_hook_no_payoff"
+              ],
+              "metadata_reasons": [],
+              "preview": "तो ये एक जीस का इंतदार हैं, उस दिन मैं बोलूगा कि मैं पूरी तरीके से अपना बेटा हैं। ये दो लाइन मेरे दिमांग में थी जब मेरा स्ट्रूगल और हाडवाक शुरूआ था, कि एक अपना टाइम आगा और अपना बेटा आगा। तो मेरा माना है कि जिस दिन मैं अपने बेटे तक पहुँआ या मेरा बेटा मुझ्च तक प..."
+            },
+            {
+              "ts": 1779278411.122861,
+              "job_id": "candidate_funnel_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 30.28,
+              "end": 85.28,
+              "title": "Untitled Clip",
+              "reasons": [
+                "no_hook_no_payoff"
+              ],
+              "metadata_reasons": [],
+              "preview": "तो इस पर भी फिल्म आने की समाबरा हैं, आपको लिखता है कि आपका वो समय आगे हैं, क्योंकि एक बार ऐसा होता है कि करियर में एक बंदे का एक सा पीरेड आथा है, किसी का इन्टर्वीज सुना था उसने बहुत अच्छी बात कही थे और इसे मैं कुद भी वासता रखती हूं जब समय खराप चल्ड रा हूँ होता..."
+            },
+            {
+              "ts": 1779278411.122861,
+              "job_id": "candidate_funnel_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 229.38,
+              "end": 249.38,
+              "title": "Time",
+              "reasons": [
+                "no_hook_no_payoff",
+                "weak_standalone_context"
+              ],
+              "metadata_reasons": [],
+              "preview": "पहाडों पे जाकर के लिखना पश्ण करते हैं, कुछ रात में लिखते हैं, कुछ दिन में लिखते हैं, उस बक्त आपका पर time, फ्रेम आप माइंड में, उस बक्त आप कैसे ये कहाणिया लिखते थे, इत्ते डिस्टरब्द माइन में. मैं अच्छी वो कहाणी ना सबिती जी मैं पब्लिक के लिए और पब्लिशर के लिए लिख..."
+            },
+            {
+              "ts": 1779278411.1238616,
+              "job_id": "candidate_funnel_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 159.38,
+              "end": 214.38,
+              "title": "Untitled Clip",
+              "reasons": [
+                "no_hook_no_payoff"
+              ],
+              "metadata_reasons": [],
+              "preview": "महुँज शौट में कि शायद कुछ लोग एं कनेक्ट मिस कर रहे हूं, अपका बेटे से मतलब आपका जो आपकी फुर्स्ट वाइव के साथ जो आपके बेटे हैं उनसे मतलब हैं। मैं तो कैमरे पिद भी देखे हूँ आजा यार बहुत आप, नोद साल हो गया वेट करते हैं, अब आजा। अपने जब ये कहाणिया लिखी, एक इंपूर्टेंट..."
+            }
+          ],
+          "top_rejection_reasons": [
+            {
+              "reason": "no_hook_no_payoff",
+              "count": 6
+            },
+            {
+              "reason": "weak_standalone_context",
+              "count": 3
+            }
+          ]
+        }
+      },
+      "error": null,
+      "stage": "Completed",
+      "progress": 100,
+      "visual_intelligence": {
+        "ok": true,
+        "sampled": 174,
+        "top_moments": [
+          {
+            "time": 2.0,
+            "brightness": 91.43,
+            "motion": 20.76,
+            "faces": 1,
+            "visual_score": 46
+          },
+          {
+            "time": 12.0,
+            "brightness": 83.3,
+            "motion": 64.13,
+            "faces": 2,
+            "visual_score": 46
+          },
+          {
+            "time": 36.0,
+            "brightness": 92.55,
+            "motion": 74.07,
+            "faces": 2,
+            "visual_score": 46
+          },
+          {
+            "time": 40.0,
+            "brightness": 84.43,
+            "motion": 54.41,
+            "faces": 2,
+            "visual_score": 46
+          },
+          {
+            "time": 82.0,
+            "brightness": 92.32,
+            "motion": 74.51,
+            "faces": 2,
+            "visual_score": 46
+          }
+        ],
+        "ai_thumbnails": [
+          {
+            "time": 2.0,
+            "path": "/uploads/candidate_funnel_e0926df0_thumb_ai_0.jpg",
+            "visual_score": 46,
+            "motion": 20.76,
+            "faces": 1,
+            "brightness": 91.43
+          },
+          {
+            "time": 12.0,
+            "path": "/uploads/candidate_funnel_e0926df0_thumb_ai_1.jpg",
+            "visual_score": 46,
+            "motion": 64.13,
+            "faces": 2,
+            "brightness": 83.3
+          },
+          {
+            "time": 36.0,
+            "path": "/uploads/candidate_funnel_e0926df0_thumb_ai_2.jpg",
+            "visual_score": 46,
+            "motion": 74.07,
+            "faces": 2,
+            "brightness": 92.55
+          },
+          {
+            "time": 40.0,
+            "path": "/uploads/candidate_funnel_e0926df0_thumb_ai_3.jpg",
+            "visual_score": 46,
+            "motion": 54.41,
+            "faces": 2,
+            "brightness": 84.43
+          },
+          {
+            "time": 82.0,
+            "path": "/uploads/candidate_funnel_e0926df0_thumb_ai_4.jpg",
+            "visual_score": 46,
+            "motion": 74.51,
+            "faces": 2,
+            "brightness": 92.32
+          }
+        ]
+      },
+      "asr_mode": "faster_whisper_medium_retry",
+      "asr_quality_score": 100,
+      "low_confidence_asr": false
+    }
+  }
+}

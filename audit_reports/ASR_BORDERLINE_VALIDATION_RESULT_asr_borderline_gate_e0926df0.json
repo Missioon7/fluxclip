@@ -1,0 +1,201 @@
+{
+  "job_id": "asr_borderline_gate_e0926df0",
+  "result": {
+    "status": "done",
+    "message": "No creator-safe clips found",
+    "summary": {
+      "text_preview": "तो मीटिंगे बीच में एर्पॉट के लाउज में कहीं बी लिख से था। तो मैं कहीं बी लिख लेता हूँ। आपको लगता है अक्षर्च जी कि अपना टाइम आयेगा वो अपना टाइम आगया है इतने पॉर्टकास्च इतने इंटर्विवूस इंच्छार फिल्म तहिड़ एं हिंदू ट्रिलॉजी पे फिल्म आरी है दोनी इंटर्टेणड्मिन्ट ने ये फिल्म के राइथ खिताब के राइथ स्ले लिए है इंट्रिलॉदगा लेकिए है इस पर पॉर्टकास्च के लिए जाओने अवले सामये पे राइथ स्ले लिए है ये तूइ पाट्ट है इस पर भी फिल्म अपने के समावरा और आपको लकता है होता है करियर में एक बन्दे का एक ऐसा पीरेड आता है मैं एक किसी का इंट्रिव्यू सुनाता है उसने भुठ अच्छी बात कही थे और इसे मैं खुद भी वास्ता रखती हूं जब समय खराग चल रहा होता है या जब समय आपको थोड़ा सा तोड़ा सा टाइम देता है समय चल देता है जब आपको कि थोड़ा काम कर लो खुद पे तो खुद पर काम करना चाहिए और त्या रहना चाहिए कि जो दरवाजा कुले गा यह से अपने मस्वंज ले कर का एक वेपंज बनाच कचार ना अपने स्किलसेट या वूप्टिन्स लेकरके अंटर करना चाहिए। आपको लगता हैं आपको व...",
+      "segments_count": 36,
+      "captions_count": 56,
+      "viral_segments_count": 3,
+      "asr_mode": "faster_whisper_medium_retry",
+      "asr_quality_score": 100,
+      "low_confidence_asr": false,
+      "clips_before_creator_qa": 1,
+      "clips_count": 0,
+      "rejected_by_creator_qa": 1,
+      "top_rejection_reasons": [
+        {
+          "reason": "no_hook_no_payoff",
+          "count": 1
+        }
+      ]
+    },
+    "clips": [],
+    "final_clips": [],
+    "creator_qa": {
+      "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+      "message": "No creator-safe clips found",
+      "asr_mode": "faster_whisper_medium_retry",
+      "asr_quality_score": 100,
+      "low_confidence_asr": false,
+      "rejections": [
+        {
+          "ts": 1779276876.6355166,
+          "job_id": "asr_borderline_gate_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 0.0,
+          "end": 39.08,
+          "title": "Untitled Clip",
+          "reasons": [
+            "no_hook_no_payoff"
+          ],
+          "metadata_reasons": [],
+          "preview": "तो मीटिंगे बीच में एर्पॉट के लाउज में कहीं बी लिख से था। तो मैं कहीं बी लिख लेता हूँ। आपको लगता है अक्षर्च जी कि अपना टाइम आयेगा वो अपना टाइम आगया है इतने पॉर्टकास्च इतने इंटर्विवूस इंच्छार फिल्म तहिड़ एं हिंदू ट्रिलॉजी पे फिल्म आरी है दोनी इंटर्टेणड्मिन्ट ने..."
+        }
+      ],
+      "top_rejection_reasons": [
+        {
+          "reason": "no_hook_no_payoff",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "jobs": {
+    "asr_borderline_gate_e0926df0": {
+      "status": "completed",
+      "result": {
+        "status": "done",
+        "message": "No creator-safe clips found",
+        "summary": {
+          "text_preview": "तो मीटिंगे बीच में एर्पॉट के लाउज में कहीं बी लिख से था। तो मैं कहीं बी लिख लेता हूँ। आपको लगता है अक्षर्च जी कि अपना टाइम आयेगा वो अपना टाइम आगया है इतने पॉर्टकास्च इतने इंटर्विवूस इंच्छार फिल्म तहिड़ एं हिंदू ट्रिलॉजी पे फिल्म आरी है दोनी इंटर्टेणड्मिन्ट ने ये फिल्म के राइथ खिताब के राइथ स्ले लिए है इंट्रिलॉदगा लेकिए है इस पर पॉर्टकास्च के लिए जाओने अवले सामये पे राइथ स्ले लिए है ये तूइ पाट्ट है इस पर भी फिल्म अपने के समावरा और आपको लकता है होता है करियर में एक बन्दे का एक ऐसा पीरेड आता है मैं एक किसी का इंट्रिव्यू सुनाता है उसने भुठ अच्छी बात कही थे और इसे मैं खुद भी वास्ता रखती हूं जब समय खराग चल रहा होता है या जब समय आपको थोड़ा सा तोड़ा सा टाइम देता है समय चल देता है जब आपको कि थोड़ा काम कर लो खुद पे तो खुद पर काम करना चाहिए और त्या रहना चाहिए कि जो दरवाजा कुले गा यह से अपने मस्वंज ले कर का एक वेपंज बनाच कचार ना अपने स्किलसेट या वूप्टिन्स लेकरके अंटर करना चाहिए। आपको लगता हैं आपको व...",
+          "segments_count": 36,
+          "captions_count": 56,
+          "viral_segments_count": 3,
+          "asr_mode": "faster_whisper_medium_retry",
+          "asr_quality_score": 100,
+          "low_confidence_asr": false,
+          "clips_before_creator_qa": 1,
+          "clips_count": 0,
+          "rejected_by_creator_qa": 1,
+          "top_rejection_reasons": [
+            {
+              "reason": "no_hook_no_payoff",
+              "count": 1
+            }
+          ]
+        },
+        "clips": [],
+        "final_clips": [],
+        "creator_qa": {
+          "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+          "message": "No creator-safe clips found",
+          "asr_mode": "faster_whisper_medium_retry",
+          "asr_quality_score": 100,
+          "low_confidence_asr": false,
+          "rejections": [
+            {
+              "ts": 1779276876.6355166,
+              "job_id": "asr_borderline_gate_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 0.0,
+              "end": 39.08,
+              "title": "Untitled Clip",
+              "reasons": [
+                "no_hook_no_payoff"
+              ],
+              "metadata_reasons": [],
+              "preview": "तो मीटिंगे बीच में एर्पॉट के लाउज में कहीं बी लिख से था। तो मैं कहीं बी लिख लेता हूँ। आपको लगता है अक्षर्च जी कि अपना टाइम आयेगा वो अपना टाइम आगया है इतने पॉर्टकास्च इतने इंटर्विवूस इंच्छार फिल्म तहिड़ एं हिंदू ट्रिलॉजी पे फिल्म आरी है दोनी इंटर्टेणड्मिन्ट ने..."
+            }
+          ],
+          "top_rejection_reasons": [
+            {
+              "reason": "no_hook_no_payoff",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "error": null,
+      "stage": "Completed",
+      "progress": 100,
+      "visual_intelligence": {
+        "ok": true,
+        "sampled": 174,
+        "top_moments": [
+          {
+            "time": 2.0,
+            "brightness": 91.43,
+            "motion": 20.76,
+            "faces": 1,
+            "visual_score": 46
+          },
+          {
+            "time": 12.0,
+            "brightness": 83.3,
+            "motion": 64.13,
+            "faces": 2,
+            "visual_score": 46
+          },
+          {
+            "time": 36.0,
+            "brightness": 92.55,
+            "motion": 74.07,
+            "faces": 2,
+            "visual_score": 46
+          },
+          {
+            "time": 40.0,
+            "brightness": 84.43,
+            "motion": 54.41,
+            "faces": 2,
+            "visual_score": 46
+          },
+          {
+            "time": 82.0,
+            "brightness": 92.32,
+            "motion": 74.51,
+            "faces": 2,
+            "visual_score": 46
+          }
+        ],
+        "ai_thumbnails": [
+          {
+            "time": 2.0,
+            "path": "/uploads/asr_borderline_gate_e0926df0_thumb_ai_0.jpg",
+            "visual_score": 46,
+            "motion": 20.76,
+            "faces": 1,
+            "brightness": 91.43
+          },
+          {
+            "time": 12.0,
+            "path": "/uploads/asr_borderline_gate_e0926df0_thumb_ai_1.jpg",
+            "visual_score": 46,
+            "motion": 64.13,
+            "faces": 2,
+            "brightness": 83.3
+          },
+          {
+            "time": 36.0,
+            "path": "/uploads/asr_borderline_gate_e0926df0_thumb_ai_2.jpg",
+            "visual_score": 46,
+            "motion": 74.07,
+            "faces": 2,
+            "brightness": 92.55
+          },
+          {
+            "time": 40.0,
+            "path": "/uploads/asr_borderline_gate_e0926df0_thumb_ai_3.jpg",
+            "visual_score": 46,
+            "motion": 54.41,
+            "faces": 2,
+            "brightness": 84.43
+          },
+          {
+            "time": 82.0,
+            "path": "/uploads/asr_borderline_gate_e0926df0_thumb_ai_4.jpg",
+            "visual_score": 46,
+            "motion": 74.51,
+            "faces": 2,
+            "brightness": 92.32
+          }
+        ]
+      },
+      "asr_mode": "faster_whisper_medium_retry",
+      "asr_quality_score": 100,
+      "low_confidence_asr": false
+    }
+  }
+}

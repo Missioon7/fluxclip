@@ -1,0 +1,40 @@
+{
+  "scope": "offline_payoff_native_candidate_generation_replay",
+  "job_id": "v51_fresh_source_23f21012",
+  "asr_artifact": "audit_reports\\asr_segments_v51_fresh_source_23f21012_native_pre_retry.json",
+  "summary": {
+    "payoff_anchors_found": 0,
+    "candidates_generated_from_payoff": 0,
+    "creator_safe_before": 0,
+    "creator_safe_after": 0,
+    "no_hook_no_payoff_before": 2,
+    "no_hook_no_payoff_after": 0,
+    "predicted_final_clean": 0,
+    "predicted_final_unstable": 0,
+    "false_positive_risk": "low",
+    "video_rerun_justified": false
+  },
+  "existing_pre_creator_candidates": [
+    {
+      "start": 184.32,
+      "end": 198.32,
+      "creator_qa_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "local_asr_confidence_label": "clean",
+      "semantic_asr_confidence_label": "clean_semantics"
+    },
+    {
+      "start": 205.32,
+      "end": 241.32,
+      "creator_qa_reasons": [
+        "no_hook_no_payoff",
+        "weak_standalone_context"
+      ],
+      "local_asr_confidence_label": "borderline",
+      "semantic_asr_confidence_label": "clean_semantics"
+    }
+  ],
+  "generated_payoff_candidates": []
+}

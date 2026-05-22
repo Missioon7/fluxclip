@@ -1,0 +1,270 @@
+{
+  "scope": "offline_audio_backed_repaired_window_retry_no_full_video_rerun",
+  "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+  "asr_artifact": "audit_reports\\asr_segments_2efbe27a-4f64-41aa-9077-6f483e00fc4f_native_pre_retry.json",
+  "video_path": "C:\\fluxclip_latest\\fluxclip\\uploads\\2efbe27a-4f64-41aa-9077-6f483e00fc4f.mp4",
+  "source_of_truth": [
+    "pipeline_runner.v48_build_asr_stability_chunks",
+    "pipeline_runner.v48_candidate_asr_stability",
+    "pipeline_runner.v49_segment_salvage_decision",
+    "asr_engine.transcribe_exact_asr_window"
+  ],
+  "summary": {
+    "current_quarantined_finalists": 4,
+    "audio_backed_repairs_completed": 2,
+    "audio_backed_repairs_failed": 2,
+    "repaired_window_available_candidates": 2,
+    "repair_export_safe_candidates": 2,
+    "would_be_creator_safe_after_asr_repair": 0,
+    "predicted_final_clean_from_repaired_windows": 2,
+    "predicted_final_unstable_from_repaired_windows": 2,
+    "video_rerun_justified": true
+  },
+  "current_quarantined_finalists": [
+    {
+      "candidate_index": 1,
+      "start": 589.36,
+      "end": 639.36,
+      "duration": 50.0,
+      "final_score": 181.0,
+      "current_finalist": true,
+      "filter_decision": "accepted",
+      "semantic_asr_confidence_label": "degraded_semantics",
+      "semantic_asr_corruption_score": 18,
+      "original_preview": "अगर बशा हुए है अगर बीच में याप को केनाल्स दिखने हैं नाले ताएप के चोड़ ये नाले नहीं ये समुद्र का पानी कवार बाड के रूप में आजाता है ये नदियो में अफान आजाता है तिया पहले पानी बहर जाता...",
+      "original_local_asr": {
+        "local_asr_confidence_label": "unstable",
+        "unstable_window_overlap_ratio": 1.0,
+        "chunk_confidence_score": 0,
+        "local_asr_reasons": [
+          "unstable_window_overlap_ratio=1.0"
+        ]
+      },
+      "segment_salvage_decision": "quarantined_unstable",
+      "quarantined_unstable_windows": [
+        {
+          "start": 550.0,
+          "end": 670.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 32,
+          "overlap_seconds": 50.0
+        }
+      ]
+    },
+    {
+      "candidate_index": 12,
+      "start": 350.36,
+      "end": 372.2,
+      "duration": 21.84,
+      "final_score": 160.0,
+      "current_finalist": true,
+      "filter_decision": "accepted",
+      "semantic_asr_confidence_label": "borderline_semantics",
+      "semantic_asr_corruption_score": 8,
+      "original_preview": "और ये जो वेफर है, ये वेफर बनता है, वेफर याने की एक तोख्डा टाएप का. ये तोख्डा बनता है, सैंद से. इस में सैंद अस्तमाल होती है. अर एक ती सेंटिमिटर का सेमिकंटक्टर वेफर बनाने के लिए करी...",
+      "original_local_asr": {
+        "local_asr_confidence_label": "unstable",
+        "unstable_window_overlap_ratio": 1.0,
+        "chunk_confidence_score": 0,
+        "local_asr_reasons": [
+          "unstable_window_overlap_ratio=1.0"
+        ]
+      },
+      "segment_salvage_decision": "quarantined_unstable",
+      "quarantined_unstable_windows": [
+        {
+          "start": 330.0,
+          "end": 450.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 37,
+          "overlap_seconds": 21.84
+        }
+      ]
+    },
+    {
+      "candidate_index": 13,
+      "start": 396.04,
+      "end": 412.36,
+      "duration": 16.32,
+      "final_score": 154.0,
+      "current_finalist": true,
+      "filter_decision": "accepted",
+      "semantic_asr_confidence_label": "borderline_semantics",
+      "semantic_asr_corruption_score": 8,
+      "original_preview": "अर बड़े अस्टर पर सेमिकंटर वेफर वनाता है जो आगे जागर के चिपस वनती हैं और आईटी धबाटमें युज अथी हैं यस लिये चेत्र चाइना की नजर में यस तराए से बसा उगाए के चाइना ये से चोडता नहीं हैं गल...",
+      "original_local_asr": {
+        "local_asr_confidence_label": "unstable",
+        "unstable_window_overlap_ratio": 1.0,
+        "chunk_confidence_score": 0,
+        "local_asr_reasons": [
+          "unstable_window_overlap_ratio=1.0"
+        ]
+      },
+      "segment_salvage_decision": "quarantined_unstable",
+      "quarantined_unstable_windows": [
+        {
+          "start": 330.0,
+          "end": 450.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 37,
+          "overlap_seconds": 16.32
+        }
+      ]
+    },
+    {
+      "candidate_index": 10,
+      "start": 270.92,
+      "end": 283.76,
+      "duration": 12.84,
+      "final_score": 144.0,
+      "current_finalist": true,
+      "filter_decision": "accepted",
+      "semantic_asr_confidence_label": "clean_semantics",
+      "semantic_asr_corruption_score": 0,
+      "original_preview": "जितनी भी भिजली अप पादित होगी, सब ग्रीन अनर्जी होगी और इस तरे से पुरा एक नेट्राक तगया जाएगा जिसे दिल्ली से मुमभाईसे और बड़े बढ़े महान नगुराँ से जोडा जाएगा एक सपेस भेज और बलुट ट्रेन्...",
+      "original_local_asr": {
+        "local_asr_confidence_label": "unstable",
+        "unstable_window_overlap_ratio": 1.0,
+        "chunk_confidence_score": 0,
+        "local_asr_reasons": [
+          "unstable_window_overlap_ratio=1.0"
+        ]
+      },
+      "segment_salvage_decision": "quarantined_unstable",
+      "quarantined_unstable_windows": [
+        {
+          "start": 220.0,
+          "end": 340.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 32,
+          "overlap_seconds": 12.84
+        }
+      ]
+    }
+  ],
+  "repaired_window_results": [
+    {
+      "version": "v49_9_repaired_window_v1",
+      "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+      "start": 350.36,
+      "end": 372.2,
+      "duration": 21.84,
+      "video_path": "C:\\fluxclip_latest\\fluxclip\\uploads\\2efbe27a-4f64-41aa-9077-6f483e00fc4f.mp4",
+      "candidate_index": 12,
+      "original_local_asr_label": "unstable",
+      "original_unstable_overlap_ratio": 1.0,
+      "original_semantic_label": "borderline_semantics",
+      "original_semantic_score": 8,
+      "original_preview": "और ये जो वेफर है, ये वेफर बनता है, वेफर याने की एक तोख्डा टाएप का. ये तोख्डा बनता है, सैंद से. इस में सैंद अस्तमाल होती है. अर एक ती सेंटिमिटर का सेमिकंटक्टर वेफर बनाने के लिए करी...",
+      "repaired_text": "और ये जो वेफर है, ये वेफर बनता है, वेफर याने की एक टुकड़ा टाइप का, ये टुकड़ा बनता है सेंड से, इसमें सेंड इस्तमाल होती हैं. और एक 30 सेंटिमेटर का सेमी कुंड़क्टर वेफर बनाने के लिए, करिब 10,000 लिटर स्वक्ष पानी च़िये होता है, जो ग्लेश्टेर से पेगला गौग पानी होता है, पेगली होई बर्फ होती हैं, वही वाला पानी च़िये होता हैं.",
+      "repaired_local_asr_label": "clean",
+      "repaired_unstable_overlap_ratio": 0.0,
+      "repaired_transcript_quality_score": 100,
+      "repaired_low_confidence_asr": false,
+      "repaired_semantic_label": "clean_semantics",
+      "repaired_semantic_score": 0,
+      "repaired_window_available": true,
+      "repair_export_safe": true,
+      "repair_decision_reason": "validated_audio_backed_repair_available",
+      "v49_9_repair_strict_reasons": [],
+      "current_creator_qa_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff"
+      ],
+      "remaining_non_asr_creator_qa_reasons": [
+        "no_hook_no_payoff"
+      ],
+      "would_be_creator_safe_after_asr_repair": false,
+      "artifact_path": "audit_reports\\asr_repaired_window_2efbe27a-4f64-41aa-9077-6f483e00fc4f_35036_37220.json",
+      "repaired_segments": 5,
+      "repaired_chunks": [
+        {
+          "start": 0.0,
+          "end": 120.0,
+          "label": "clean",
+          "collapse_score": 0
+        }
+      ],
+      "repaired_transcript_quality_reasons": [],
+      "repaired_local_asr_reasons": [],
+      "repaired_semantic_reasons": []
+    },
+    {
+      "version": "v49_9_repaired_window_v1",
+      "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+      "start": 396.04,
+      "end": 412.36,
+      "duration": 16.32,
+      "video_path": "C:\\fluxclip_latest\\fluxclip\\uploads\\2efbe27a-4f64-41aa-9077-6f483e00fc4f.mp4",
+      "candidate_index": 13,
+      "original_local_asr_label": "unstable",
+      "original_unstable_overlap_ratio": 1.0,
+      "original_semantic_label": "borderline_semantics",
+      "original_semantic_score": 8,
+      "original_preview": "अर बड़े अस्टर पर सेमिकंटर वेफर वनाता है जो आगे जागर के चिपस वनती हैं और आईटी धबाटमें युज अथी हैं यस लिये चेत्र चाइना की नजर में यस तराए से बसा उगाए के चाइना ये से चोडता नहीं हैं गल...",
+      "repaired_text": "और बड़े स्थर पर सेमीकंडॉक्टर वेफर वनाता हैं जो आगे जा कर के चिप्स बनती हैं और आईटी डपाटमेंट में यूज होती हैं इसलिए ये चेत्र चाइना की नजर में इस तरह से बसा हुगा हैं कि चाइना इसे छोडता नहीं हैं गलवान कुन्फलिक्ट हो, समझ पे आखें दिखाना हो चाइना इसलिए ही ये सब करता हैं",
+      "repaired_local_asr_label": "clean",
+      "repaired_unstable_overlap_ratio": 0.0,
+      "repaired_transcript_quality_score": 100,
+      "repaired_low_confidence_asr": false,
+      "repaired_semantic_label": "clean_semantics",
+      "repaired_semantic_score": 0,
+      "repaired_window_available": true,
+      "repair_export_safe": true,
+      "repair_decision_reason": "validated_audio_backed_repair_available",
+      "v49_9_repair_strict_reasons": [],
+      "current_creator_qa_reasons": [
+        "asr_low_confidence",
+        "no_hook_no_payoff"
+      ],
+      "remaining_non_asr_creator_qa_reasons": [
+        "no_hook_no_payoff"
+      ],
+      "would_be_creator_safe_after_asr_repair": false,
+      "artifact_path": "audit_reports\\asr_repaired_window_2efbe27a-4f64-41aa-9077-6f483e00fc4f_39604_41236.json",
+      "repaired_segments": 5,
+      "repaired_chunks": [
+        {
+          "start": 0.0,
+          "end": 120.0,
+          "label": "clean",
+          "collapse_score": 0
+        }
+      ],
+      "repaired_transcript_quality_reasons": [],
+      "repaired_local_asr_reasons": [],
+      "repaired_semantic_reasons": []
+    }
+  ],
+  "repair_failures": [
+    {
+      "candidate_index": 1,
+      "start": 589.36,
+      "end": 639.36,
+      "error": "faster_whisper_child_failed"
+    },
+    {
+      "candidate_index": 10,
+      "start": 270.92,
+      "end": 283.76,
+      "error": "faster_whisper_child_failed"
+    }
+  ],
+  "design": {
+    "flow": [
+      "extract exact candidate expanded window from source MP4",
+      "retry ASR only on quarantined unstable finalists",
+      "score repaired transcript with existing transcript_quality_score",
+      "recompute repaired local stability with production helpers",
+      "set repaired_window_available only if repaired window becomes clean or borderline and transcript is not low confidence",
+      "set repair_export_safe only if repaired transcript is clean-local-ASR and semantically clean or borderline"
+    ],
+    "safety": [
+      "no Creator QA relaxation",
+      "no ASR threshold relaxation",
+      "no normalized metadata used as export text",
+      "no frontend/render/export/subtitle changes",
+      "pipeline remains fail-closed without validated repair artifact"
+    ]
+  }
+}

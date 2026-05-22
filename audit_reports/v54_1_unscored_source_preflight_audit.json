@@ -1,0 +1,226 @@
+{
+  "summary": {
+    "total_unscored_sources": 5,
+    "sources_attempted_this_run": 0,
+    "sources_preflighted": 5,
+    "sources_completed": 5,
+    "sources_failed": 0,
+    "sources_remaining": 0,
+    "good_sources": 0,
+    "borderline_sources": 0,
+    "poor_sources": 5,
+    "best_source_for_full_generation": null,
+    "expected_clip_yield": "low",
+    "recommended_next_action": "do_not_run_full_generation_on_this_batch_collect_stronger_sources"
+  },
+  "sources": [
+    {
+      "job_id": "42007af6-770d-4192-bed6-1fbe7588c168",
+      "video_path": "C:\\fluxclip_latest\\fluxclip\\uploads\\42007af6-770d-4192-bed6-1fbe7588c168.mp4",
+      "preflight_meta": {
+        "artifact_reused": true,
+        "asr_mode": "cached_artifact",
+        "asr_quality_score": null,
+        "low_confidence_asr": null,
+        "segments_count": null
+      },
+      "metrics": {
+        "job_id": "42007af6-770d-4192-bed6-1fbe7588c168",
+        "artifact_path": "audit_reports\\asr_segments_42007af6-770d-4192-bed6-1fbe7588c168_native_pre_retry.json",
+        "asr_quality_score": 0.0,
+        "low_confidence_asr": true,
+        "segment_count": 134,
+        "eligible_segment_count": 5,
+        "clean_or_borderline_window_count": 42,
+        "clean_or_borderline_window_ratio": 0.3134,
+        "unstable_candidate_ratio": 0.0,
+        "payoff_anchor_density": 0.0,
+        "standalone_context_density": 0.4,
+        "filler_ratio": 0.8955,
+        "semantic_degradation_ratio": 0.2612,
+        "candidates_found": 0,
+        "candidates_quarantined": 0,
+        "repaired_window_needed": 0,
+        "pre_creator_qa_candidates": 0,
+        "creator_safe_count": 0,
+        "rejection_reasons": [],
+        "salvage_summary": {},
+        "source_quality_score": 0,
+        "source_quality_label": "poor",
+        "likely_clip_yield": "low",
+        "dominant_failure_reason": "filler_heavy_source",
+        "recommended_action": "skip_or_deprioritize_source_for_full_generation"
+      },
+      "status": "completed"
+    },
+    {
+      "job_id": "44198754-4f75-4428-9926-616c0ce170c9",
+      "video_path": "C:\\fluxclip_latest\\fluxclip\\uploads\\44198754-4f75-4428-9926-616c0ce170c9.mp4",
+      "preflight_meta": {
+        "artifact_reused": true,
+        "asr_mode": "cached_artifact",
+        "asr_quality_score": null,
+        "low_confidence_asr": null,
+        "segments_count": null
+      },
+      "metrics": {
+        "job_id": "44198754-4f75-4428-9926-616c0ce170c9",
+        "artifact_path": "audit_reports\\asr_segments_44198754-4f75-4428-9926-616c0ce170c9_native_pre_retry.json",
+        "asr_quality_score": 0.0,
+        "low_confidence_asr": true,
+        "segment_count": 134,
+        "eligible_segment_count": 5,
+        "clean_or_borderline_window_count": 42,
+        "clean_or_borderline_window_ratio": 0.3134,
+        "unstable_candidate_ratio": 0.0,
+        "payoff_anchor_density": 0.0,
+        "standalone_context_density": 0.4,
+        "filler_ratio": 0.8955,
+        "semantic_degradation_ratio": 0.2612,
+        "candidates_found": 0,
+        "candidates_quarantined": 0,
+        "repaired_window_needed": 0,
+        "pre_creator_qa_candidates": 0,
+        "creator_safe_count": 0,
+        "rejection_reasons": [],
+        "salvage_summary": {},
+        "source_quality_score": 0,
+        "source_quality_label": "poor",
+        "likely_clip_yield": "low",
+        "dominant_failure_reason": "filler_heavy_source",
+        "recommended_action": "skip_or_deprioritize_source_for_full_generation"
+      },
+      "status": "completed"
+    },
+    {
+      "job_id": "646ad490-6470-4d8f-ace2-7b3ddceb49d7",
+      "video_path": "C:\\fluxclip_latest\\fluxclip\\uploads\\646ad490-6470-4d8f-ace2-7b3ddceb49d7.mp4",
+      "preflight_meta": {
+        "artifact_reused": false,
+        "asr_mode": "native_transcribe",
+        "asr_quality_score": 0,
+        "low_confidence_asr": true,
+        "segments_count": 132
+      },
+      "metrics": {
+        "job_id": "646ad490-6470-4d8f-ace2-7b3ddceb49d7",
+        "artifact_path": "audit_reports\\asr_segments_646ad490-6470-4d8f-ace2-7b3ddceb49d7_native_pre_retry.json",
+        "asr_quality_score": 0.0,
+        "low_confidence_asr": true,
+        "segment_count": 132,
+        "eligible_segment_count": 0,
+        "clean_or_borderline_window_count": 0,
+        "clean_or_borderline_window_ratio": 0.0,
+        "unstable_candidate_ratio": 0.0,
+        "payoff_anchor_density": 0.0,
+        "standalone_context_density": 0.0,
+        "filler_ratio": 1.0,
+        "semantic_degradation_ratio": 0.9621,
+        "candidates_found": 0,
+        "candidates_quarantined": 0,
+        "repaired_window_needed": 0,
+        "pre_creator_qa_candidates": 0,
+        "creator_safe_count": 0,
+        "rejection_reasons": [],
+        "salvage_summary": {},
+        "source_quality_score": 0,
+        "source_quality_label": "poor",
+        "likely_clip_yield": "low",
+        "dominant_failure_reason": "semantic_degradation",
+        "recommended_action": "avoid_full_generation_until_semantic_cleanliness_improves"
+      },
+      "status": "completed"
+    },
+    {
+      "job_id": "833d13b2-a3aa-4fae-97da-f715a5ee3149",
+      "video_path": "C:\\fluxclip_latest\\fluxclip\\uploads\\833d13b2-a3aa-4fae-97da-f715a5ee3149.mp4",
+      "preflight_meta": {
+        "artifact_reused": true,
+        "asr_mode": "cached_artifact",
+        "asr_quality_score": null,
+        "low_confidence_asr": null,
+        "segments_count": null
+      },
+      "metrics": {
+        "job_id": "833d13b2-a3aa-4fae-97da-f715a5ee3149",
+        "artifact_path": "audit_reports\\asr_segments_833d13b2-a3aa-4fae-97da-f715a5ee3149_native_pre_retry.json",
+        "asr_quality_score": 0.0,
+        "low_confidence_asr": true,
+        "segment_count": 134,
+        "eligible_segment_count": 5,
+        "clean_or_borderline_window_count": 42,
+        "clean_or_borderline_window_ratio": 0.3134,
+        "unstable_candidate_ratio": 0.0,
+        "payoff_anchor_density": 0.0,
+        "standalone_context_density": 0.4,
+        "filler_ratio": 0.8955,
+        "semantic_degradation_ratio": 0.2612,
+        "candidates_found": 0,
+        "candidates_quarantined": 0,
+        "repaired_window_needed": 0,
+        "pre_creator_qa_candidates": 0,
+        "creator_safe_count": 0,
+        "rejection_reasons": [],
+        "salvage_summary": {},
+        "source_quality_score": 0,
+        "source_quality_label": "poor",
+        "likely_clip_yield": "low",
+        "dominant_failure_reason": "filler_heavy_source",
+        "recommended_action": "skip_or_deprioritize_source_for_full_generation"
+      },
+      "status": "completed"
+    },
+    {
+      "job_id": "c537ca42-8d0d-4f67-a279-7e63156f32ea",
+      "video_path": "C:\\fluxclip_latest\\fluxclip\\uploads\\c537ca42-8d0d-4f67-a279-7e63156f32ea.mp4",
+      "preflight_meta": {
+        "artifact_reused": false,
+        "asr_mode": "native_transcribe",
+        "asr_quality_score": 0,
+        "low_confidence_asr": true,
+        "segments_count": 134
+      },
+      "metrics": {
+        "job_id": "c537ca42-8d0d-4f67-a279-7e63156f32ea",
+        "artifact_path": "audit_reports\\asr_segments_c537ca42-8d0d-4f67-a279-7e63156f32ea_native_pre_retry.json",
+        "asr_quality_score": 0.0,
+        "low_confidence_asr": true,
+        "segment_count": 134,
+        "eligible_segment_count": 5,
+        "clean_or_borderline_window_count": 42,
+        "clean_or_borderline_window_ratio": 0.3134,
+        "unstable_candidate_ratio": 0.0,
+        "payoff_anchor_density": 0.0,
+        "standalone_context_density": 0.4,
+        "filler_ratio": 0.8955,
+        "semantic_degradation_ratio": 0.2612,
+        "candidates_found": 20,
+        "candidates_quarantined": 0,
+        "repaired_window_needed": 0,
+        "pre_creator_qa_candidates": 6,
+        "creator_safe_count": 0,
+        "rejection_reasons": [
+          [
+            "asr_low_confidence",
+            6
+          ],
+          [
+            "no_hook_no_payoff",
+            6
+          ],
+          [
+            "weak_standalone_context",
+            4
+          ]
+        ],
+        "salvage_summary": {},
+        "source_quality_score": 0,
+        "source_quality_label": "poor",
+        "likely_clip_yield": "low",
+        "dominant_failure_reason": "missing_standalone_payoff",
+        "recommended_action": "use_source_for_payoff_generation_experiments_only"
+      },
+      "status": "completed"
+    }
+  ]
+}

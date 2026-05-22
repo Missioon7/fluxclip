@@ -1,0 +1,1422 @@
+{
+  "scope": "offline_only_existing_artifacts",
+  "job_ids": [
+    "f964425c-0803-4e3d-b6e7-98f8eb3e7d52",
+    "e0fc755a-9319-4bab-ad50-fd6ffa723bcb",
+    "cb7f65ba-222e-4e82-869f-57d399a3f146"
+  ],
+  "jobs": [
+    {
+      "job_id": "f964425c-0803-4e3d-b6e7-98f8eb3e7d52",
+      "asr_artifacts": {
+        "native_pre_retry": {
+          "path": "audit_reports\\asr_segments_f964425c-0803-4e3d-b6e7-98f8eb3e7d52_native_pre_retry.json",
+          "exists": true,
+          "asr_mode": "native_transcribe",
+          "asr_quality_score": 0,
+          "low_confidence_asr": true,
+          "transcript_quality_reasons": [
+            "replacement_chars=62",
+            "repeated_hindi_phrase=आप आप आप",
+            "repeated_hindi_phrase=आ�",
+            "ultra_short_repeated_segments=1",
+            "repeated_helper_phrases=29"
+          ],
+          "segment_count": 134,
+          "replacement_char_count": 31,
+          "repeated_token_loop_count": 14
+        },
+        "final": {
+          "path": "audit_reports\\asr_segments_f964425c-0803-4e3d-b6e7-98f8eb3e7d52.json",
+          "exists": true,
+          "asr_mode": "native_transcribe",
+          "asr_quality_score": 0,
+          "low_confidence_asr": true,
+          "transcript_quality_reasons": [],
+          "segment_count": 134,
+          "replacement_char_count": 31,
+          "repeated_token_loop_count": 14
+        }
+      },
+      "transcript_quality": {
+        "ts": 1779363161.1301794,
+        "job_id": "f964425c-0803-4e3d-b6e7-98f8eb3e7d52",
+        "event": "ASR_LOW_CONFIDENCE",
+        "asr_mode": "native_transcribe",
+        "asr_quality_score": 0,
+        "asr_quality_reasons": [
+          "replacement_chars=62",
+          "repeated_hindi_phrase=आप आप आप",
+          "repeated_hindi_phrase=आ�",
+          "ultra_short_repeated_segments=1",
+          "repeated_helper_phrases=29"
+        ],
+        "message": "ASR_LOW_CONFIDENCE"
+      },
+      "candidate_funnel_count": 20,
+      "final_candidate_count": 6,
+      "creator_qa_reject_count": 6,
+      "creator_qa_zero_safe": true,
+      "creator_qa_zero_row": {
+        "ts": 1779363161.491807,
+        "job_id": "f964425c-0803-4e3d-b6e7-98f8eb3e7d52",
+        "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+        "message": "No creator-safe clips found",
+        "rejected_count": 6,
+        "top_rejection_reasons": [
+          {
+            "reason": "asr_low_confidence",
+            "count": 6
+          },
+          {
+            "reason": "no_hook_no_payoff",
+            "count": 6
+          },
+          {
+            "reason": "weak_standalone_context",
+            "count": 4
+          }
+        ]
+      },
+      "qa_reason_counts": {
+        "asr_low_confidence": 6,
+        "no_hook_no_payoff": 6,
+        "weak_standalone_context": 4
+      },
+      "qa_metadata_reason_counts": {
+        "missing_setup": 1
+      },
+      "funnel_semantic_labels": {
+        "degraded_semantics": 12,
+        "clean_semantics": 2,
+        "borderline_semantics": 3
+      },
+      "final_semantic_labels": {
+        "degraded_semantics": 3,
+        "borderline_semantics": 2,
+        "clean_semantics": 1
+      },
+      "funnel_structural_labels": {
+        "unstable": 15,
+        "clean": 2
+      },
+      "final_structural_labels": {
+        "unstable": 4,
+        "clean": 2
+      },
+      "clean_or_borderline_lost": [
+        {
+          "candidate_index": 11,
+          "window": [
+            292.06,
+            305.56
+          ],
+          "label": "borderline_semantics",
+          "filter_decision": "accepted_pre_dedupe",
+          "filter_reason": "passed_build_final_filters",
+          "final_score": 140.0,
+          "semantic_preference_applied": null,
+          "semantic_preference_reason": null,
+          "preview": "जिस में सेम्मिकन्टर का हब भी यहाप तभीर थएयार होगा जिस में नेदर लेंट समारे मदद करेगा तो एक बड़े डेल तो हमने ये करी हैं अब आप ख़ेंगे के बही ये चिप्स के बारे में और कुछ बता हैं ये क्य..."
+        },
+        {
+          "candidate_index": 14,
+          "window": [
+            407.36,
+            422.36
+          ],
+          "label": "clean_semantics",
+          "filter_decision": "duplicate_removed",
+          "filter_reason": "overlap_or_near_start_duplicate",
+          "final_score": 146.0,
+          "semantic_preference_applied": true,
+          "semantic_preference_reason": "clean_semantics_within_12_points_of_degraded",
+          "preview": "गल्वान, कुन्फलिक्त हो, समय प्यांखे दिखाना हो, चाईना इस्टिये ही यह सब करता है. तिके, उसी तरह से, भारत चिवकी इस्पे एक लोंक्टम स्टर्टिजी लेके चल रहा है, बाद में दिखेंगे कैसे अख्षाए इच..."
+        }
+      ],
+      "degraded_finalists": [
+        {
+          "start": 589.36,
+          "end": 639.36,
+          "score": 181,
+          "semantic_label": "degraded_semantics",
+          "creator_qa_reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "preview": "अगर बशा हुए है अगर बीच में याप को केनाल्स दिखने हैं नाले ताएप के चोड़ ये नाले नहीं ये समुद्र का पानी कवार बाड के रूप में आजाता है ये नदियो में अफान आजाता है तिया पहले पानी बहर जाता था अगर गलती से थोड़ावध पानी आबी जाता है"
+        },
+        {
+          "start": 1161.0,
+          "end": 1173.0,
+          "score": 162,
+          "semantic_label": "degraded_semantics",
+          "creator_qa_reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "preview": "या दीजल पेट्रोल या तेल की एरर्जी पर चलने के बचाए, अगर हीट्रोजन से चलने लगजाए, तो अनंदा जाएगा. खई रही बात यूरेनिम की, यूरेनिम से भी न चलवा सकते हैं,"
+        },
+        {
+          "start": 536.36,
+          "end": 548.36,
+          "score": 152,
+          "semantic_label": "degraded_semantics",
+          "creator_qa_reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "preview": "नेदल्ट्झो नाम इसका मतलबी होता है पानी में दूबा हुए लेंद नेदल्ट्झो एक आसी कन्तरी रही है जिसका एक चोथा इस्सा पानी में दूबा रहेता था"
+        }
+      ],
+      "final_duration_avg": 20.83,
+      "final_duration_min": 12.0,
+      "final_duration_max": 50.0,
+      "avg_setup_strength": 8.33,
+      "avg_payoff_strength": 0.0,
+      "zero_payoff_finalists": 6,
+      "semantic_preference_applied_count": 4
+    },
+    {
+      "job_id": "e0fc755a-9319-4bab-ad50-fd6ffa723bcb",
+      "asr_artifacts": {
+        "native_pre_retry": {
+          "path": "audit_reports\\asr_segments_e0fc755a-9319-4bab-ad50-fd6ffa723bcb_native_pre_retry.json",
+          "exists": true,
+          "asr_mode": "native_transcribe",
+          "asr_quality_score": 0,
+          "low_confidence_asr": true,
+          "transcript_quality_reasons": [
+            "replacement_chars=62",
+            "repeated_hindi_phrase=आप आप आप",
+            "repeated_hindi_phrase=आ�",
+            "ultra_short_repeated_segments=1",
+            "repeated_helper_phrases=29"
+          ],
+          "segment_count": 134,
+          "replacement_char_count": 31,
+          "repeated_token_loop_count": 14
+        },
+        "final": {
+          "path": "audit_reports\\asr_segments_e0fc755a-9319-4bab-ad50-fd6ffa723bcb.json",
+          "exists": true,
+          "asr_mode": "native_transcribe",
+          "asr_quality_score": 0,
+          "low_confidence_asr": true,
+          "transcript_quality_reasons": [],
+          "segment_count": 134,
+          "replacement_char_count": 31,
+          "repeated_token_loop_count": 14
+        }
+      },
+      "transcript_quality": {
+        "ts": 1779361834.6210597,
+        "job_id": "e0fc755a-9319-4bab-ad50-fd6ffa723bcb",
+        "event": "ASR_LOW_CONFIDENCE",
+        "asr_mode": "native_transcribe",
+        "asr_quality_score": 0,
+        "asr_quality_reasons": [
+          "replacement_chars=62",
+          "repeated_hindi_phrase=आप आप आप",
+          "repeated_hindi_phrase=आ�",
+          "ultra_short_repeated_segments=1",
+          "repeated_helper_phrases=29"
+        ],
+        "message": "ASR_LOW_CONFIDENCE"
+      },
+      "candidate_funnel_count": 20,
+      "final_candidate_count": 6,
+      "creator_qa_reject_count": 6,
+      "creator_qa_zero_safe": true,
+      "creator_qa_zero_row": {
+        "ts": 1779361834.8846014,
+        "job_id": "e0fc755a-9319-4bab-ad50-fd6ffa723bcb",
+        "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+        "message": "No creator-safe clips found",
+        "rejected_count": 6,
+        "top_rejection_reasons": [
+          {
+            "reason": "asr_low_confidence",
+            "count": 6
+          },
+          {
+            "reason": "no_hook_no_payoff",
+            "count": 6
+          },
+          {
+            "reason": "weak_standalone_context",
+            "count": 4
+          }
+        ]
+      },
+      "qa_reason_counts": {
+        "asr_low_confidence": 6,
+        "no_hook_no_payoff": 6,
+        "weak_standalone_context": 4
+      },
+      "qa_metadata_reason_counts": {
+        "missing_setup": 1
+      },
+      "funnel_semantic_labels": {
+        "degraded_semantics": 12,
+        "clean_semantics": 2,
+        "borderline_semantics": 3
+      },
+      "final_semantic_labels": {
+        "degraded_semantics": 4,
+        "borderline_semantics": 2
+      },
+      "funnel_structural_labels": {
+        "unstable": 15,
+        "clean": 2
+      },
+      "final_structural_labels": {
+        "unstable": 4,
+        "clean": 2
+      },
+      "clean_or_borderline_lost": [
+        {
+          "candidate_index": 10,
+          "window": [
+            270.92,
+            283.76
+          ],
+          "label": "clean_semantics",
+          "filter_decision": "accepted_pre_dedupe",
+          "filter_reason": "passed_build_final_filters",
+          "final_score": 144.0,
+          "semantic_preference_applied": null,
+          "semantic_preference_reason": null,
+          "preview": "जितनी भी भिजली अप पादित होगी, सब ग्रीन अनर्जी होगी और इस तरे से पुरा एक नेट्राक तगया जाएगा जिसे दिल्ली से मुमभाईसे और बड़े बढ़े महान नगुराँ से जोडा जाएगा एक सपेस भेज और बलुट ट्रेन्..."
+        },
+        {
+          "candidate_index": 11,
+          "window": [
+            292.06,
+            305.56
+          ],
+          "label": "borderline_semantics",
+          "filter_decision": "accepted_pre_dedupe",
+          "filter_reason": "passed_build_final_filters",
+          "final_score": 140.0,
+          "semantic_preference_applied": null,
+          "semantic_preference_reason": null,
+          "preview": "जिस में सेम्मिकन्टर का हब भी यहाप तभीर थएयार होगा जिस में नेदर लेंट समारे मदद करेगा तो एक बड़े डेल तो हमने ये करी हैं अब आप ख़ेंगे के बही ये चिप्स के बारे में और कुछ बता हैं ये क्य..."
+        },
+        {
+          "candidate_index": 14,
+          "window": [
+            407.36,
+            422.36
+          ],
+          "label": "clean_semantics",
+          "filter_decision": "accepted_pre_dedupe",
+          "filter_reason": "passed_build_final_filters",
+          "final_score": 146.0,
+          "semantic_preference_applied": null,
+          "semantic_preference_reason": null,
+          "preview": "गल्वान, कुन्फलिक्त हो, समय प्यांखे दिखाना हो, चाईना इस्टिये ही यह सब करता है. तिके, उसी तरह से, भारत चिवकी इस्पे एक लोंक्टम स्टर्टिजी लेके चल रहा है, बाद में दिखेंगे कैसे अख्षाए इच..."
+        }
+      ],
+      "degraded_finalists": [
+        {
+          "start": 589.36,
+          "end": 639.36,
+          "score": 181,
+          "semantic_label": "degraded_semantics",
+          "creator_qa_reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "preview": "अगर बशा हुए है अगर बीच में याप को केनाल्स दिखने हैं नाले ताएप के चोड़ ये नाले नहीं ये समुद्र का पानी कवार बाड के रूप में आजाता है ये नदियो में अफान आजाता है तिया पहले पानी बहर जाता था अगर गलती से थोड़ावध पानी आबी जाता है"
+        },
+        {
+          "start": 1161.0,
+          "end": 1173.0,
+          "score": 162,
+          "semantic_label": "degraded_semantics",
+          "creator_qa_reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "preview": "या दीजल पेट्रोल या तेल की एरर्जी पर चलने के बचाए, अगर हीट्रोजन से चलने लगजाए, तो अनंदा जाएगा. खई रही बात यूरेनिम की, यूरेनिम से भी न चलवा सकते हैं,"
+        },
+        {
+          "start": 536.36,
+          "end": 548.36,
+          "score": 152,
+          "semantic_label": "degraded_semantics",
+          "creator_qa_reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "preview": "नेदल्ट्झो नाम इसका मतलबी होता है पानी में दूबा हुए लेंद नेदल्ट्झो एक आसी कन्तरी रही है जिसका एक चोथा इस्सा पानी में दूबा रहेता था"
+        },
+        {
+          "start": 636.36,
+          "end": 672.36,
+          "score": 152,
+          "semantic_label": "degraded_semantics",
+          "creator_qa_reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "preview": "अवाप कहो थी कै है यह तेंकलोडी बारत क्या लेने गया था? जी हाँ, बारत भी अपने यह आपर यस तरे का पूरे एक सिस्टम बनारा हा आए, अगर बाड़ लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा लोगा �"
+        }
+      ],
+      "final_duration_avg": 24.69,
+      "final_duration_min": 12.0,
+      "final_duration_max": 50.0,
+      "avg_setup_strength": 8.33,
+      "avg_payoff_strength": 0.0,
+      "zero_payoff_finalists": 6,
+      "semantic_preference_applied_count": 0
+    },
+    {
+      "job_id": "cb7f65ba-222e-4e82-869f-57d399a3f146",
+      "asr_artifacts": {
+        "native_pre_retry": {
+          "path": "audit_reports\\asr_segments_cb7f65ba-222e-4e82-869f-57d399a3f146_native_pre_retry.json",
+          "exists": true,
+          "asr_mode": "native_transcribe",
+          "asr_quality_score": 0,
+          "low_confidence_asr": true,
+          "transcript_quality_reasons": [
+            "replacement_chars=62",
+            "repeated_hindi_phrase=आप आप आप",
+            "repeated_hindi_phrase=आ�",
+            "ultra_short_repeated_segments=1",
+            "repeated_helper_phrases=29"
+          ],
+          "segment_count": 134,
+          "replacement_char_count": 31,
+          "repeated_token_loop_count": 14
+        },
+        "final": {
+          "path": "audit_reports\\asr_segments_cb7f65ba-222e-4e82-869f-57d399a3f146.json",
+          "exists": true,
+          "asr_mode": "native_transcribe",
+          "asr_quality_score": 0,
+          "low_confidence_asr": true,
+          "transcript_quality_reasons": [],
+          "segment_count": 134,
+          "replacement_char_count": 31,
+          "repeated_token_loop_count": 14
+        }
+      },
+      "transcript_quality": {
+        "ts": 1779359912.3547966,
+        "job_id": "cb7f65ba-222e-4e82-869f-57d399a3f146",
+        "event": "ASR_LOW_CONFIDENCE",
+        "asr_mode": "native_transcribe",
+        "asr_quality_score": 0,
+        "asr_quality_reasons": [
+          "replacement_chars=62",
+          "repeated_hindi_phrase=आप आप आप",
+          "repeated_hindi_phrase=आ�",
+          "ultra_short_repeated_segments=1",
+          "repeated_helper_phrases=29"
+        ],
+        "message": "ASR_LOW_CONFIDENCE"
+      },
+      "candidate_funnel_count": 20,
+      "final_candidate_count": 6,
+      "creator_qa_reject_count": 6,
+      "creator_qa_zero_safe": true,
+      "creator_qa_zero_row": {
+        "ts": 1779359913.6745129,
+        "job_id": "cb7f65ba-222e-4e82-869f-57d399a3f146",
+        "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+        "message": "No creator-safe clips found",
+        "rejected_count": 6,
+        "top_rejection_reasons": [
+          {
+            "reason": "asr_low_confidence",
+            "count": 6
+          },
+          {
+            "reason": "no_hook_no_payoff",
+            "count": 6
+          },
+          {
+            "reason": "weak_standalone_context",
+            "count": 5
+          }
+        ]
+      },
+      "qa_reason_counts": {
+        "asr_low_confidence": 6,
+        "no_hook_no_payoff": 6,
+        "weak_standalone_context": 5
+      },
+      "qa_metadata_reason_counts": {
+        "missing_setup": 1
+      },
+      "funnel_semantic_labels": {},
+      "final_semantic_labels": {
+        "unknown": 6
+      },
+      "funnel_structural_labels": {
+        "unstable": 15,
+        "clean": 2
+      },
+      "final_structural_labels": {
+        "unstable": 4,
+        "clean": 2
+      },
+      "clean_or_borderline_lost": [],
+      "degraded_finalists": [],
+      "final_duration_avg": 24.23,
+      "final_duration_min": 12.0,
+      "final_duration_max": 50.0,
+      "avg_setup_strength": 8.33,
+      "avg_payoff_strength": 0.0,
+      "zero_payoff_finalists": 6,
+      "semantic_preference_applied_count": 0
+    }
+  ],
+  "v48_report_summaries": {
+    "chunk_stability": {
+      "total_chunks": 14,
+      "clean_chunks": 6,
+      "borderline_chunks": 0,
+      "unstable_chunks": 8,
+      "devanagari_count": 8833,
+      "mojibake_marker_count": 0,
+      "replacement_char_count": 49,
+      "retry_recommended_windows": [
+        {
+          "start": 0.0,
+          "end": 230.0
+        },
+        {
+          "start": 330.0,
+          "end": 450.0
+        },
+        {
+          "start": 550.0,
+          "end": 1000.0
+        },
+        {
+          "start": 1320.0,
+          "end": 1440.0
+        }
+      ],
+      "preserved_clean_regions": [
+        {
+          "start": 220.0,
+          "end": 340.0
+        },
+        {
+          "start": 440.0,
+          "end": 560.0
+        },
+        {
+          "start": 990.0,
+          "end": 1110.0
+        },
+        {
+          "start": 1100.0,
+          "end": 1220.0
+        },
+        {
+          "start": 1210.0,
+          "end": 1330.0
+        },
+        {
+          "start": 1430.0,
+          "end": 1550.0
+        }
+      ],
+      "risky_collapsed_regions": [
+        {
+          "start": 0.0,
+          "end": 120.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 27
+        },
+        {
+          "start": 110.0,
+          "end": 230.0,
+          "label": "local_repetition_collapse",
+          "collapse_score": 36
+        },
+        {
+          "start": 330.0,
+          "end": 450.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 17
+        },
+        {
+          "start": 550.0,
+          "end": 670.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 26
+        },
+        {
+          "start": 660.0,
+          "end": 780.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 49
+        },
+        {
+          "start": 770.0,
+          "end": 890.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 100
+        },
+        {
+          "start": 880.0,
+          "end": 1000.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 81
+        },
+        {
+          "start": 1320.0,
+          "end": 1440.0,
+          "label": "replacement_artifact_collapse",
+          "collapse_score": 35
+        }
+      ],
+      "global_vs_chunk_mismatch_explanation": "Chunk audit can preserve clean regions while retrying only unstable windows."
+    },
+    "candidate_asr_confidence": {
+      "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+      "asr_artifact": "audit_reports\\asr_segments_2efbe27a-4f64-41aa-9077-6f483e00fc4f_native_pre_retry.json",
+      "total_candidates": 6,
+      "candidates_rejected_only_due_to_global_asr": 0,
+      "locally_clean_candidates": 3,
+      "locally_borderline_candidates": 0,
+      "candidates_overlapping_unstable_windows": 3,
+      "locally_salvageable_from_global_asr_gate": 0,
+      "top_overlap_patterns": [
+        {
+          "pattern": "replacement_artifact_collapse",
+          "count": 3
+        },
+        {
+          "pattern": "clean",
+          "count": 3
+        }
+      ],
+      "chunk_summary": {
+        "total_chunks": 14,
+        "clean_chunks": 6,
+        "borderline_chunks": 0,
+        "unstable_chunks": 8,
+        "devanagari_count": 8833,
+        "mojibake_marker_count": 0,
+        "replacement_char_count": 49,
+        "retry_recommended_windows": [
+          {
+            "start": 0.0,
+            "end": 230.0
+          },
+          {
+            "start": 330.0,
+            "end": 450.0
+          },
+          {
+            "start": 550.0,
+            "end": 1000.0
+          },
+          {
+            "start": 1320.0,
+            "end": 1440.0
+          }
+        ],
+        "preserved_clean_regions": [
+          {
+            "start": 220.0,
+            "end": 340.0
+          },
+          {
+            "start": 440.0,
+            "end": 560.0
+          },
+          {
+            "start": 990.0,
+            "end": 1110.0
+          },
+          {
+            "start": 1100.0,
+            "end": 1220.0
+          },
+          {
+            "start": 1210.0,
+            "end": 1330.0
+          },
+          {
+            "start": 1430.0,
+            "end": 1550.0
+          }
+        ],
+        "risky_collapsed_regions": [
+          {
+            "start": 0.0,
+            "end": 120.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 27
+          },
+          {
+            "start": 110.0,
+            "end": 230.0,
+            "label": "local_repetition_collapse",
+            "collapse_score": 36
+          },
+          {
+            "start": 330.0,
+            "end": 450.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 17
+          },
+          {
+            "start": 550.0,
+            "end": 670.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 26
+          },
+          {
+            "start": 660.0,
+            "end": 780.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 49
+          },
+          {
+            "start": 770.0,
+            "end": 890.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 100
+          },
+          {
+            "start": 880.0,
+            "end": 1000.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 81
+          },
+          {
+            "start": 1320.0,
+            "end": 1440.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 35
+          }
+        ],
+        "global_vs_chunk_mismatch_explanation": "Chunk audit can preserve clean regions while retrying only unstable windows."
+      }
+    },
+    "clean_window_ranking": {
+      "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+      "asr_artifact": "audit_reports\\asr_segments_2efbe27a-4f64-41aa-9077-6f483e00fc4f_native_pre_retry.json",
+      "chunk_summary": {
+        "total_chunks": 14,
+        "clean_chunks": 6,
+        "borderline_chunks": 0,
+        "unstable_chunks": 8,
+        "devanagari_count": 8833,
+        "mojibake_marker_count": 0,
+        "replacement_char_count": 49,
+        "retry_recommended_windows": [
+          {
+            "start": 0.0,
+            "end": 230.0
+          },
+          {
+            "start": 330.0,
+            "end": 450.0
+          },
+          {
+            "start": 550.0,
+            "end": 1000.0
+          },
+          {
+            "start": 1320.0,
+            "end": 1440.0
+          }
+        ],
+        "preserved_clean_regions": [
+          {
+            "start": 220.0,
+            "end": 340.0
+          },
+          {
+            "start": 440.0,
+            "end": 560.0
+          },
+          {
+            "start": 990.0,
+            "end": 1110.0
+          },
+          {
+            "start": 1100.0,
+            "end": 1220.0
+          },
+          {
+            "start": 1210.0,
+            "end": 1330.0
+          },
+          {
+            "start": 1430.0,
+            "end": 1550.0
+          }
+        ],
+        "risky_collapsed_regions": [
+          {
+            "start": 0.0,
+            "end": 120.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 27
+          },
+          {
+            "start": 110.0,
+            "end": 230.0,
+            "label": "local_repetition_collapse",
+            "collapse_score": 36
+          },
+          {
+            "start": 330.0,
+            "end": 450.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 17
+          },
+          {
+            "start": 550.0,
+            "end": 670.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 26
+          },
+          {
+            "start": 660.0,
+            "end": 780.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 49
+          },
+          {
+            "start": 770.0,
+            "end": 890.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 100
+          },
+          {
+            "start": 880.0,
+            "end": 1000.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 81
+          },
+          {
+            "start": 1320.0,
+            "end": 1440.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 35
+          }
+        ],
+        "global_vs_chunk_mismatch_explanation": "Chunk audit can preserve clean regions while retrying only unstable windows."
+      },
+      "clean_windows": [
+        {
+          "start": 220.0,
+          "end": 340.0
+        },
+        {
+          "start": 440.0,
+          "end": 560.0
+        },
+        {
+          "start": 990.0,
+          "end": 1110.0
+        },
+        {
+          "start": 1100.0,
+          "end": 1220.0
+        },
+        {
+          "start": 1210.0,
+          "end": 1330.0
+        },
+        {
+          "start": 1430.0,
+          "end": 1550.0
+        }
+      ],
+      "unstable_windows": [
+        {
+          "start": 0.0,
+          "end": 230.0
+        },
+        {
+          "start": 330.0,
+          "end": 450.0
+        },
+        {
+          "start": 550.0,
+          "end": 1000.0
+        },
+        {
+          "start": 1320.0,
+          "end": 1440.0
+        }
+      ],
+      "total_funnel_candidates": 20,
+      "clean_window_candidates": 6,
+      "unstable_window_candidates": 14,
+      "borderline_window_candidates": 0,
+      "final_selected_candidates": 6,
+      "final_selected_clean_candidates": 3,
+      "final_selected_unstable_candidates": 3,
+      "lost_clean_window_candidates": 3,
+      "lost_clean_filter_decisions": {
+        "dna_rejected": 2,
+        "accepted_pre_dedupe": 1
+      },
+      "lost_clean_filter_reasons": {
+        "v10_v15_dna_gate": 2,
+        "passed_build_final_filters": 1
+      },
+      "funnel_candidates_by_region": {
+        "clean": 6,
+        "unstable": 14
+      },
+      "final_candidates_by_region": {
+        "unstable": 3,
+        "clean": 3
+      },
+      "creator_qa_zero_safe": {
+        "ts": 1779365183.06262,
+        "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+        "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+        "message": "No creator-safe clips found",
+        "rejected_count": 6,
+        "top_rejection_reasons": [
+          {
+            "reason": "asr_low_confidence",
+            "count": 6
+          },
+          {
+            "reason": "no_hook_no_payoff",
+            "count": 6
+          },
+          {
+            "reason": "weak_standalone_context",
+            "count": 4
+          }
+        ]
+      },
+      "recommended_minimal_patch": "No production ranking patch is justified from this run alone."
+    },
+    "semantic_asr_confidence": {
+      "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+      "asr_artifact": "audit_reports\\asr_segments_2efbe27a-4f64-41aa-9077-6f483e00fc4f_native_pre_retry.json",
+      "chunk_source": "recomputed",
+      "chunk_source_artifact": "audit_reports\\asr_segments_2efbe27a-4f64-41aa-9077-6f483e00fc4f_native_pre_retry.json",
+      "stability_source": "production_helpers",
+      "total_candidates": 20,
+      "final_selected_candidates": 6,
+      "structurally_clean_candidates": 4,
+      "structurally_borderline_candidates": 0,
+      "structurally_unstable_candidates": 16,
+      "semantically_clean_candidates": 1,
+      "semantically_borderline_candidates": 2,
+      "semantically_degraded_candidates": 17,
+      "final_semantically_degraded_candidates": 5,
+      "clean_structural_degraded_semantics": 4,
+      "final_clean_structural_degraded_semantics": 2,
+      "candidates_rejected_mainly_due_to_asr_semantic_degradation": 7,
+      "candidates_rejected_mainly_due_to_real_editorial_weakness": 2,
+      "structurally_clean_no_hook_due_to_semantic_degradation": 4,
+      "semantic_label_counts": {
+        "degraded_semantics": 17,
+        "clean_semantics": 1,
+        "borderline_semantics": 2
+      },
+      "structural_label_counts": {
+        "clean": 4,
+        "unstable": 16
+      },
+      "rejection_driver_counts": {
+        "asr_semantic_driven": 7,
+        "asr_semantic_risk": 9,
+        "editorial_driven": 2,
+        "not_rejected_or_unclear": 1,
+        "mixed_asr_semantic_and_editorial": 1
+      },
+      "chunk_summary": {
+        "total_chunks": 14,
+        "clean_chunks": 4,
+        "borderline_chunks": 0,
+        "unstable_chunks": 10,
+        "retry_recommended_windows": [
+          {
+            "start": 0.0,
+            "end": 450.0
+          },
+          {
+            "start": 550.0,
+            "end": 1110.0
+          },
+          {
+            "start": 1320.0,
+            "end": 1440.0
+          }
+        ],
+        "preserved_clean_regions": [
+          {
+            "start": 440.0,
+            "end": 560.0
+          },
+          {
+            "start": 1100.0,
+            "end": 1220.0
+          },
+          {
+            "start": 1210.0,
+            "end": 1330.0
+          },
+          {
+            "start": 1430.0,
+            "end": 1550.0
+          }
+        ],
+        "risky_collapsed_regions": [
+          {
+            "start": 0.0,
+            "end": 120.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 40
+          },
+          {
+            "start": 110.0,
+            "end": 230.0,
+            "label": "local_repetition_collapse",
+            "collapse_score": 39
+          },
+          {
+            "start": 220.0,
+            "end": 340.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 32
+          },
+          {
+            "start": 330.0,
+            "end": 450.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 37
+          },
+          {
+            "start": 550.0,
+            "end": 670.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 32
+          },
+          {
+            "start": 660.0,
+            "end": 780.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 58
+          },
+          {
+            "start": 770.0,
+            "end": 890.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 90
+          },
+          {
+            "start": 880.0,
+            "end": 1000.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 75
+          },
+          {
+            "start": 990.0,
+            "end": 1110.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 62
+          },
+          {
+            "start": 1320.0,
+            "end": 1440.0,
+            "label": "replacement_artifact_collapse",
+            "collapse_score": 39
+          }
+        ],
+        "global_vs_chunk_mismatch_explanation": "Semantic ASR audit uses production ASR stability helpers for local structural labels.",
+        "chunk_source": "recomputed",
+        "chunk_source_artifact": "audit_reports\\asr_segments_2efbe27a-4f64-41aa-9077-6f483e00fc4f_native_pre_retry.json",
+        "stability_source": "production_helpers",
+        "ignored_chunk_report": "audit_reports\\v48_asr_chunk_stability.json"
+      },
+      "recommended_next_production_patch": "Next production patch should target ASR semantic confidence first: add deterministic semantic corruption scoring to candidate selection/QA metadata, keep ASR fail-closed, and use it before ranking promotes structurally clean but semantically degraded windows."
+    }
+  },
+  "gaps": [
+    {
+      "title": "Global ASR fail-closed gate rejects locally/semantically usable candidates",
+      "impact": "Blocks all finalists even when a clean_semantics candidate reaches Creator QA.",
+      "evidence": [
+        "latest creator_qa rejects=6 and zero_safe=True",
+        "top QA reasons={'asr_low_confidence': 6, 'no_hook_no_payoff': 6, 'weak_standalone_context': 4}",
+        "latest final semantic labels={'degraded_semantics': 3, 'borderline_semantics': 2, 'clean_semantics': 1}",
+        "candidate 270.92-283.76 reached QA as clean_semantics but still rejected with asr_low_confidence"
+      ],
+      "recommendation": "Make Creator QA ASR gate local/semantic-aware: keep fail-closed for degraded/unknown, but do not let global low_confidence_asr alone reject clean_semantics windows.",
+      "priority": "P0",
+      "risk": "Medium: must not allow degraded transcripts through; requires strict metadata checks and fallback to current behavior when missing.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Native ASR artifact has severe global quality collapse",
+      "impact": "The transcript contains replacement artifacts, repeated helper phrases, and entity corruption across runs.",
+      "evidence": [
+        "chunk replacement_char_count=49",
+        "unstable_chunks=8 of 14",
+        "latest transcript reasons=['replacement_chars=62', 'repeated_hindi_phrase=आप आप आप', 'repeated_hindi_phrase=आ�', 'ultra_short_repeated_segments=1', 'repeated_helper_phrases=29']"
+      ],
+      "recommendation": "Do not rely on global transcript quality as a clip-level decision; preserve chunk/local scoring and local semantic confidence.",
+      "priority": "P0",
+      "risk": "Low: diagnostic conclusion only; production change belongs in P0 local QA gate.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": false
+    },
+    {
+      "title": "Semantic ASR degradation remains high in final selection",
+      "impact": "Even after V48.9, degraded candidates still dominate finals.",
+      "evidence": [
+        "latest semantic audit final degraded=5",
+        "latest semantic audit clean structural degraded=2",
+        "latest final semantic labels={'degraded_semantics': 3, 'borderline_semantics': 2, 'clean_semantics': 1}"
+      ],
+      "recommendation": "Strengthen semantic ranking only after P0: require at least one clean/borderline finalist when such candidates exist and score gap is bounded.",
+      "priority": "P1",
+      "risk": "Medium: can over-promote low-payoff clean text if not paired with editorial thresholds.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Editorial extraction produces no payoff across all finalists",
+      "impact": "All finalist clips repeatedly fail no_hook_no_payoff, so even clean ASR text is not creator-safe.",
+      "evidence": [
+        "latest zero_payoff_finalists=6 of 6",
+        "latest avg setup=8.33 avg payoff=0.0",
+        "QA no_hook_no_payoff count=6"
+      ],
+      "recommendation": "Audit and patch Hindi payoff/setup expansion around clean windows; choose longer/neighboring context before ranking rather than relaxing QA.",
+      "priority": "P1",
+      "risk": "Medium: larger windows can add rambling context or continuation leakage.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Dedupe and near-start removal can hide clean/borderline candidates",
+      "impact": "Clean or borderline candidates exist but may not survive final dedupe/selection consistently.",
+      "evidence": [
+        "latest lost clean/borderline rows=2",
+        "clean window lost count from V48 report=3",
+        "lost filter reasons={'v10_v15_dna_gate': 2, 'passed_build_final_filters': 1}"
+      ],
+      "recommendation": "After P0, add a dedupe tie-break that keeps cleaner semantic candidate when windows overlap and editorial scores are close.",
+      "priority": "P1",
+      "risk": "Medium: overlap rules can reduce variety if too aggressive.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Repeated full reruns are avoidable",
+      "impact": "Existing artifacts are sufficient to validate ranking/QA hypotheses offline before another upload.",
+      "evidence": [
+        "ASR segment artifacts, candidate funnel, clip intelligence, QA logs, and V48 reports exist for all target jobs.",
+        "V48.8/V48.9 impact was measurable from existing analytics."
+      ],
+      "recommendation": "Add offline replay harness for candidate ranking/Creator QA decisions using saved artifacts before any future long-video rerun.",
+      "priority": "P1",
+      "risk": "Low: read-only replay reduces iteration cost.",
+      "files_affected": [
+        "audit_reports/*.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": false
+    },
+    {
+      "title": "Candidate windows are often too short or context-thin for standalone clips",
+      "impact": "Finalists include 12-16s windows and weak_standalone_context remains a top rejection reason.",
+      "evidence": [
+        "latest duration min=12.0 avg=20.83 max=50.0",
+        "weak_standalone_context count=4"
+      ],
+      "recommendation": "For clean/local-good windows, prefer expanded context that includes setup and payoff before final scoring.",
+      "priority": "P1",
+      "risk": "Medium: longer clips may dilute hooks.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Retry path is not improving this Hindi/Hinglish mode",
+      "impact": "Latest jobs still end in native_transcribe low confidence despite final artifacts being written.",
+      "evidence": [
+        "latest final ASR mode=native_transcribe",
+        "latest final ASR quality=0",
+        "specified checkpoint says faster-whisper retry fails safely and falls back"
+      ],
+      "recommendation": "Keep retry fail-safe, but disable or shorten retry sampling for this mode if logs confirm repeated no-benefit; validate with offline ASR artifact comparison first.",
+      "priority": "P2",
+      "risk": "Low to medium: affects runtime only if scoped to this failure mode; do not change ASR model policy yet.",
+      "files_affected": [
+        "asr_engine.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Semantic corruption is mostly entity/technical term corruption",
+      "impact": "Names and technical terms are malformed, which makes otherwise topical clips unusable.",
+      "evidence": [
+        "Repeated examples across audits include Netherlands/Modi/travel/semiconductor/energy corruptions.",
+        "latest semantic degraded candidates=17"
+      ],
+      "recommendation": "Keep deterministic semantic ASR scoring and add a narrow entity-corruption diagnostic field; do not auto-correct text for export yet.",
+      "priority": "P2",
+      "risk": "Low if diagnostic only; high if used for transcript rewriting.",
+      "files_affected": [
+        "pipeline_runner.py",
+        "audit_reports/*.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": false
+    },
+    {
+      "title": "Frontend zero-clip reporting appears fixed but needs guardrail audit",
+      "impact": "The app now reports no creator-safe clips instead of pretending success.",
+      "evidence": [
+        "creator_qa_zero_safe rows are present for all three target jobs.",
+        "No export should occur for rejected-only jobs."
+      ],
+      "recommendation": "Keep current UX; add a regression audit that asserts zero-safe jobs expose no final exports.",
+      "priority": "P2",
+      "risk": "Low.",
+      "files_affected": [
+        "audit_reports/*.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": false
+    }
+  ],
+  "top_10_gaps": [
+    {
+      "title": "Global ASR fail-closed gate rejects locally/semantically usable candidates",
+      "impact": "Blocks all finalists even when a clean_semantics candidate reaches Creator QA.",
+      "evidence": [
+        "latest creator_qa rejects=6 and zero_safe=True",
+        "top QA reasons={'asr_low_confidence': 6, 'no_hook_no_payoff': 6, 'weak_standalone_context': 4}",
+        "latest final semantic labels={'degraded_semantics': 3, 'borderline_semantics': 2, 'clean_semantics': 1}",
+        "candidate 270.92-283.76 reached QA as clean_semantics but still rejected with asr_low_confidence"
+      ],
+      "recommendation": "Make Creator QA ASR gate local/semantic-aware: keep fail-closed for degraded/unknown, but do not let global low_confidence_asr alone reject clean_semantics windows.",
+      "priority": "P0",
+      "risk": "Medium: must not allow degraded transcripts through; requires strict metadata checks and fallback to current behavior when missing.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Native ASR artifact has severe global quality collapse",
+      "impact": "The transcript contains replacement artifacts, repeated helper phrases, and entity corruption across runs.",
+      "evidence": [
+        "chunk replacement_char_count=49",
+        "unstable_chunks=8 of 14",
+        "latest transcript reasons=['replacement_chars=62', 'repeated_hindi_phrase=आप आप आप', 'repeated_hindi_phrase=आ�', 'ultra_short_repeated_segments=1', 'repeated_helper_phrases=29']"
+      ],
+      "recommendation": "Do not rely on global transcript quality as a clip-level decision; preserve chunk/local scoring and local semantic confidence.",
+      "priority": "P0",
+      "risk": "Low: diagnostic conclusion only; production change belongs in P0 local QA gate.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": false
+    },
+    {
+      "title": "Semantic ASR degradation remains high in final selection",
+      "impact": "Even after V48.9, degraded candidates still dominate finals.",
+      "evidence": [
+        "latest semantic audit final degraded=5",
+        "latest semantic audit clean structural degraded=2",
+        "latest final semantic labels={'degraded_semantics': 3, 'borderline_semantics': 2, 'clean_semantics': 1}"
+      ],
+      "recommendation": "Strengthen semantic ranking only after P0: require at least one clean/borderline finalist when such candidates exist and score gap is bounded.",
+      "priority": "P1",
+      "risk": "Medium: can over-promote low-payoff clean text if not paired with editorial thresholds.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Editorial extraction produces no payoff across all finalists",
+      "impact": "All finalist clips repeatedly fail no_hook_no_payoff, so even clean ASR text is not creator-safe.",
+      "evidence": [
+        "latest zero_payoff_finalists=6 of 6",
+        "latest avg setup=8.33 avg payoff=0.0",
+        "QA no_hook_no_payoff count=6"
+      ],
+      "recommendation": "Audit and patch Hindi payoff/setup expansion around clean windows; choose longer/neighboring context before ranking rather than relaxing QA.",
+      "priority": "P1",
+      "risk": "Medium: larger windows can add rambling context or continuation leakage.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Dedupe and near-start removal can hide clean/borderline candidates",
+      "impact": "Clean or borderline candidates exist but may not survive final dedupe/selection consistently.",
+      "evidence": [
+        "latest lost clean/borderline rows=2",
+        "clean window lost count from V48 report=3",
+        "lost filter reasons={'v10_v15_dna_gate': 2, 'passed_build_final_filters': 1}"
+      ],
+      "recommendation": "After P0, add a dedupe tie-break that keeps cleaner semantic candidate when windows overlap and editorial scores are close.",
+      "priority": "P1",
+      "risk": "Medium: overlap rules can reduce variety if too aggressive.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Repeated full reruns are avoidable",
+      "impact": "Existing artifacts are sufficient to validate ranking/QA hypotheses offline before another upload.",
+      "evidence": [
+        "ASR segment artifacts, candidate funnel, clip intelligence, QA logs, and V48 reports exist for all target jobs.",
+        "V48.8/V48.9 impact was measurable from existing analytics."
+      ],
+      "recommendation": "Add offline replay harness for candidate ranking/Creator QA decisions using saved artifacts before any future long-video rerun.",
+      "priority": "P1",
+      "risk": "Low: read-only replay reduces iteration cost.",
+      "files_affected": [
+        "audit_reports/*.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": false
+    },
+    {
+      "title": "Candidate windows are often too short or context-thin for standalone clips",
+      "impact": "Finalists include 12-16s windows and weak_standalone_context remains a top rejection reason.",
+      "evidence": [
+        "latest duration min=12.0 avg=20.83 max=50.0",
+        "weak_standalone_context count=4"
+      ],
+      "recommendation": "For clean/local-good windows, prefer expanded context that includes setup and payoff before final scoring.",
+      "priority": "P1",
+      "risk": "Medium: longer clips may dilute hooks.",
+      "files_affected": [
+        "pipeline_runner.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Retry path is not improving this Hindi/Hinglish mode",
+      "impact": "Latest jobs still end in native_transcribe low confidence despite final artifacts being written.",
+      "evidence": [
+        "latest final ASR mode=native_transcribe",
+        "latest final ASR quality=0",
+        "specified checkpoint says faster-whisper retry fails safely and falls back"
+      ],
+      "recommendation": "Keep retry fail-safe, but disable or shorten retry sampling for this mode if logs confirm repeated no-benefit; validate with offline ASR artifact comparison first.",
+      "priority": "P2",
+      "risk": "Low to medium: affects runtime only if scoped to this failure mode; do not change ASR model policy yet.",
+      "files_affected": [
+        "asr_engine.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": true
+    },
+    {
+      "title": "Semantic corruption is mostly entity/technical term corruption",
+      "impact": "Names and technical terms are malformed, which makes otherwise topical clips unusable.",
+      "evidence": [
+        "Repeated examples across audits include Netherlands/Modi/travel/semiconductor/energy corruptions.",
+        "latest semantic degraded candidates=17"
+      ],
+      "recommendation": "Keep deterministic semantic ASR scoring and add a narrow entity-corruption diagnostic field; do not auto-correct text for export yet.",
+      "priority": "P2",
+      "risk": "Low if diagnostic only; high if used for transcript rewriting.",
+      "files_affected": [
+        "pipeline_runner.py",
+        "audit_reports/*.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": false
+    },
+    {
+      "title": "Frontend zero-clip reporting appears fixed but needs guardrail audit",
+      "impact": "The app now reports no creator-safe clips instead of pretending success.",
+      "evidence": [
+        "creator_qa_zero_safe rows are present for all three target jobs.",
+        "No export should occur for rejected-only jobs."
+      ],
+      "recommendation": "Keep current UX; add a regression audit that asserts zero-safe jobs expose no final exports.",
+      "priority": "P2",
+      "risk": "Low.",
+      "files_affected": [
+        "audit_reports/*.py"
+      ],
+      "can_validate_offline_first": true,
+      "needs_rerun_for_final_validation": false
+    }
+  ],
+  "action_plan": {
+    "P0": [
+      "Global ASR fail-closed gate rejects locally/semantically usable candidates",
+      "Native ASR artifact has severe global quality collapse"
+    ],
+    "P1": [
+      "Semantic ASR degradation remains high in final selection",
+      "Editorial extraction produces no payoff across all finalists",
+      "Dedupe and near-start removal can hide clean/borderline candidates",
+      "Repeated full reruns are avoidable",
+      "Candidate windows are often too short or context-thin for standalone clips"
+    ],
+    "P2": [
+      "Retry path is not improving this Hindi/Hinglish mode",
+      "Semantic corruption is mostly entity/technical term corruption",
+      "Frontend zero-clip reporting appears fixed but needs guardrail audit"
+    ],
+    "do_not_touch": [
+      "Do not weaken Creator QA acceptance thresholds.",
+      "Do not export rejected clips.",
+      "Do not change frontend/render/export/subtitle code for this problem.",
+      "Do not change ASR model/retry policy until local semantic QA gate is validated.",
+      "Do not run another long-video job before offline replay/audit predicts an improvement."
+    ]
+  },
+  "next_codex_prompt": "FluxClip V49.1 local semantic ASR Creator-QA gate patch.\n\nEnvironment:\n- Local Windows only\n- Path: C:\\fluxclip_latest\\fluxclip\n- Minimal production patch only\n- Compile after every changed Python file\n- No frontend/render/export/subtitle changes\n- Do NOT weaken Creator QA\n- Do NOT export rejected clips\n- Do NOT change ASR retry/model policy\n\nGoal:\nReplace the global ASR rejection inside Creator QA with a strict local semantic-aware ASR gate.\n\nPatch:\n- In pipeline_runner.py Creator QA rejection logic, keep current fail-closed behavior for degraded_semantics, unknown/missing semantic metadata, unstable local ASR, and severe artifact reasons.\n- Allow global low_confidence_asr to stop being an automatic rejection only when the clip has semantic_asr_confidence_label in clean_semantics/borderline_semantics, local_asr_confidence_label clean/borderline, and semantic_asr_corruption_score below a conservative threshold.\n- Add score_breakdown metadata explaining local_asr_gate_decision and reasons.\n- Do not alter no_hook_no_payoff or weak_standalone_context checks.\n\nValidation:\n- python -m py_compile pipeline_runner.py\n- Run offline audits first; only rerun the source if the audit predicts at least one finalist is no longer rejected solely by global ASR.\n"
+}

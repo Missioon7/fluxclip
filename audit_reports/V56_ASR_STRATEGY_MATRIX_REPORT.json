@@ -1,0 +1,64 @@
+{
+  "source": "C:\\fluxclip_latest\\fluxclip\\uploads\\a2d35c39-8201-44e4-8f61-6a06c763fe40.mp4",
+  "asr_audio": "C:\\fluxclip_latest\\fluxclip\\uploads\\a2d35c39-8201-44e4-8f61-6a06c763fe40_asr_16k.wav",
+  "sample_audio": "C:\\fluxclip_latest\\fluxclip\\uploads\\a2d35c39-8201-44e4-8f61-6a06c763fe40_asr_16k_asr_retry_sample_30s.wav",
+  "sample_seconds": 30,
+  "device": "cuda",
+  "cuda_available": true,
+  "results": [
+    {
+      "strategy": "A_whisper_small_native_transcribe_auto",
+      "ok": true,
+      "quality_score": 24,
+      "quality_reasons": [
+        "replacement_chars=22",
+        "repeated_hindi_phrase=आप आप आप",
+        "repeated_hindi_phrase=आ�"
+      ],
+      "raw_segments": 6,
+      "kept_segments": 6,
+      "preview": "साथियो नमशकार साथियो ज़ासा कि आप जानते हैं के प्रदान्मद्री मुदी पाँद देशों की यात्रा पन निकले हूँ हैं मैंने पिषले विटिम बटाया था के पाँथ तो देशों की यात्रा में उखों कोंपन सी बडी दील करने वाले हैं ज़िस में विशेश योग के बारे में हम ने चच्चा करी थी के योग भरत के बीश में कोंषी डील होई एग आप आप आप आप आप आप आ� आप आ� आ� आ� आ� आ� आ� आ� आ� आ� आ� आ",
+      "elapsed_seconds": 41.61
+    },
+    {
+      "strategy": "B_whisper_small_translate_auto",
+      "ok": true,
+      "quality_score": 54,
+      "quality_reasons": [
+        "weak_continuation_fragments=2",
+        "repeated_helper_phrases=209"
+      ],
+      "raw_segments": 7,
+      "kept_segments": 7,
+      "preview": "Hello friends! As you know, Prime Minister Modi has been on a five-state journey. In the last video, I told you about the five-state journey, which deal was going to be made. We had discussed in the U.S. about which deal was going to be made between the U.S. and India. Prime Minister Modi has been on a Netherlands journey where India has made many deals that will bring India out of many problems. And will also help India become a superpower. What are the deals? What kind of Trump card is there for India?",
+      "elapsed_seconds": 3.65
+    },
+    {
+      "strategy": "C_whisper_small_forced_language_hi",
+      "ok": true,
+      "quality_score": 24,
+      "quality_reasons": [
+        "replacement_chars=22",
+        "repeated_hindi_phrase=आप आप आप",
+        "repeated_hindi_phrase=आ�"
+      ],
+      "raw_segments": 6,
+      "kept_segments": 6,
+      "preview": "साथियो नमशकार साथियो ज़ासा कि आप जानते हैं के प्रदान्मद्री मुदी पाँद देशों की यात्रा पन निकले हूँ हैं मैंने पिषले विटिम बटाया था के पाँथ तो देशों की यात्रा में उखों कोंपन सी बडी दील करने वाले हैं ज़िस में विशेश योग के बारे में हम ने चच्चा करी थी के योग भरत के बीश में कोंषी डील होई एग आप आप आप आप आप आप आ� आप आ� आ� आ� आ� आ� आ� आ� आ� आ� आ� आ",
+      "elapsed_seconds": 16.28
+    },
+    {
+      "strategy": "D_faster_whisper_medium_hi",
+      "ok": true,
+      "quality_score": 100,
+      "quality_reasons": [],
+      "raw_segments": 9,
+      "kept_segments": 9,
+      "preview": "साथियों नमश्कार. साथियों, ज़ासा की आप जानते हैं, कि प्रिधान मंत्रि मौदी पांस् देशों की यात्रा पर निकले हुए हैं. मैंने पिछ्ले विदियों में बदाए था, के पांचो देशों की यात्रा में वो कोन्कोंसी बढ़ी डिल करने वाले हैं, जसमें विश्य सॉर से यूए के वारे में हमने चचा करी थी क्या यूए और भारत के भीश में कौन सी डिल हुई हैं. एसे ही आप परजान मंत्रि मूदि नेदरलेन्ड्ड़ के यात्रा पर गई वूए हैं जहां पर भारत ने कई ऐसी डिल स करी हैं जो आने वाले सम्ह में भारत को कई संकत ओंट नौगालेंगी. और साथ ही भारत को सोपर्पावर बनने में मदद करेंगी. वो कुनसी दील्स हैं? भारत के लिए कौन सा त्रम्प कार्ड मुदि जी रहे हैं?",
+      "elapsed_seconds": 62.06
+    }
+  ],
+  "best_quality_score": 100,
+  "full_video_rerun_allowed": true,
+  "version": "v56_asr_strategy_matrix"
+}

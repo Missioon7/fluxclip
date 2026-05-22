@@ -1,0 +1,174 @@
+{
+  "scope": "offline_only_corrected_after_v49_4_parity_fix",
+  "production_changes": false,
+  "video_rerun": false,
+  "audit_scripts_changed": false,
+  "compile_needed": false,
+  "source_audits_rerun": [
+    "audit_reports\\v48_candidate_asr_confidence_audit.py",
+    "audit_reports\\v48_clean_window_candidate_ranking_audit.py",
+    "audit_reports\\v48_semantic_asr_confidence_audit.py",
+    "audit_reports\\v49_asr_stability_parity_audit.py",
+    "audit_reports\\v49_master_gap_audit.py"
+  ],
+  "parity_corrected_facts": {
+    "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+    "stability_source": "production_helpers",
+    "total_final_candidates": 6,
+    "production_logged_vs_recomputed_mismatches": 0,
+    "production_vs_audit_label_mismatches": 0,
+    "production_vs_audit_ratio_mismatches": 0,
+    "mismatch_reason_counts": {
+      "matched": 6
+    },
+    "production_chunk_label_counts": {
+      "replacement_artifact_collapse": 9,
+      "local_repetition_collapse": 1,
+      "clean": 4
+    },
+    "semantic_audit_structural_label_counts": {
+      "clean": 4,
+      "unstable": 16
+    },
+    "semantic_label_counts": {
+      "clean_semantics": 1,
+      "borderline_semantics": 2,
+      "degraded_semantics": 17
+    },
+    "final_semantically_degraded_candidates": 5,
+    "creator_qa_zero_safe": true,
+    "creator_qa_rejected_count": 6,
+    "creator_qa_top_rejection_reasons": {
+      "asr_low_confidence": 6,
+      "no_hook_no_payoff": 6,
+      "weak_standalone_context": 4
+    }
+  },
+  "candidate_270_92_corrected": {
+    "start": 270.92,
+    "end": 283.76,
+    "semantic_confidence_label": "clean_semantics",
+    "structural_local_asr_label": "unstable",
+    "unstable_overlap_ratio": 1.0,
+    "overlapping_production_chunk": {
+      "start": 220.0,
+      "end": 340.0,
+      "label": "replacement_artifact_collapse",
+      "collapse_score": 32,
+      "overlap_seconds": 12.84
+    },
+    "creator_qa_reasons": [
+      "asr_low_confidence",
+      "no_hook_no_payoff",
+      "weak_standalone_context"
+    ],
+    "conclusion": "semantic clean but not locally ASR-stable; cannot justify Creator QA bypass"
+  },
+  "invalid_previous_conclusions_due_to_audit_drift": [
+    "Candidate 270.92-283.76 is not locally clean/salvageable; it is production-structural unstable.",
+    "The previous P0 conclusion that global ASR fail-closed rejects locally/semantically usable candidates is invalid for the corrected latest job.",
+    "Creator QA rollback or local-semantic ASR bypass based on the old clean-window label is invalid.",
+    "Legacy clean-window structural counts are diagnostic only unless reconciled with V49 parity.",
+    "A ranking-only patch is not justified as the next fix."
+  ],
+  "valid_conclusions_after_parity_fix": [
+    "Native ASR still has severe local/global collapse.",
+    "Semantic ASR degradation remains high.",
+    "Creator QA correctly returns zero safe clips for the corrected latest job.",
+    "V48.9 semantic preference still helps as ranking/diagnostic logic but is not sufficient.",
+    "Candidate expansion/payoff remains secondary until ASR text quality is locally stable."
+  ],
+  "corrected_top_gaps": [
+    {
+      "rank": 1,
+      "priority": "P0",
+      "title": "ASR unstable-window corruption in the source transcript",
+      "evidence": [
+        "production parity shows 10 unstable chunks out of 14",
+        "4 of 6 finalists are structurally unstable",
+        "candidate 270.92-283.76 is semantic clean but structural unstable"
+      ],
+      "target": "retry path replace/repair for unstable Hindi/Hinglish windows",
+      "not_target": "Creator QA rollback or ASR threshold relaxation",
+      "risk": "medium"
+    },
+    {
+      "rank": 2,
+      "priority": "P0",
+      "title": "Hindi semantic ASR corruption across candidate text",
+      "evidence": [
+        "17 of 20 candidates are degraded_semantics",
+        "5 of 6 finalists are degraded_semantics"
+      ],
+      "target": "Hindi semantic ASR repair/normalization diagnostics after structural repair is defined",
+      "risk": "medium"
+    },
+    {
+      "rank": 3,
+      "priority": "P1",
+      "title": "Editorial payoff/setup extraction has no usable payoff",
+      "evidence": [
+        "6 of 6 finalists rejected with no_hook_no_payoff",
+        "latest average payoff is 0.0"
+      ],
+      "target": "candidate expansion/payoff repair after ASR repair",
+      "risk": "medium"
+    },
+    {
+      "rank": 4,
+      "priority": "P1",
+      "title": "Ranking/dedupe can still lose cleaner candidates",
+      "evidence": [
+        "V48.9 surfaces cleaner semantic windows",
+        "corrected clean/borderline semantic candidates are structurally unstable"
+      ],
+      "target": "defer ranking/dedupe patch",
+      "risk": "medium"
+    },
+    {
+      "rank": 5,
+      "priority": "P2",
+      "title": "Retry path runtime policy remains suspect",
+      "evidence": [
+        "final artifacts remain native_transcribe low confidence",
+        "fallback does not create creator-safe candidates"
+      ],
+      "target": "offline repair/replacement audit before production retry policy change",
+      "risk": "low_to_medium"
+    }
+  ],
+  "decisions": {
+    "v49_1_creator_qa_gate": {
+      "status": "correct",
+      "rollback_needed": false,
+      "reason": "corrected clean-semantic finalist is structurally unstable and also fails editorial QA"
+    },
+    "v48_9_semantic_preference": {
+      "status": "keep",
+      "helps": true,
+      "reason": "helps ranking diagnostics and surfaces cleaner semantic windows, but cannot overcome structural ASR instability"
+    },
+    "next_patch_should_target": {
+      "asr_stability_classifier_thresholds": false,
+      "hindi_semantic_asr_repair_normalization": true,
+      "retry_path_disable_replace": true,
+      "candidate_expansion": false,
+      "creator_qa": false
+    }
+  },
+  "exact_next_recommended_patch": {
+    "name": "V49.6 offline unstable-window ASR repair/replace audit",
+    "risk": "low for audit-only preflight; medium for later production patch",
+    "summary": "Evaluate targeted unstable-window repair/retranscription or retry replacement using existing artifacts before any production change."
+  },
+  "do_not_touch": [
+    "Do not roll back V49.1 Creator QA.",
+    "Do not weaken Creator QA acceptance thresholds.",
+    "Do not export rejected clips.",
+    "Do not change frontend/render/export/subtitle code.",
+    "Do not relax ASR stability classifier thresholds.",
+    "Do not treat legacy clean-window labels as production truth unless V49 parity agrees.",
+    "Do not run another long-video job before an offline repair/replay audit predicts improvement."
+  ],
+  "next_codex_prompt": "FluxClip V49.6 offline unstable-window ASR repair/replace audit.\n\nEnvironment:\n- Local Windows only\n- Path: C:\\fluxclip_latest\\fluxclip\n- Offline only\n- No video rerun\n- No production patch unless explicitly requested after audit\n- No frontend/render/export/subtitle changes\n- Do not weaken Creator QA\n- Do not relax ASR stability thresholds\n- Compile only if changing audit scripts\n\nContext:\nV49.4 fixed ASR stability parity. The corrected source of truth is production_helpers:\n- production_vs_audit_label_mismatches=0\n- production_vs_audit_ratio_mismatches=0\n- candidate 270.92 -> 283.76 is semantic clean but production-structural unstable with unstable overlap 1.0\n- corrected semantic audit: 17/20 candidates degraded, 5/6 finalists degraded, 4/6 finalists structurally unstable\n\nTask:\nCreate an audit-only V49.6 report that evaluates whether unstable Hindi/Hinglish ASR windows should be repaired, retranscribed, or replaced before candidate ranking/Creator QA.\n\nRequirements:\n- Use existing ASR artifacts and logs only.\n- Use pipeline_runner production stability helpers as the structural source of truth.\n- For each unstable chunk, report overlap with funnel/final candidates, replacement artifacts, repetition collapse, semantic corruption, and whether a local repair/retry would plausibly change candidate eligibility.\n- Compare three options without changing production:\n  1. keep current native ASR fallback\n  2. disable/shorten the current no-benefit retry path\n  3. replace retry with targeted unstable-window repair/retranscription\n- Do not propose Creator QA relaxation.\n- Do not propose ASR threshold relaxation.\n\nOutputs:\n- audit_reports/V49_6_ASR_REPAIR_REPLACE_AUDIT_REPORT.md\n- audit_reports/v49_6_asr_repair_replace_audit.json\n\nReturn:\n- corrected top unstable windows\n- candidate eligibility impact\n- recommended retry/repair strategy\n- risk level\n- exact next production patch prompt only if audit evidence supports one\n"
+}

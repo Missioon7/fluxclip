@@ -1,0 +1,57 @@
+{
+  "summary": {
+    "current": {
+      "job_id": "v51_fresh_source_23f21012",
+      "asr_mode": "native_transcribe",
+      "asr_quality_score": 62,
+      "low_confidence_asr": true,
+      "asr_quality_reasons": [
+        "replacement_chars=2",
+        "repeated_hindi_phrase=अपको अपको"
+      ],
+      "candidates_found": 11,
+      "candidates_quarantined": 6,
+      "repaired_window_needed": 6,
+      "pre_creator_qa_candidates": 2,
+      "creator_safe_count": 0,
+      "rejection_reasons": [
+        [
+          "no_hook_no_payoff",
+          2
+        ],
+        [
+          "weak_standalone_context",
+          2
+        ]
+      ],
+      "final_clips_count": 0,
+      "salvage_allowed_clean": 1,
+      "salvage_allowed_borderline": 2,
+      "salvage_quarantined_unstable": 6,
+      "v49_7_to_v50_3_assessment": "helped_not_overblocked"
+    },
+    "baseline_same_source": {
+      "job_id": "23f21012-b025-4521-93c0-e13d15271343",
+      "asr_mode": "faster_whisper_medium_retry",
+      "asr_quality_score": 70,
+      "low_confidence_asr": false,
+      "candidates_found": 5,
+      "creator_safe_count": 0,
+      "rejection_reasons": [
+        [
+          "no_hook_no_payoff",
+          5
+        ],
+        [
+          "weak_standalone_context",
+          1
+        ]
+      ],
+      "final_clips_count": 0
+    }
+  },
+  "next_patch_recommendation": {
+    "recommendation": "target_payoff_candidate_generation_on_clean_or_borderline_windows",
+    "reason": "ASR quarantine removed unstable junk, but surviving clean/borderline candidates still fail on no_hook_no_payoff"
+  }
+}

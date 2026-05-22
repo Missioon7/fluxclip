@@ -1,0 +1,323 @@
+{
+  "job_id": "v44_final_e0926df0",
+  "result": {
+    "status": "done",
+    "message": "No creator-safe clips found",
+    "summary": {
+      "text_preview": "तो में बीच में एर्पोट के लाँज में कही बिलिख से. तो में कही बिलिख लिख. अपको लकता अख्शजी की अपना टाईम आएगा वो अपना टाईम आगा एग इतने पोटकास यतने अंटेवूँज अपना शाँए फिल्म दहिडन हिंदू त्रिलोगी पे फिल्म आरीए दोनी अईट्टी अपने ये फिल्म के राइट्स लेलिए है आगा ये किताग का भी राइट्स लेले गा, इस पर भी फिल्म आने वाले समयः पे आगे, अगर तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो � अदे आप दरवाजा खुलेगा अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अप अगर अपना बेटा आगे होता तो अपना बेटा आगे होता जी जिन अपना बेटा आगे है ना अपन बोलें अपना बेटा आगे है खिल कि अगर भी अबही भी अपकी मेहनेद शिद्धत और पहुच में कही नकही कोई कमी होगी अपी दिवाँ में जोला है, मेरी पुरी महनत, मेरा फैवरेट कोटेशन हमेशाच़ है, तो वो दोनो मेरे लिए मेरे दिमाग में जोला है, मेरी पुरी महनत, मेरे फेवरेट कोटेशन हमेशा से है, गरेटेस रिवेंज जे मैहसेर सक्सेस, औ...",
+      "segments_count": 29,
+      "captions_count": 98,
+      "viral_segments_count": 11,
+      "asr_mode": "native_transcribe",
+      "asr_quality_score": 52,
+      "low_confidence_asr": true,
+      "clips_before_creator_qa": 4,
+      "clips_count": 0,
+      "rejected_by_creator_qa": 4,
+      "top_rejection_reasons": [
+        {
+          "reason": "asr_low_confidence",
+          "count": 4
+        },
+        {
+          "reason": "no_hook_no_payoff",
+          "count": 4
+        },
+        {
+          "reason": "weak_standalone_context",
+          "count": 2
+        }
+      ]
+    },
+    "clips": [],
+    "final_clips": [],
+    "creator_qa": {
+      "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+      "message": "No creator-safe clips found",
+      "asr_mode": "native_transcribe",
+      "asr_quality_score": 52,
+      "low_confidence_asr": true,
+      "rejections": [
+        {
+          "ts": 1779279702.873046,
+          "job_id": "v44_final_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 0.0,
+          "end": 17.32,
+          "title": "Untitled Clip",
+          "reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff"
+          ],
+          "metadata_reasons": [],
+          "preview": "तो में बीच में एर्पोट के लाँज में कही बिलिख से. तो में कही बिलिख लिख. अपको लकता अख्शजी की अपना टाईम आएगा वो अपना टाईम आगा एग इतने पोटकास यतने अंटेवूँज अपना शाँए फिल्म दहिडन हिंदू त्रिलोगी पे फिल्म आरीए"
+        },
+        {
+          "ts": 1779279702.87404,
+          "job_id": "v44_final_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 97.32,
+          "end": 109.32,
+          "title": "Untitled Clip",
+          "reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff"
+          ],
+          "metadata_reasons": [],
+          "preview": "खिल कि अगर भी अबही भी अपकी मेहनेद शिद्धत और पहुच में कही नकही कोई कमी होगी अपी दिवाँ में जोला है, मेरी पुरी महनत, मेरा फैवरेट कोटेशन हमेशाच़ है,"
+        },
+        {
+          "ts": 1779279702.87404,
+          "job_id": "v44_final_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 184.32,
+          "end": 198.32,
+          "title": "Untitled Clip",
+          "reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "metadata_reasons": [],
+          "preview": "अगर अक्ष्द गुप्ता की एक मन्शा है एक जो ख़ाएश है अगर वो पूरी करने में जागरन मन्तन और अमारा दैनिक जागरन का पलाट्फोम"
+        },
+        {
+          "ts": 1779279702.8750384,
+          "job_id": "v44_final_e0926df0",
+          "event": "CREATOR_QA_REJECT",
+          "start": 205.32,
+          "end": 241.32,
+          "title": "Untitled Clip",
+          "reasons": [
+            "asr_low_confidence",
+            "no_hook_no_payoff",
+            "weak_standalone_context"
+          ],
+          "metadata_reasons": [],
+          "preview": "लिकन आप ने जब ये कहानिया लिख ही, एक रह्टर्स का लिखने का कोई श्पेस नहीं होता, नी जब ये कहानिया लिख ही एक इमपोट्ट़न बात है कि अपका फ्रेम अप माँँँँँँँँँँँँँँँँँँँँँँँँँँ"
+        }
+      ],
+      "top_rejection_reasons": [
+        {
+          "reason": "asr_low_confidence",
+          "count": 4
+        },
+        {
+          "reason": "no_hook_no_payoff",
+          "count": 4
+        },
+        {
+          "reason": "weak_standalone_context",
+          "count": 2
+        }
+      ]
+    }
+  },
+  "jobs": {
+    "v44_final_e0926df0": {
+      "status": "completed",
+      "result": {
+        "status": "done",
+        "message": "No creator-safe clips found",
+        "summary": {
+          "text_preview": "तो में बीच में एर्पोट के लाँज में कही बिलिख से. तो में कही बिलिख लिख. अपको लकता अख्शजी की अपना टाईम आएगा वो अपना टाईम आगा एग इतने पोटकास यतने अंटेवूँज अपना शाँए फिल्म दहिडन हिंदू त्रिलोगी पे फिल्म आरीए दोनी अईट्टी अपने ये फिल्म के राइट्स लेलिए है आगा ये किताग का भी राइट्स लेले गा, इस पर भी फिल्म आने वाले समयः पे आगे, अगर तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो आप यह तो � अदे आप दरवाजा खुलेगा अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अपको अप अगर अपना बेटा आगे होता तो अपना बेटा आगे होता जी जिन अपना बेटा आगे है ना अपन बोलें अपना बेटा आगे है खिल कि अगर भी अबही भी अपकी मेहनेद शिद्धत और पहुच में कही नकही कोई कमी होगी अपी दिवाँ में जोला है, मेरी पुरी महनत, मेरा फैवरेट कोटेशन हमेशाच़ है, तो वो दोनो मेरे लिए मेरे दिमाग में जोला है, मेरी पुरी महनत, मेरे फेवरेट कोटेशन हमेशा से है, गरेटेस रिवेंज जे मैहसेर सक्सेस, औ...",
+          "segments_count": 29,
+          "captions_count": 98,
+          "viral_segments_count": 11,
+          "asr_mode": "native_transcribe",
+          "asr_quality_score": 52,
+          "low_confidence_asr": true,
+          "clips_before_creator_qa": 4,
+          "clips_count": 0,
+          "rejected_by_creator_qa": 4,
+          "top_rejection_reasons": [
+            {
+              "reason": "asr_low_confidence",
+              "count": 4
+            },
+            {
+              "reason": "no_hook_no_payoff",
+              "count": 4
+            },
+            {
+              "reason": "weak_standalone_context",
+              "count": 2
+            }
+          ]
+        },
+        "clips": [],
+        "final_clips": [],
+        "creator_qa": {
+          "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+          "message": "No creator-safe clips found",
+          "asr_mode": "native_transcribe",
+          "asr_quality_score": 52,
+          "low_confidence_asr": true,
+          "rejections": [
+            {
+              "ts": 1779279702.873046,
+              "job_id": "v44_final_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 0.0,
+              "end": 17.32,
+              "title": "Untitled Clip",
+              "reasons": [
+                "asr_low_confidence",
+                "no_hook_no_payoff"
+              ],
+              "metadata_reasons": [],
+              "preview": "तो में बीच में एर्पोट के लाँज में कही बिलिख से. तो में कही बिलिख लिख. अपको लकता अख्शजी की अपना टाईम आएगा वो अपना टाईम आगा एग इतने पोटकास यतने अंटेवूँज अपना शाँए फिल्म दहिडन हिंदू त्रिलोगी पे फिल्म आरीए"
+            },
+            {
+              "ts": 1779279702.87404,
+              "job_id": "v44_final_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 97.32,
+              "end": 109.32,
+              "title": "Untitled Clip",
+              "reasons": [
+                "asr_low_confidence",
+                "no_hook_no_payoff"
+              ],
+              "metadata_reasons": [],
+              "preview": "खिल कि अगर भी अबही भी अपकी मेहनेद शिद्धत और पहुच में कही नकही कोई कमी होगी अपी दिवाँ में जोला है, मेरी पुरी महनत, मेरा फैवरेट कोटेशन हमेशाच़ है,"
+            },
+            {
+              "ts": 1779279702.87404,
+              "job_id": "v44_final_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 184.32,
+              "end": 198.32,
+              "title": "Untitled Clip",
+              "reasons": [
+                "asr_low_confidence",
+                "no_hook_no_payoff",
+                "weak_standalone_context"
+              ],
+              "metadata_reasons": [],
+              "preview": "अगर अक्ष्द गुप्ता की एक मन्शा है एक जो ख़ाएश है अगर वो पूरी करने में जागरन मन्तन और अमारा दैनिक जागरन का पलाट्फोम"
+            },
+            {
+              "ts": 1779279702.8750384,
+              "job_id": "v44_final_e0926df0",
+              "event": "CREATOR_QA_REJECT",
+              "start": 205.32,
+              "end": 241.32,
+              "title": "Untitled Clip",
+              "reasons": [
+                "asr_low_confidence",
+                "no_hook_no_payoff",
+                "weak_standalone_context"
+              ],
+              "metadata_reasons": [],
+              "preview": "लिकन आप ने जब ये कहानिया लिख ही, एक रह्टर्स का लिखने का कोई श्पेस नहीं होता, नी जब ये कहानिया लिख ही एक इमपोट्ट़न बात है कि अपका फ्रेम अप माँँँँँँँँँँँँँँँँँँँँँँँँँँ"
+            }
+          ],
+          "top_rejection_reasons": [
+            {
+              "reason": "asr_low_confidence",
+              "count": 4
+            },
+            {
+              "reason": "no_hook_no_payoff",
+              "count": 4
+            },
+            {
+              "reason": "weak_standalone_context",
+              "count": 2
+            }
+          ]
+        }
+      },
+      "error": null,
+      "stage": "Completed",
+      "progress": 100,
+      "visual_intelligence": {
+        "ok": true,
+        "sampled": 174,
+        "top_moments": [
+          {
+            "time": 2.0,
+            "brightness": 91.43,
+            "motion": 20.76,
+            "faces": 1,
+            "visual_score": 46
+          },
+          {
+            "time": 12.0,
+            "brightness": 83.3,
+            "motion": 64.13,
+            "faces": 2,
+            "visual_score": 46
+          },
+          {
+            "time": 36.0,
+            "brightness": 92.55,
+            "motion": 74.07,
+            "faces": 2,
+            "visual_score": 46
+          },
+          {
+            "time": 40.0,
+            "brightness": 84.43,
+            "motion": 54.41,
+            "faces": 2,
+            "visual_score": 46
+          },
+          {
+            "time": 82.0,
+            "brightness": 92.32,
+            "motion": 74.51,
+            "faces": 2,
+            "visual_score": 46
+          }
+        ],
+        "ai_thumbnails": [
+          {
+            "time": 2.0,
+            "path": "/uploads/v44_final_e0926df0_thumb_ai_0.jpg",
+            "visual_score": 46,
+            "motion": 20.76,
+            "faces": 1,
+            "brightness": 91.43
+          },
+          {
+            "time": 12.0,
+            "path": "/uploads/v44_final_e0926df0_thumb_ai_1.jpg",
+            "visual_score": 46,
+            "motion": 64.13,
+            "faces": 2,
+            "brightness": 83.3
+          },
+          {
+            "time": 36.0,
+            "path": "/uploads/v44_final_e0926df0_thumb_ai_2.jpg",
+            "visual_score": 46,
+            "motion": 74.07,
+            "faces": 2,
+            "brightness": 92.55
+          },
+          {
+            "time": 40.0,
+            "path": "/uploads/v44_final_e0926df0_thumb_ai_3.jpg",
+            "visual_score": 46,
+            "motion": 54.41,
+            "faces": 2,
+            "brightness": 84.43
+          },
+          {
+            "time": 82.0,
+            "path": "/uploads/v44_final_e0926df0_thumb_ai_4.jpg",
+            "visual_score": 46,
+            "motion": 74.51,
+            "faces": 2,
+            "brightness": 92.32
+          }
+        ]
+      },
+      "asr_mode": "native_transcribe",
+      "asr_quality_score": 52,
+      "low_confidence_asr": true
+    }
+  }
+}

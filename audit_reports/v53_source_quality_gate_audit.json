@@ -1,0 +1,245 @@
+{
+  "jobs_evaluated": 6,
+  "sources": [
+    {
+      "job_id": "v51_fresh_source_23f21012",
+      "artifact_path": "audit_reports\\asr_segments_v51_fresh_source_23f21012_native_pre_retry.json",
+      "asr_quality_score": 62.0,
+      "low_confidence_asr": true,
+      "segment_count": 29,
+      "eligible_segment_count": 0,
+      "clean_or_borderline_window_count": 16,
+      "clean_or_borderline_window_ratio": 0.5517,
+      "unstable_candidate_ratio": 0.5455,
+      "payoff_anchor_density": 0.0,
+      "standalone_context_density": 0.0,
+      "filler_ratio": 0.9655,
+      "semantic_degradation_ratio": 0.1379,
+      "candidates_found": 11,
+      "candidates_quarantined": 6,
+      "repaired_window_needed": 6,
+      "pre_creator_qa_candidates": 2,
+      "creator_safe_count": 0,
+      "rejection_reasons": [
+        [
+          "no_hook_no_payoff",
+          2
+        ],
+        [
+          "weak_standalone_context",
+          2
+        ]
+      ],
+      "salvage_summary": {
+        "quarantined_unstable": 6,
+        "allowed_clean": 1,
+        "allowed_borderline": 2
+      },
+      "source_quality_score": 1,
+      "source_quality_label": "poor",
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "unstable_asr_dominant",
+      "recommended_action": "avoid_full_generation_until_source_or_asr_capture_improves"
+    },
+    {
+      "job_id": "2efbe27a-4f64-41aa-9077-6f483e00fc4f",
+      "artifact_path": "audit_reports\\asr_segments_2efbe27a-4f64-41aa-9077-6f483e00fc4f_native_pre_retry.json",
+      "asr_quality_score": 0.0,
+      "low_confidence_asr": true,
+      "segment_count": 134,
+      "eligible_segment_count": 5,
+      "clean_or_borderline_window_count": 42,
+      "clean_or_borderline_window_ratio": 0.3134,
+      "unstable_candidate_ratio": 0.0,
+      "payoff_anchor_density": 0.0,
+      "standalone_context_density": 0.4,
+      "filler_ratio": 0.8955,
+      "semantic_degradation_ratio": 0.2612,
+      "candidates_found": 20,
+      "candidates_quarantined": 0,
+      "repaired_window_needed": 0,
+      "pre_creator_qa_candidates": 6,
+      "creator_safe_count": 0,
+      "rejection_reasons": [
+        [
+          "asr_low_confidence",
+          6
+        ],
+        [
+          "no_hook_no_payoff",
+          6
+        ],
+        [
+          "weak_standalone_context",
+          4
+        ]
+      ],
+      "salvage_summary": {},
+      "source_quality_score": 0,
+      "source_quality_label": "poor",
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "missing_standalone_payoff",
+      "recommended_action": "use_source_for_payoff_generation_experiments_only"
+    },
+    {
+      "job_id": "cb7f65ba-222e-4e82-869f-57d399a3f146",
+      "artifact_path": "audit_reports\\asr_segments_cb7f65ba-222e-4e82-869f-57d399a3f146_native_pre_retry.json",
+      "asr_quality_score": 0.0,
+      "low_confidence_asr": true,
+      "segment_count": 134,
+      "eligible_segment_count": 5,
+      "clean_or_borderline_window_count": 42,
+      "clean_or_borderline_window_ratio": 0.3134,
+      "unstable_candidate_ratio": 0.0,
+      "payoff_anchor_density": 0.0,
+      "standalone_context_density": 0.4,
+      "filler_ratio": 0.8955,
+      "semantic_degradation_ratio": 0.2612,
+      "candidates_found": 20,
+      "candidates_quarantined": 0,
+      "repaired_window_needed": 0,
+      "pre_creator_qa_candidates": 6,
+      "creator_safe_count": 0,
+      "rejection_reasons": [
+        [
+          "asr_low_confidence",
+          6
+        ],
+        [
+          "no_hook_no_payoff",
+          6
+        ],
+        [
+          "weak_standalone_context",
+          5
+        ]
+      ],
+      "salvage_summary": {},
+      "source_quality_score": 0,
+      "source_quality_label": "poor",
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "missing_standalone_payoff",
+      "recommended_action": "use_source_for_payoff_generation_experiments_only"
+    },
+    {
+      "job_id": "e0fc755a-9319-4bab-ad50-fd6ffa723bcb",
+      "artifact_path": "audit_reports\\asr_segments_e0fc755a-9319-4bab-ad50-fd6ffa723bcb_native_pre_retry.json",
+      "asr_quality_score": 0.0,
+      "low_confidence_asr": true,
+      "segment_count": 134,
+      "eligible_segment_count": 5,
+      "clean_or_borderline_window_count": 42,
+      "clean_or_borderline_window_ratio": 0.3134,
+      "unstable_candidate_ratio": 0.0,
+      "payoff_anchor_density": 0.0,
+      "standalone_context_density": 0.4,
+      "filler_ratio": 0.8955,
+      "semantic_degradation_ratio": 0.2612,
+      "candidates_found": 20,
+      "candidates_quarantined": 0,
+      "repaired_window_needed": 0,
+      "pre_creator_qa_candidates": 6,
+      "creator_safe_count": 0,
+      "rejection_reasons": [
+        [
+          "asr_low_confidence",
+          6
+        ],
+        [
+          "no_hook_no_payoff",
+          6
+        ],
+        [
+          "weak_standalone_context",
+          4
+        ]
+      ],
+      "salvage_summary": {},
+      "source_quality_score": 0,
+      "source_quality_label": "poor",
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "missing_standalone_payoff",
+      "recommended_action": "use_source_for_payoff_generation_experiments_only"
+    },
+    {
+      "job_id": "e6c97f3b-bd73-4401-a690-4f8b373af49c",
+      "artifact_path": "audit_reports\\asr_segments_e6c97f3b-bd73-4401-a690-4f8b373af49c_native_pre_retry.json",
+      "asr_quality_score": 0.0,
+      "low_confidence_asr": true,
+      "segment_count": 134,
+      "eligible_segment_count": 5,
+      "clean_or_borderline_window_count": 42,
+      "clean_or_borderline_window_ratio": 0.3134,
+      "unstable_candidate_ratio": 0.0,
+      "payoff_anchor_density": 0.0,
+      "standalone_context_density": 0.4,
+      "filler_ratio": 0.8955,
+      "semantic_degradation_ratio": 0.2612,
+      "candidates_found": 20,
+      "candidates_quarantined": 0,
+      "repaired_window_needed": 0,
+      "pre_creator_qa_candidates": 6,
+      "creator_safe_count": 0,
+      "rejection_reasons": [
+        [
+          "asr_low_confidence",
+          6
+        ],
+        [
+          "no_hook_no_payoff",
+          6
+        ],
+        [
+          "weak_standalone_context",
+          4
+        ]
+      ],
+      "salvage_summary": {},
+      "source_quality_score": 0,
+      "source_quality_label": "poor",
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "missing_standalone_payoff",
+      "recommended_action": "use_source_for_payoff_generation_experiments_only"
+    },
+    {
+      "job_id": "f964425c-0803-4e3d-b6e7-98f8eb3e7d52",
+      "artifact_path": "audit_reports\\asr_segments_f964425c-0803-4e3d-b6e7-98f8eb3e7d52_native_pre_retry.json",
+      "asr_quality_score": 0.0,
+      "low_confidence_asr": true,
+      "segment_count": 134,
+      "eligible_segment_count": 5,
+      "clean_or_borderline_window_count": 42,
+      "clean_or_borderline_window_ratio": 0.3134,
+      "unstable_candidate_ratio": 0.0,
+      "payoff_anchor_density": 0.0,
+      "standalone_context_density": 0.4,
+      "filler_ratio": 0.8955,
+      "semantic_degradation_ratio": 0.2612,
+      "candidates_found": 20,
+      "candidates_quarantined": 0,
+      "repaired_window_needed": 0,
+      "pre_creator_qa_candidates": 6,
+      "creator_safe_count": 0,
+      "rejection_reasons": [
+        [
+          "asr_low_confidence",
+          6
+        ],
+        [
+          "no_hook_no_payoff",
+          6
+        ],
+        [
+          "weak_standalone_context",
+          4
+        ]
+      ],
+      "salvage_summary": {},
+      "source_quality_score": 0,
+      "source_quality_label": "poor",
+      "likely_clip_yield": "low",
+      "dominant_failure_reason": "missing_standalone_payoff",
+      "recommended_action": "use_source_for_payoff_generation_experiments_only"
+    }
+  ]
+}
