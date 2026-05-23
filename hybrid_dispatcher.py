@@ -1,6 +1,9 @@
 import os
+import json
 import time
 import requests
+import zipfile
+from pathlib import Path
 from urllib.parse import urlparse
 from pipeline_runner import run_pipeline
 from hybrid_router import choose_worker, load_worker_config
@@ -11,19 +14,23 @@ POLL_INTERVAL = int(load_worker_config().get("poll_interval_seconds", 8))
 MAX_WAIT_SECONDS = int(load_worker_config().get("max_wait_seconds", 1800))
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+def _resolve_worker_url(url, worker_url=None):
+    if not isinstance(url, str):
+        return url
+    if url.startswith("/content/uploads/") and worker_url:
+        return worker_url.rstrip("/") + "/uploads/" + os.path.basename(url)
+    if url.startswith("uploads/") and worker_url:
+        return worker_url.rstrip("/") + "/" + url
+    if url.startswith("/uploads/") and worker_url:
+        return worker_url.rstrip("/") + url
+    return url
+
 def _download(url, worker_url=None, required=True, context="file"):
     if not isinstance(url, str):
         return url
 
     original_url = url
-    if url.startswith("/content/uploads/") and worker_url:
-        url = worker_url.rstrip("/") + "/uploads/" + os.path.basename(url)
-
-    elif url.startswith("uploads/") and worker_url:
-        url = worker_url.rstrip("/") + "/" + url
-
-    elif url.startswith("/uploads/") and worker_url:
-        url = worker_url.rstrip("/") + url
+    url = _resolve_worker_url(url, worker_url)
 
     if not url.startswith("http"):
         return url
@@ -62,6 +69,77 @@ def _download(url, worker_url=None, required=True, context="file"):
         if required:
             raise
         return original_url
+
+def _safe_extract_zip(zip_path, target_dir):
+    target = Path(target_dir).resolve()
+    extracted = []
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        for member in zf.infolist():
+            member_name = member.filename.replace("\\", "/")
+            if member.is_dir() or member_name.startswith("/") or ".." in Path(member_name).parts:
+                continue
+            destination = (target / member_name).resolve()
+            if target not in destination.parents and destination != target:
+                continue
+            zf.extract(member, target)
+            extracted.append(str(destination))
+    return extracted
+
+def _sync_result_bundle(worker_status, worker_url=None):
+    worker_status = worker_status if isinstance(worker_status, dict) else {}
+    result = worker_status.get("result") if isinstance(worker_status.get("result"), dict) else {}
+    bundle_url = (
+        worker_status.get("result_bundle_url")
+        or worker_status.get("bundle_url")
+        or result.get("result_bundle_url")
+        or result.get("bundle_url")
+    )
+    if not bundle_url:
+        print("WORKER_BUNDLE_SYNC_FALLBACK reason=no_bundle_url")
+        return None
+
+    resolved_url = _resolve_worker_url(bundle_url, worker_url)
+    print(f"WORKER_BUNDLE_SYNC_START source={resolved_url}")
+    try:
+        local_bundle = _download(resolved_url, worker_url, required=True, context="result_bundle")
+        bundle_path = os.path.join(UPLOAD_DIR, os.path.basename(local_bundle))
+        if local_bundle.startswith("/uploads/"):
+            bundle_path = os.path.join(UPLOAD_DIR, os.path.basename(local_bundle))
+        elif os.path.exists(local_bundle):
+            bundle_path = local_bundle
+
+        extracted = _safe_extract_zip(bundle_path, UPLOAD_DIR)
+        metadata = {}
+        for metadata_name in ["worker_status.json", "result.json"]:
+            metadata_path = os.path.join(UPLOAD_DIR, metadata_name)
+            if os.path.exists(metadata_path):
+                try:
+                    metadata[metadata_name] = json.loads(Path(metadata_path).read_text(encoding="utf-8"))
+                except Exception as e:
+                    print(f"WORKER_BUNDLE_SYNC_FALLBACK reason=metadata_parse_failed file={metadata_name} error={e}")
+
+        bundled_status = metadata.get("worker_status.json") if isinstance(metadata.get("worker_status.json"), dict) else {}
+        bundled_result = metadata.get("result.json") if isinstance(metadata.get("result.json"), dict) else {}
+        merged = dict(worker_status)
+        if bundled_status:
+            merged.update({k: v for k, v in bundled_status.items() if k not in {"local_path"}})
+        if bundled_result:
+            merged["result"] = bundled_result
+        merged["result_bundle_url"] = f"/uploads/{os.path.basename(bundle_path)}"
+        merged["bundle_url"] = merged["result_bundle_url"]
+        if isinstance(merged.get("result"), dict):
+            merged["result"]["result_bundle_url"] = merged["result_bundle_url"]
+            merged["result"]["bundle_url"] = merged["bundle_url"]
+
+        print(
+            "WORKER_BUNDLE_SYNC_DONE "
+            f"bundle={merged['result_bundle_url']} extracted={len(extracted)} "
+            f"clips={len((merged.get('result') or {}).get('clips') or []) if isinstance(merged.get('result'), dict) else 0}"
+        )
+        return merged
+    except Exception as e:
+        print(f"WORKER_BUNDLE_SYNC_FALLBACK reason=bundle_sync_failed error={e}")
+        return None
 
 def _sync_item(item, worker_url=None, context="item"):
     if isinstance(item, str):
@@ -133,6 +211,9 @@ def _normalize_clip(clip, idx=0):
     return clip
 
 def _merge_worker_result_into_job(job_id, jobs, worker_status, worker):
+    bundled_status = _sync_result_bundle(worker_status, worker.get("url"))
+    if bundled_status:
+        worker_status = bundled_status
     result = worker_status.get("result") if isinstance(worker_status.get("result"), dict) else dict(worker_status)
     result = _sync_result_files(result, worker.get("url"))
     clips = result.get("clips") if isinstance(result.get("clips"), list) else []
