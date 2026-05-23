@@ -241,6 +241,48 @@ def generate_social_caption(title, hashtags, niche):
     }
 
 
+def source_credit_from_clip(clip):
+    clip = clip if isinstance(clip, dict) else {}
+    for key in ["original_creator", "source_credit", "source", "channel", "creator"]:
+        value = str(clip.get(key) or "").strip()
+        if value:
+            return value[:140]
+    sb = clip.get("score_breakdown", {}) if isinstance(clip.get("score_breakdown"), dict) else {}
+    for key in ["original_creator", "source_credit", "source_channel"]:
+        value = str(sb.get(key) or "").strip()
+        if value:
+            return value[:140]
+    return ""
+
+
+def generated_transformative_description(title, text, niche, source_credit=""):
+    title = str(title or "Context Clip").strip()
+    niche_text = str(niche or "general").replace("_", " ")
+    description = (
+        f"{title}. Edited as a short contextual clip with captions, headline framing, "
+        f"and concise educational commentary around the key moment."
+    )
+    if niche_text and niche_text != "general":
+        description += f" Topic: {niche_text}."
+    if source_credit:
+        description += f" Source credit: {source_credit}."
+    description += " Review the original source and rights before publishing."
+    return description
+
+
+def transformation_notes_for_clip(transform_meta):
+    transform_meta = transform_meta if isinstance(transform_meta, dict) else {}
+    notes = []
+    if transform_meta.get("transformative_overlay_applied"):
+        notes.append("Added editorial hook overlay in the opening seconds.")
+    if transform_meta.get("broll_applied"):
+        asset = transform_meta.get("broll_asset") or "matched local B-roll"
+        notes.append(f"Added contextual local B-roll overlay: {asset}.")
+    if not notes:
+        notes.append("Captioned and packaged with title, description, and creator metadata.")
+    return notes
+
+
 V48_ASR_STABILITY_CHUNK_SIZE = 120.0
 V48_ASR_STABILITY_CHUNK_OVERLAP = 10.0
 
@@ -7985,6 +8027,7 @@ def run_pipeline(job_id, file_path, JOBS):
 
         final_clips = []
         approved_clips = []
+        transform_metadata_rows = []
 
         JOBS[job_id]["stage"] = "Subtitles + Filtering"
         JOBS[job_id]["progress"] = 85
@@ -8024,14 +8067,24 @@ def run_pipeline(job_id, file_path, JOBS):
                     print(f"âš  Missing clip file: {input_clip}")
                     continue
 
-                final_output = burn_subtitles(
+                transform_input = {
+                    "title": clip.get("title") or v9_editorial_title(clip.get("expanded_text", clip.get("source_text", "")), set()),
+                    "hook_text": clip.get("title") or v9_editorial_title(clip.get("expanded_text", clip.get("source_text", "")), set()),
+                    "niche": clip.get("niche", "general"),
+                    "text": clip.get("expanded_text", clip.get("source_text", "")),
+                }
+
+                final_output, transform_meta = burn_subtitles(
                     input_clip,
                     clip_captions,
-                    output_clip
+                    output_clip,
+                    transform_metadata=transform_input,
+                    return_metadata=True,
                 )
 
                 final_clips.append(final_output)
                 approved_clips.append(clip)
+                transform_metadata_rows.append(transform_meta)
 
             except Exception as clip_error:
                 print(f"âŒ Clip {i} failed: {clip_error}")
@@ -8043,10 +8096,19 @@ def run_pipeline(job_id, file_path, JOBS):
 
         for i, clip in enumerate(approved_clips):
             video_path = final_clips[i] if i < len(final_clips) else None
+            transform_meta = transform_metadata_rows[i] if i < len(transform_metadata_rows) else {}
 
             context_for_title = clip.get("expanded_text", clip.get("source_text", ""))
             clean_title = clip.get("title") or v9_editorial_title(context_for_title, set())
             clean_title = _v9_unique_title(clean_title, used_titles)
+            source_credit = source_credit_from_clip(clip)
+            transformation_notes = transformation_notes_for_clip(transform_meta)
+            generated_description = generated_transformative_description(
+                clean_title,
+                context_for_title,
+                clip.get("niche", "general"),
+                source_credit,
+            )
 
             final_hashtags = clip.get("hashtags", ["#viral"])
             final_hashtags = v40_niche_hashtags(
@@ -8067,6 +8129,9 @@ def run_pipeline(job_id, file_path, JOBS):
                 clip.get("score_breakdown", {}).get("visual_score", 0),
                 clip.get("score_breakdown", {}).get("story_score", 0)
             )
+            creator_pack["source_credit"] = source_credit
+            creator_pack["transformation_notes"] = transformation_notes
+            creator_pack["generated_description"] = generated_description
             enhanced_clips.append({
                 "clip_number": i + 1,
                 "start": clip.get("start"),
@@ -8080,6 +8145,12 @@ def run_pipeline(job_id, file_path, JOBS):
                 "download_url": f"/uploads/{Path(video_path).name}" if video_path else None,
                 "thumbnail_url": f"/uploads/{job_id}_thumbnail_{i}.jpg",
                 "creator_pack": creator_pack,
+                "source_credit": source_credit,
+                "transformation_notes": transformation_notes,
+                "generated_description": generated_description,
+                "transformative_overlay_applied": bool(transform_meta.get("transformative_overlay_applied")),
+                "transformative_broll_applied": bool(transform_meta.get("broll_applied")),
+                "transformative_broll_asset": transform_meta.get("broll_asset", ""),
                 "source_text": v18_preview_text(clip.get("source_text", ""), 260),
                 "expanded_text": v18_preview_text(clip.get("expanded_text", ""), 520),
                 "title": clean_title,

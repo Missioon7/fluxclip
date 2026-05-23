@@ -839,10 +839,23 @@ function App() {
                                   <div>🖼 Thumbnail: <b>{clip.creator_pack.thumbnail_text}</b></div>
                                   <div>📝 Title: <b>{clip.creator_pack.upload_title}</b></div>
                                   <div>📣 CTA: <b>{clip.creator_pack.suggested_cta}</b></div>
+                                  {clip.creator_pack.source_credit && (
+                                    <div>Source: <b>{clip.creator_pack.source_credit}</b></div>
+                                  )}
                                 </div>
                                 <div style={{ marginTop: "8px", fontSize: "12px", color: "#94a3b8" }}>
                                   {clip.creator_pack.short_description}
                                 </div>
+                                {Array.isArray(clip.creator_pack.transformation_notes) && clip.creator_pack.transformation_notes.length > 0 && (
+                                  <div style={{ marginTop: "8px", fontSize: "12px", color: "#cbd5e1" }}>
+                                    {clip.creator_pack.transformation_notes.join(" ")}
+                                  </div>
+                                )}
+                                {clip.creator_pack.generated_description && (
+                                  <div style={{ marginTop: "8px", fontSize: "12px", color: "#94a3b8" }}>
+                                    {clip.creator_pack.generated_description}
+                                  </div>
+                                )}
                               </div>
                             )}
 
