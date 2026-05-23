@@ -842,6 +842,12 @@ function App() {
                                   {clip.creator_pack.source_credit && (
                                     <div>Source: <b>{clip.creator_pack.source_credit}</b></div>
                                   )}
+                                  <div>Visual Stack: <b>{clip.creator_pack.visual_stack_applied ? "applied" : "skipped"}</b></div>
+                                  <div>Transformation Score: <b>{clip.creator_pack.transformation_score ?? 0}</b></div>
+                                  {Array.isArray(clip.creator_pack.transformation_layers) && (
+                                    <div>Transformation Layers: <b>{clip.creator_pack.transformation_layers.join(", ") || "none"}</b></div>
+                                  )}
+                                  <div>Monetization guarantee: <b>{String(Boolean(clip.creator_pack.monetization_guarantee))}</b></div>
                                 </div>
                                 <div style={{ marginTop: "8px", fontSize: "12px", color: "#94a3b8" }}>
                                   {clip.creator_pack.short_description}

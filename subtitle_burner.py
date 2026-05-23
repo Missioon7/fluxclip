@@ -118,36 +118,43 @@ def broll_terms(metadata):
 def select_broll_asset(metadata, broll_dir="assets/broll"):
     if os.getenv("FLUXCLIP_ENABLE_BROLL", "1").strip().lower() in {"0", "false", "no"}:
         print("TRANSFORMATIVE_BROLL_SKIPPED reason=disabled")
+        print("V65_BROLL_PLACEMENT_SKIPPED reason=disabled")
         return None
 
     root = Path(broll_dir)
     if not root.exists() or not root.is_dir():
         print(f"TRANSFORMATIVE_BROLL_SKIPPED reason=no_broll_dir path={broll_dir}")
+        print(f"V65_BROLL_PLACEMENT_SKIPPED reason=no_broll_dir path={broll_dir}")
         return None
 
     exts = {".mp4", ".mov", ".mkv", ".webm", ".jpg", ".jpeg", ".png"}
     assets = [p for p in root.iterdir() if p.is_file() and p.suffix.lower() in exts]
     if not assets:
         print(f"TRANSFORMATIVE_BROLL_SKIPPED reason=no_assets path={broll_dir}")
+        print(f"V65_BROLL_PLACEMENT_SKIPPED reason=no_assets path={broll_dir}")
         return None
 
     terms = broll_terms(metadata)
     if not terms:
         print("TRANSFORMATIVE_BROLL_SKIPPED reason=no_match_terms")
+        print("V65_BROLL_PLACEMENT_SKIPPED reason=no_match_terms")
         return None
 
     for asset in assets:
         name = asset.stem.lower()
         if any(term in name for term in terms):
             print(f"TRANSFORMATIVE_BROLL_SELECTED asset={asset} terms={terms[:5]}")
+            print(f"V65_BROLL_PLACEMENT_SELECTED asset={asset} placement=side_panel terms={terms[:5]}")
             return str(asset)
 
     print(f"TRANSFORMATIVE_BROLL_SKIPPED reason=no_matching_asset terms={terms[:5]}")
+    print(f"V65_BROLL_PLACEMENT_SKIPPED reason=no_matching_asset terms={terms[:5]}")
     return None
 
 
 def apply_broll_overlay(video_path, broll_path, output_path):
     if not broll_path:
+        print("V65_BROLL_PLACEMENT_SKIPPED reason=no_broll_asset")
         return video_path, False
 
     video_path = os.path.abspath(video_path)
@@ -182,15 +189,88 @@ def apply_broll_overlay(video_path, broll_path, output_path):
     )
     if result.returncode != 0 or not os.path.exists(output_path):
         print(f"TRANSFORMATIVE_BROLL_SKIPPED reason=ffmpeg_failed error={result.stderr[-500:]}")
+        print("V65_BROLL_PLACEMENT_SKIPPED reason=ffmpeg_failed")
         return video_path, False
     return output_path, True
+
+
+def visual_stack_enabled():
+    return os.getenv("FLUXCLIP_ENABLE_VISUAL_STACK", "1").strip().lower() not in {"0", "false", "no"}
+
+
+def apply_v65_visual_stack(video_path, output_path):
+    if not visual_stack_enabled():
+        print("V65_VISUAL_STACK_SKIPPED reason=disabled")
+        return video_path, {
+            "visual_stack_applied": False,
+            "visual_stack_mode": "",
+        }
+
+    video_path = os.path.abspath(video_path)
+    output_path = os.path.abspath(output_path)
+    if os.path.exists(output_path):
+        os.remove(output_path)
+
+    filter_complex = (
+        "[0:v]scale=720:1280:force_original_aspect_ratio=increase,"
+        "crop=720:1280,boxblur=34:3,eq=brightness=-0.12:contrast=1.08:saturation=1.08[bg];"
+        "[0:v]scale=660:1180:force_original_aspect_ratio=decrease,"
+        "pad=iw+14:ih+14:7:7:color=black@0.35[fg];"
+        "[bg][fg]overlay=(W-w)/2:(H-h)/2+18,setsar=1,fps=25"
+    )
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", video_path,
+        "-filter_complex", filter_complex,
+        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
+        "-c:a", "copy",
+        output_path,
+    ]
+    print("\nV65_VISUAL_STACK_FFMPEG:")
+    print(" ".join(cmd))
+    result = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+        errors="ignore",
+    )
+    if result.returncode != 0 or not os.path.exists(output_path):
+        print(f"V65_VISUAL_STACK_SKIPPED reason=ffmpeg_failed error={result.stderr[-500:]}")
+        return video_path, {
+            "visual_stack_applied": False,
+            "visual_stack_mode": "",
+        }
+
+    return output_path, {
+        "visual_stack_applied": True,
+        "visual_stack_mode": "blurred_background_foreground",
+    }
+
+
+def v65_transformation_score(layers):
+    weights = {
+        "blurred_background": 28,
+        "hook_banner": 22,
+        "contextual_broll": 18,
+        "captions": 26,
+    }
+    return min(100, sum(weights.get(layer, 0) for layer in layers))
 
 
 def burn_subtitles(video_path, captions, output_path=None, transform_metadata=None, return_metadata=False):
     empty_metadata = {
         "transformative_overlay_applied": False,
+        "hook_banner_applied": False,
+        "visual_stack_applied": False,
+        "visual_stack_mode": "",
         "broll_applied": False,
         "broll_asset": "",
+        "transformation_layers": [],
+        "transformation_score": 0,
+        "monetization_guarantee": False,
+        "transformation_note": "Adds editorial presentation value; does not guarantee platform monetization.",
     }
     if not captions:
         print("No captions, skipping subtitle burn")
@@ -200,14 +280,17 @@ def burn_subtitles(video_path, captions, output_path=None, transform_metadata=No
     transform_metadata = transform_metadata if isinstance(transform_metadata, dict) else {}
     hook_text = safe_hook_text(transform_metadata)
     overlay_applied = bool(hook_text)
+    visual_input = video_path
+    stacked_path = os.path.splitext(video_path)[0] + "_v65_stack.mp4"
+    visual_input, visual_meta = apply_v65_visual_stack(video_path, stacked_path)
 
     if output_path:
         final_output = os.path.abspath(output_path)
     else:
-        base = os.path.splitext(video_path)[0]
+        base = os.path.splitext(visual_input)[0]
         final_output = base + "_final.mp4"
 
-    ass_path = os.path.splitext(video_path)[0] + ".ass"
+    ass_path = os.path.splitext(visual_input)[0] + ".ass"
     write_ass_file(ass_path, captions, hook_text=hook_text)
 
     ass_path_fixed = os.path.abspath(ass_path).replace("\\", "/").replace(":", "\\:")
@@ -217,7 +300,7 @@ def burn_subtitles(video_path, captions, output_path=None, transform_metadata=No
 
     cmd = [
         "ffmpeg", "-y",
-        "-i", video_path,
+        "-i", visual_input,
         "-vf", f"subtitles='{ass_path_fixed}'",
         "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23",
         "-c:a", "aac",
@@ -249,8 +332,24 @@ def burn_subtitles(video_path, captions, output_path=None, transform_metadata=No
 
     metadata = {
         "transformative_overlay_applied": overlay_applied,
+        "hook_banner_applied": overlay_applied,
+        "visual_stack_applied": bool(visual_meta.get("visual_stack_applied")),
+        "visual_stack_mode": visual_meta.get("visual_stack_mode", ""),
         "broll_applied": broll_applied,
         "broll_asset": os.path.basename(broll_asset) if broll_asset and broll_applied else "",
+        "monetization_guarantee": False,
+        "transformation_note": "Adds editorial presentation value; does not guarantee platform monetization.",
     }
+    layers = []
+    if metadata["visual_stack_applied"]:
+        layers.append("blurred_background")
+    if metadata["hook_banner_applied"]:
+        layers.append("hook_banner")
+    if metadata["broll_applied"]:
+        layers.append("contextual_broll")
+    if captions:
+        layers.append("captions")
+    metadata["transformation_layers"] = layers
+    metadata["transformation_score"] = v65_transformation_score(layers)
     print(f"Subtitle video created: {final_output}")
     return (final_output, metadata) if return_metadata else final_output

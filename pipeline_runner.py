@@ -273,8 +273,10 @@ def generated_transformative_description(title, text, niche, source_credit=""):
 def transformation_notes_for_clip(transform_meta):
     transform_meta = transform_meta if isinstance(transform_meta, dict) else {}
     notes = []
+    if transform_meta.get("visual_stack_applied"):
+        notes.append("Applied blurred-background foreground visual stack.")
     if transform_meta.get("transformative_overlay_applied"):
-        notes.append("Added editorial hook overlay in the opening seconds.")
+        notes.append("Added premium editorial hook banner in the opening seconds.")
     if transform_meta.get("broll_applied"):
         asset = transform_meta.get("broll_asset") or "matched local B-roll"
         notes.append(f"Added contextual local B-roll overlay: {asset}.")
@@ -8132,6 +8134,16 @@ def run_pipeline(job_id, file_path, JOBS):
             creator_pack["source_credit"] = source_credit
             creator_pack["transformation_notes"] = transformation_notes
             creator_pack["generated_description"] = generated_description
+            creator_pack["visual_stack_applied"] = bool(transform_meta.get("visual_stack_applied"))
+            creator_pack["visual_stack_mode"] = transform_meta.get("visual_stack_mode", "")
+            creator_pack["hook_banner_applied"] = bool(transform_meta.get("hook_banner_applied"))
+            creator_pack["transformation_layers"] = transform_meta.get("transformation_layers", [])
+            creator_pack["transformation_score"] = transform_meta.get("transformation_score", 0)
+            creator_pack["monetization_guarantee"] = False
+            creator_pack["transformation_note"] = transform_meta.get(
+                "transformation_note",
+                "Adds editorial presentation value; does not guarantee platform monetization.",
+            )
             enhanced_clips.append({
                 "clip_number": i + 1,
                 "start": clip.get("start"),
@@ -8149,8 +8161,18 @@ def run_pipeline(job_id, file_path, JOBS):
                 "transformation_notes": transformation_notes,
                 "generated_description": generated_description,
                 "transformative_overlay_applied": bool(transform_meta.get("transformative_overlay_applied")),
+                "visual_stack_applied": bool(transform_meta.get("visual_stack_applied")),
+                "visual_stack_mode": transform_meta.get("visual_stack_mode", ""),
+                "hook_banner_applied": bool(transform_meta.get("hook_banner_applied")),
                 "transformative_broll_applied": bool(transform_meta.get("broll_applied")),
                 "transformative_broll_asset": transform_meta.get("broll_asset", ""),
+                "transformation_layers": transform_meta.get("transformation_layers", []),
+                "transformation_score": transform_meta.get("transformation_score", 0),
+                "monetization_guarantee": False,
+                "transformation_note": transform_meta.get(
+                    "transformation_note",
+                    "Adds editorial presentation value; does not guarantee platform monetization.",
+                ),
                 "source_text": v18_preview_text(clip.get("source_text", ""), 260),
                 "expanded_text": v18_preview_text(clip.get("expanded_text", ""), 520),
                 "title": clean_title,
