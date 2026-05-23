@@ -40,6 +40,62 @@ const getCreatorQaSummary = (result) => {
   };
 };
 
+const getResultPayload = (data) => {
+  const workerResult = data?.worker_status?.result || {};
+  return data?.result || workerResult || data || {};
+};
+
+const clipFromFinalPath = (path, idx) => ({
+  clip_number: idx + 1,
+  title: `Clip #${idx + 1}`,
+  video_url: path,
+  video_path: path,
+  download_url: path,
+  score: 0,
+  niche: "general",
+  duration: 0,
+  hashtags: [],
+});
+
+const getCompatibleClips = (...sources) => {
+  for (const source of sources) {
+    if (!source) continue;
+    if (Array.isArray(source.clips) && source.clips.length > 0) return source.clips;
+    if (Array.isArray(source.result?.clips) && source.result.clips.length > 0) return source.result.clips;
+    if (Array.isArray(source.worker_status?.clips) && source.worker_status.clips.length > 0) return source.worker_status.clips;
+    if (Array.isArray(source.worker_status?.result?.clips) && source.worker_status.result.clips.length > 0) {
+      return source.worker_status.result.clips;
+    }
+  }
+
+  for (const source of sources) {
+    if (!source) continue;
+    const finalClips =
+      source.final_clips ||
+      source.result?.final_clips ||
+      source.worker_status?.final_clips ||
+      source.worker_status?.result?.final_clips ||
+      [];
+    if (Array.isArray(finalClips) && finalClips.length > 0) {
+      return finalClips.filter(Boolean).map(clipFromFinalPath);
+    }
+  }
+
+  return [];
+};
+
+const getNoClipReason = (result) => {
+  if (!result) return "";
+  if (result.error) return result.error;
+  if (result.message) return result.message;
+  const summary = getCreatorQaSummary(result);
+  if (summary.rejectedByCreatorQa > 0) {
+    const reasons = summary.topRejectionReasons.map(formatRejectionReason).join(", ");
+    return `Creator QA rejected ${summary.rejectedByCreatorQa} candidate(s)${reasons ? `: ${reasons}` : ""}`;
+  }
+  return "";
+};
+
 const formatRejectionReason = (reason) => {
   if (Array.isArray(reason)) return reason.join(": ");
   if (reason && typeof reason === "object") {
@@ -122,14 +178,21 @@ function App() {
           clearInterval(timer);
           setLoading(false);
 
-          const finalResult = data.result || data;
-          const normalizedClips = data.clips || data.worker_status?.clips || finalResult.clips || [];
-          const normalizedFinalClips = data.final_clips || data.worker_status?.final_clips || finalResult.final_clips || [];
+          const finalResult = getResultPayload(data);
+          const normalizedClips = getCompatibleClips(data, finalResult, data.worker_status);
+          const normalizedFinalClips =
+            data.final_clips ||
+            data.worker_status?.final_clips ||
+            data.worker_status?.result?.final_clips ||
+            finalResult.final_clips ||
+            [];
           const completedResult = { ...finalResult, clips: normalizedClips, final_clips: normalizedFinalClips };
           const noCreatorSafeClips = isNoCreatorSafeClipsResult(completedResult);
           const completedStage = noCreatorSafeClips
             ? "⚠ No creator-safe clips found"
-            : "✅ Final clips ready!";
+            : normalizedClips.length > 0
+              ? "✅ Final clips ready!"
+              : (getNoClipReason(completedResult) || "Completed with no clips");
 
           setResult(completedResult);
 
@@ -271,10 +334,6 @@ function App() {
       }));
     }
   };
-
-
-  const latestCompletedJob = jobs.find(j => (j.clips?.length > 0) || (j.result?.clips?.length > 0));
-  const clips = latestCompletedJob?.clips || latestCompletedJob?.result?.clips || result?.clips || [];
 
   return (
     <div
@@ -614,12 +673,12 @@ function App() {
           </div>
         )}
 
-        {jobs.some(j => (j.result?.clips?.length > 0) || (j.clips?.length > 0)) && (
+        {jobs.some(j => getCompatibleClips(j, j.result).length > 0) && (
           <div>
             <h2 style={{ fontSize: "28px" }}>Your Viral Clips</h2>
 
             {jobs.map((job) => {
-              const jobClips = job.clips && job.clips.length ? job.clips : (job.result?.clips || []);
+              const jobClips = getCompatibleClips(job, job.result);
 
               if (!jobClips.length) return null;
 
@@ -644,7 +703,7 @@ function App() {
                   >
                     {jobClips.map((clip, index) => {
                       const videoUrl = fixVideoUrl(
-                        clip.video_url || clip.video_path || clip.download_url
+                        clip.video_url || clip.video_path || clip.download_url || clip.path || clip.file || clip.url
                       );
 
                       return (

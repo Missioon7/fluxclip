@@ -30,6 +30,21 @@ WORKER_LOCK = threading.Lock()
 ACTIVE_JOB_ID = None
 
 
+def _merge_result_contract(job):
+    job = dict(job or {})
+    result = job.get("result") if isinstance(job.get("result"), dict) else {}
+    if result:
+        job.setdefault("clips", result.get("clips", []))
+        job.setdefault("final_clips", result.get("final_clips", []))
+        job.setdefault("summary", result.get("summary", {}))
+        job.setdefault("creator_qa", result.get("creator_qa", {}))
+        if result.get("message"):
+            job.setdefault("message", result.get("message"))
+        if result.get("error"):
+            job.setdefault("error", result.get("error"))
+    return job
+
+
 @app.get("/health")
 def health():
     return {
@@ -51,6 +66,7 @@ def _run_worker_job(job_id, local_path):
         JOBS[job_id]["progress"] = 5
         result = run_pipeline(job_id, local_path, JOBS)
         JOBS[job_id]["result"] = result
+        JOBS[job_id].update(_merge_result_contract(JOBS[job_id]))
         if JOBS[job_id].get("status") not in {"failed", "completed", "done"}:
             JOBS[job_id]["status"] = "completed"
             JOBS[job_id]["progress"] = 100
@@ -116,7 +132,8 @@ def status(job_id: str):
     status_value = job.get("status")
     if status_value == "completed":
         status_value = "done"
-    return {**job, "status": status_value}
+    normalized = _merge_result_contract(job)
+    return {**normalized, "status": status_value}
 
 
 if __name__ == "__main__":

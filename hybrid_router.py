@@ -47,7 +47,7 @@ def load_worker_config(path="worker_config.json"):
             loaded = json.loads(cfg_path.read_text(encoding="utf-8"))
             if isinstance(loaded, dict):
                 config.update({k: v for k, v in loaded.items() if k != "workers"})
-                if isinstance(loaded.get("workers"), list):
+                if isinstance(loaded.get("workers"), (list, dict)):
                     config["workers"] = loaded["workers"]
         except Exception as e:
             print(f"worker_config_load_failed path={cfg_path} error={e}")
@@ -58,7 +58,14 @@ def configured_workers():
     config = load_worker_config()
     workers = []
     prefer_worker = str(config.get("prefer_worker") or "").strip()
-    for idx, worker in enumerate(config.get("workers") or []):
+    configured = config.get("workers") or []
+    if isinstance(configured, dict):
+        configured = [
+            {"name": name, **value}
+            for name, value in configured.items()
+            if isinstance(value, dict)
+        ]
+    for idx, worker in enumerate(configured):
         if not isinstance(worker, dict) or worker.get("enabled") is False:
             continue
         item = dict(worker)

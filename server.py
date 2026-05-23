@@ -37,6 +37,30 @@ app.mount(
 JOBS = {}
 PIPELINE_LOCK = threading.Lock()
 
+
+def normalize_status_payload(job):
+    payload = dict(job or {})
+    result = payload.get("result") if isinstance(payload.get("result"), dict) else {}
+    worker_status = payload.get("worker_status") if isinstance(payload.get("worker_status"), dict) else {}
+    worker_result = worker_status.get("result") if isinstance(worker_status.get("result"), dict) else {}
+
+    source = result or worker_result or worker_status
+    if isinstance(source, dict):
+        if not isinstance(payload.get("clips"), list):
+            payload["clips"] = source.get("clips", [])
+        if not isinstance(payload.get("final_clips"), list):
+            payload["final_clips"] = source.get("final_clips", [])
+        payload.setdefault("summary", source.get("summary", {}))
+        payload.setdefault("creator_qa", source.get("creator_qa", {}))
+        if source.get("message") and not payload.get("message"):
+            payload["message"] = source.get("message")
+        if source.get("error") and not payload.get("error"):
+            payload["error"] = source.get("error")
+
+    if result and "result" not in payload:
+        payload["result"] = result
+    return payload
+
 @app.get("/")
 def home():
     return {
@@ -173,7 +197,7 @@ def status(job_id: str):
     if not job:
         return {"status": "not_found", "error": "job not found"}
 
-    return job
+    return normalize_status_payload(job)
 
 if __name__ == "__main__":
     import uvicorn

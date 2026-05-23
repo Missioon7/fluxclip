@@ -5956,6 +5956,393 @@ def creator_qa_metadata_reasons(clip):
     return notes
 
 
+def v60_context_piece_ok(text):
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    if not text:
+        return False, "empty_context"
+    if len(_v8_word_set(text)) < 5:
+        return False, "too_few_unique_words"
+    if is_bad_transcript_clip(text):
+        return False, "bad_transcript_context"
+    if is_ad_segment(text):
+        return False, "ad_context"
+    if _v7_is_drift(text):
+        return False, "topic_drift"
+    if v38_text_quality_is_severe(text):
+        return False, "severe_text_quality"
+    if v42_repetition_or_filler_spike(text):
+        return False, "filler_or_repetition_context"
+    semantic = v48_semantic_asr_confidence(text)
+    if semantic.get("semantic_asr_confidence_label") == "degraded_semantics":
+        return False, "semantic_degraded_context"
+    return True, ""
+
+
+def v60_context_segment_score(text, role):
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    low = text.lower()
+    if not text:
+        return -999
+
+    score = _v7_segment_energy(low)
+    if role == "setup":
+        score += v40_sentence_boundary_score(text, "start")
+        if v7_context_quality_score(text) >= 8:
+            score += 8
+        if is_strong_hook(text):
+            score += 8
+        if any(w in low for w in [
+            "why", "how", "what", "reason", "because", "problem", "suddenly",
+            "for the first time", "this started", "context", "risk",
+        ]):
+            score += 10
+    else:
+        score += v40_sentence_boundary_score(text, "end")
+        v43_bonus, _ = v43_hinglish_payoff_bonus(text)
+        v44_bonus, _, _ = v44_semantic_payoff_score(text)
+        payoff_bonus = 0 if v44_payoff_quality_block(text) else max(
+            v6_payoff_bonus(text),
+            v7_better_payoff_bonus(text),
+            v43_bonus,
+            v44_bonus,
+        )
+        score += min(24, payoff_bonus)
+        if _v7_is_payoff(low):
+            score += 12
+    return score
+
+
+def v60_collect_context_side(segments, base_start, base_end, asr_stability_chunks, role, max_seconds=24.0, max_gap=1.2):
+    ordered = safe_dict_list(segments or [])
+    max_seconds = max(4.0, safe_float(max_seconds, 24.0))
+    max_gap = max(0.1, safe_float(max_gap, 1.2))
+    base_start = safe_float(base_start)
+    base_end = safe_float(base_end, base_start)
+
+    if role == "setup":
+        cursor = base_start
+        for seg in reversed(ordered):
+            seg_start = safe_float(seg.get("start"))
+            seg_end = safe_float(seg.get("end"), seg_start)
+            if seg_end > cursor + 0.01:
+                continue
+            if cursor - seg_end > max_gap:
+                break
+            if base_start - seg_start > max_seconds:
+                break
+            text = v50_2_context_piece_text(ordered, seg_start, base_start)
+            ok, reason = v60_context_piece_ok(text)
+            if not ok:
+                cursor = seg_start
+                continue
+            local_asr = v48_candidate_asr_stability(seg_start, base_start, asr_stability_chunks)
+            if str(local_asr.get("local_asr_confidence_label") or "unknown") != "clean":
+                cursor = seg_start
+                continue
+            score = v60_context_segment_score(text, "setup")
+            if score < 8:
+                cursor = seg_start
+                continue
+            return {
+                "start": round(seg_start, 2),
+                "end": round(base_start, 2),
+                "text": text,
+                "source": "v60_previous_setup_segment",
+                "score": safe_float(score),
+                "local_asr_confidence_label": local_asr.get("local_asr_confidence_label"),
+            }
+        return None
+
+    cursor = base_end
+    for seg in ordered:
+        seg_start = safe_float(seg.get("start"))
+        seg_end = safe_float(seg.get("end"), seg_start)
+        if seg_start < cursor - 0.01:
+            continue
+        if seg_start - cursor > max_gap:
+            break
+        if seg_end - base_end > max_seconds:
+            break
+        text = v50_2_context_piece_text(ordered, base_end, seg_end)
+        ok, reason = v60_context_piece_ok(text)
+        if not ok:
+            cursor = seg_end
+            continue
+        local_asr = v48_candidate_asr_stability(base_end, seg_end, asr_stability_chunks)
+        if str(local_asr.get("local_asr_confidence_label") or "unknown") != "clean":
+            cursor = seg_end
+            continue
+        score = v60_context_segment_score(text, "payoff")
+        if score < 8:
+            cursor = seg_end
+            continue
+        return {
+            "start": round(base_end, 2),
+            "end": round(seg_end, 2),
+            "text": text,
+            "source": "v60_next_payoff_segment",
+            "score": safe_float(score),
+            "local_asr_confidence_label": local_asr.get("local_asr_confidence_label"),
+        }
+    return None
+
+
+def v60_payoff_bonus(text):
+    v43_bonus, _ = v43_hinglish_payoff_bonus(text)
+    v44_bonus, _, _ = v44_semantic_payoff_score(text)
+    if v44_payoff_quality_block(text):
+        return 0
+    return max(
+        v6_payoff_bonus(text),
+        v7_better_payoff_bonus(text),
+        v43_bonus,
+        v44_bonus,
+    )
+
+
+def v60_log_context_expansion(row):
+    row = row if isinstance(row, dict) else {}
+    event = str(row.get("event") or "V60_CONTEXT_EXPANSION")
+    print(
+        f"{event} "
+        f"job_id={row.get('job_id')} index={row.get('candidate_index')} "
+        f"start={row.get('start')} end={row.get('end')} "
+        f"reason={row.get('reason', '')} before_reasons={row.get('before_reasons', [])} "
+        f"after_reasons={row.get('after_reasons', [])}"
+    )
+    try:
+        Path("analytics").mkdir(exist_ok=True)
+        with (Path("analytics") / "creator_qa.jsonl").open("a", encoding="utf-8") as f:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+    except Exception as e:
+        print(f"V60 context expansion logging failed: {e}")
+
+
+def v60_expand_context_before_creator_qa(job_id, clips, segments, captions):
+    clips = safe_dict_list(clips)
+    asr_stability_chunks = v48_build_asr_stability_chunks(segments)
+    repaired = []
+    applied = 0
+
+    v60_log_context_expansion({
+        "ts": time.time(),
+        "job_id": job_id,
+        "event": "V60_CONTEXT_EXPANSION_START",
+        "candidate_count": len(clips),
+    })
+
+    for idx, clip in enumerate(clips):
+        clip = copy.deepcopy(clip)
+        sb = clip.setdefault("score_breakdown", {})
+        base_start = safe_float(clip.get("start"))
+        base_end = safe_float(clip.get("end"), base_start)
+        base_text = re.sub(r"\s+", " ", str(clip.get("expanded_text") or clip.get("source_text") or "")).strip()
+        clip_captions = get_captions_for_clip(captions, base_start, base_end)
+        before_reasons = creator_qa_rejection_reasons(copy.deepcopy(clip), clip_captions)
+        targeted = bool({"no_hook_no_payoff", "weak_standalone_context"} & set(before_reasons))
+
+        if not targeted:
+            sb["v60_context_expansion_attempted"] = False
+            repaired.append(clip)
+            continue
+        if sb.get("low_confidence_asr") is True:
+            sb["v60_context_expansion_attempted"] = False
+            sb["v60_context_expansion_reason"] = "global_low_confidence_asr"
+            v60_log_context_expansion({
+                "ts": time.time(),
+                "job_id": job_id,
+                "event": "V60_CONTEXT_EXPANSION_SKIPPED",
+                "candidate_index": idx,
+                "start": base_start,
+                "end": base_end,
+                "reason": "global_low_confidence_asr",
+                "before_reasons": before_reasons,
+            })
+            repaired.append(clip)
+            continue
+        if str(sb.get("local_asr_confidence_label") or "unknown") != "clean":
+            sb["v60_context_expansion_attempted"] = False
+            sb["v60_context_expansion_reason"] = "base_local_asr_not_clean"
+            v60_log_context_expansion({
+                "ts": time.time(),
+                "job_id": job_id,
+                "event": "V60_CONTEXT_EXPANSION_SKIPPED",
+                "candidate_index": idx,
+                "start": base_start,
+                "end": base_end,
+                "reason": "base_local_asr_not_clean",
+                "before_reasons": before_reasons,
+            })
+            repaired.append(clip)
+            continue
+
+        need_setup = "weak_standalone_context" in before_reasons or safe_float(sb.get("context_quality")) < 8
+        need_payoff = "no_hook_no_payoff" in before_reasons or safe_float(sb.get("payoff_bonus")) <= 0
+        setup_context = v60_collect_context_side(
+            segments,
+            base_start,
+            base_end,
+            asr_stability_chunks,
+            "setup",
+        ) if need_setup else None
+        payoff_context = v60_collect_context_side(
+            segments,
+            base_start,
+            base_end,
+            asr_stability_chunks,
+            "payoff",
+        ) if need_payoff else None
+
+        variants = []
+        if setup_context:
+            variants.append((setup_context, None))
+        if payoff_context:
+            variants.append((None, payoff_context))
+        if setup_context and payoff_context:
+            variants.append((setup_context, payoff_context))
+        if not variants:
+            sb["v60_context_expansion_attempted"] = True
+            sb["v60_context_expansion_applied"] = False
+            sb["v60_context_expansion_reason"] = "no_clean_setup_or_payoff_context"
+            v60_log_context_expansion({
+                "ts": time.time(),
+                "job_id": job_id,
+                "event": "V60_CONTEXT_EXPANSION_SKIPPED",
+                "candidate_index": idx,
+                "start": base_start,
+                "end": base_end,
+                "reason": "no_clean_setup_or_payoff_context",
+                "before_reasons": before_reasons,
+            })
+            repaired.append(clip)
+            continue
+
+        best_clip = None
+        best_rank = None
+        skipped_reason = "no_creator_qa_improvement"
+        for setup, payoff in variants:
+            expanded_start = safe_float(setup.get("start"), base_start) if setup else base_start
+            expanded_end = safe_float(payoff.get("end"), base_end) if payoff else base_end
+            if expanded_end - expanded_start > 60:
+                skipped_reason = "expanded_window_too_long"
+                continue
+            expanded_text = re.sub(
+                r"\s+",
+                " ",
+                " ".join(part for part in [
+                    setup.get("text") if setup else "",
+                    base_text,
+                    payoff.get("text") if payoff else "",
+                ] if part).strip(),
+            ).strip()
+            ok, reason = v60_context_piece_ok(expanded_text)
+            if not ok:
+                skipped_reason = reason
+                continue
+            expanded_local_asr = v48_candidate_asr_stability(expanded_start, expanded_end, asr_stability_chunks)
+            if str(expanded_local_asr.get("local_asr_confidence_label") or "unknown") != "clean":
+                skipped_reason = "expanded_local_asr_not_clean"
+                continue
+            semantic = v48_semantic_asr_confidence(expanded_text)
+            if semantic.get("semantic_asr_confidence_label") == "degraded_semantics":
+                skipped_reason = "expanded_semantic_degraded"
+                continue
+
+            test_clip = copy.deepcopy(clip)
+            test_clip["start"] = round(expanded_start, 2)
+            test_clip["end"] = round(expanded_end, 2)
+            test_clip["expanded_text"] = expanded_text
+            start_text, end_text = v50_repaired_text_boundaries(expanded_text)
+            test_sb = test_clip.setdefault("score_breakdown", {})
+            test_sb["context_quality"] = v7_context_quality_score(expanded_text)
+            test_sb["payoff_bonus"] = v60_payoff_bonus(expanded_text)
+            test_sb["hook_bonus"] = max(safe_float(test_sb.get("hook_bonus")), 8 if is_strong_hook(start_text) else 0)
+            test_sb["start_text"] = start_text
+            test_sb["end_text"] = end_text
+            test_sb["local_asr_confidence_label"] = "clean"
+            test_sb["unstable_window_overlap_ratio"] = safe_float(expanded_local_asr.get("unstable_window_overlap_ratio"))
+            test_sb["chunk_confidence_score"] = safe_float(expanded_local_asr.get("chunk_confidence_score"), 100)
+            test_sb["local_asr_reasons"] = expanded_local_asr.get("local_asr_reasons", [])[:5]
+            test_sb["semantic_asr_confidence_label"] = semantic.get("semantic_asr_confidence_label")
+            test_sb["semantic_asr_corruption_score"] = semantic.get("semantic_asr_corruption_score")
+            test_sb["semantic_asr_reasons"] = semantic.get("semantic_asr_reasons", [])[:5]
+            test_sb["v60_context_expansion_attempted"] = True
+            test_sb["v60_context_expansion_applied"] = True
+            test_sb["v60_original_window"] = [base_start, base_end]
+            test_sb["v60_expanded_window"] = [round(expanded_start, 2), round(expanded_end, 2)]
+            test_sb["v60_setup_source"] = setup.get("source") if setup else ""
+            test_sb["v60_payoff_source"] = payoff.get("source") if payoff else ""
+            test_sb["v60_setup_score"] = setup.get("score") if setup else 0
+            test_sb["v60_payoff_score"] = payoff.get("score") if payoff else 0
+
+            replay_captions = get_captions_for_clip(captions, expanded_start, expanded_end)
+            after_reasons = creator_qa_rejection_reasons(copy.deepcopy(test_clip), replay_captions)
+            v60_log_context_expansion({
+                "ts": time.time(),
+                "job_id": job_id,
+                "event": "V60_CREATOR_QA_REPLAY_RESULT",
+                "candidate_index": idx,
+                "start": round(expanded_start, 2),
+                "end": round(expanded_end, 2),
+                "before_reasons": before_reasons,
+                "after_reasons": after_reasons,
+                "setup_source": test_sb["v60_setup_source"],
+                "payoff_source": test_sb["v60_payoff_source"],
+            })
+            if set(after_reasons) >= set(before_reasons):
+                skipped_reason = "no_creator_qa_improvement"
+                continue
+            rank = (
+                1 if not after_reasons else 0,
+                -len(after_reasons),
+                "no_hook_no_payoff" not in after_reasons,
+                "weak_standalone_context" not in after_reasons,
+                safe_float(test_sb.get("payoff_bonus")),
+                safe_float(test_sb.get("context_quality")),
+                -(expanded_end - expanded_start),
+            )
+            if best_clip is None or rank > best_rank:
+                test_sb["v60_before_reasons"] = before_reasons
+                test_sb["v60_after_reasons"] = after_reasons
+                best_clip = test_clip
+                best_rank = rank
+
+        if best_clip:
+            applied += 1
+            best_sb = best_clip.get("score_breakdown", {})
+            v60_log_context_expansion({
+                "ts": time.time(),
+                "job_id": job_id,
+                "event": "V60_CONTEXT_EXPANSION_APPLIED",
+                "candidate_index": idx,
+                "start": best_clip.get("start"),
+                "end": best_clip.get("end"),
+                "before_reasons": best_sb.get("v60_before_reasons", before_reasons),
+                "after_reasons": best_sb.get("v60_after_reasons", []),
+                "setup_source": best_sb.get("v60_setup_source"),
+                "payoff_source": best_sb.get("v60_payoff_source"),
+            })
+            repaired.append(best_clip)
+        else:
+            sb["v60_context_expansion_attempted"] = True
+            sb["v60_context_expansion_applied"] = False
+            sb["v60_context_expansion_reason"] = skipped_reason
+            v60_log_context_expansion({
+                "ts": time.time(),
+                "job_id": job_id,
+                "event": "V60_CONTEXT_EXPANSION_SKIPPED",
+                "candidate_index": idx,
+                "start": base_start,
+                "end": base_end,
+                "reason": skipped_reason,
+                "before_reasons": before_reasons,
+            })
+            repaired.append(clip)
+
+    print(f"V60_CONTEXT_EXPANSION_DONE job_id={job_id} before={len(clips)} applied={applied}")
+    return repaired
+
+
 def apply_creator_qa(job_id, clips, captions):
     approved = []
     rejected = []
@@ -6921,6 +7308,8 @@ def run_pipeline(job_id, file_path, JOBS):
 
         clips_before_creator_qa = len(clips)
         v20_log_clip_intelligence(job_id, clips, stage="pre_creator_qa")
+        clips = v60_expand_context_before_creator_qa(job_id, clips, segments, captions)
+        v20_log_clip_intelligence(job_id, clips, stage="pre_creator_qa_v60")
         clips, creator_qa_rejections = apply_creator_qa(job_id, clips, captions)
         print(
             "Creator QA summary: "
