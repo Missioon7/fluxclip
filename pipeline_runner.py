@@ -1194,6 +1194,377 @@ def v52_generate_payoff_native_candidates(segments, asr_stability_chunks, niche=
     return generated
 
 
+def v61_editorial_log(job_id, row):
+    row = row if isinstance(row, dict) else {}
+    row.setdefault("ts", time.time())
+    row.setdefault("job_id", job_id or "unknown")
+    event = str(row.get("event") or "V61_EDITORIAL")
+    print(
+        f"{event} job_id={row.get('job_id')} "
+        f"start={row.get('start')} end={row.get('end')} "
+        f"score={row.get('score', '')} reason={row.get('reason', '')}"
+    )
+    try:
+        Path("analytics").mkdir(exist_ok=True)
+        with (Path("analytics") / "editorial_candidates.jsonl").open("a", encoding="utf-8") as f:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+    except Exception as e:
+        print(f"V61 editorial logging failed: {e}")
+
+
+def v62_hook_payoff_scores(text, start_text=None, end_text=None):
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    start_text = re.sub(r"\s+", " ", str(start_text or "")).strip() or text
+    end_text = re.sub(r"\s+", " ", str(end_text or "")).strip() or text
+    low = text.lower()
+    start_low = start_text.lower()
+    end_low = end_text.lower()
+
+    hook_score = 0
+    if is_strong_hook(start_text):
+        hook_score += 18
+    if any(p in start_low for p in [
+        "why", "how", "what", "reason", "problem", "risk", "danger",
+        "suddenly", "truth", "secret", "nobody", "first time",
+    ]):
+        hook_score += 12
+    if v40_sentence_boundary_score(start_text, "start") > 0:
+        hook_score += 6
+    if start_low.startswith(("and ", "but ", "so ", "because ", "then ", "which ", "that ")):
+        hook_score -= 12
+
+    v43_bonus, _ = v43_hinglish_payoff_bonus(text)
+    v44_bonus, _, _ = v44_semantic_payoff_score(text)
+    payoff_bonus = 0 if v44_payoff_quality_block(text) else max(
+        v6_payoff_bonus(text),
+        v7_better_payoff_bonus(text),
+        v43_bonus,
+        v44_bonus,
+    )
+    payoff_score = safe_float(payoff_bonus)
+    if _v7_is_payoff(end_low) or _v7_is_payoff(low):
+        payoff_score += 18
+    if any(p in end_low for p in [
+        "this means", "that means", "therefore", "result", "impact",
+        "finally", "in the end", "because of this", "this is why",
+    ]):
+        payoff_score += 12
+    if v40_sentence_boundary_score(end_text, "end") > 0:
+        payoff_score += 6
+
+    standalone_context_score = safe_float(v7_context_quality_score(text))
+    unique_words = len(_v8_word_set(text))
+    if unique_words >= 10:
+        standalone_context_score += 6
+    if 35 <= len(text.split()) <= 145:
+        standalone_context_score += 6
+    if v42_repetition_or_filler_spike(text):
+        standalone_context_score -= 20
+    if v38_text_quality_is_severe(text):
+        standalone_context_score -= 30
+
+    return {
+        "v62_hook_score": max(0, round(hook_score, 2)),
+        "v62_payoff_score": max(0, round(payoff_score, 2)),
+        "v62_standalone_context_score": round(standalone_context_score, 2),
+        "v62_payoff_bonus": payoff_bonus,
+    }
+
+
+def v62_score_clip_for_creator_qa(job_id, clip, captions=None, candidate_index=None, stage="pre_creator_qa"):
+    clip = clip if isinstance(clip, dict) else {}
+    sb = clip.setdefault("score_breakdown", {})
+    text = re.sub(r"\s+", " ", str(clip.get("expanded_text") or clip.get("source_text") or clip.get("text") or "")).strip()
+    start_text = str(sb.get("start_text") or "").strip()
+    end_text = str(sb.get("end_text") or "").strip()
+    if not start_text or not end_text:
+        start_text, end_text = v50_repaired_text_boundaries(text)
+        sb["start_text"] = start_text
+        sb["end_text"] = end_text
+
+    scores = v62_hook_payoff_scores(text, start_text, end_text)
+    sb.update(scores)
+    sb["hook_bonus"] = max(safe_float(sb.get("hook_bonus")), min(18, scores["v62_hook_score"]))
+    sb["payoff_bonus"] = max(safe_float(sb.get("payoff_bonus")), safe_float(scores["v62_payoff_bonus"]))
+    sb["context_quality"] = max(safe_float(sb.get("context_quality")), safe_float(v7_context_quality_score(text)))
+    sb["v62_repair_needed_before_creator_qa"] = bool(
+        scores["v62_payoff_score"] <= 0
+        or (scores["v62_hook_score"] <= 0 and scores["v62_standalone_context_score"] < 8)
+    )
+    reasons = creator_qa_rejection_reasons(copy.deepcopy(clip), captions or [])
+    v61_editorial_log(job_id, {
+        "event": "V62_HOOK_PAYOFF_SCORE",
+        "stage": stage,
+        "candidate_index": candidate_index,
+        "start": clip.get("start"),
+        "end": clip.get("end"),
+        "hook_score": scores["v62_hook_score"],
+        "payoff_score": scores["v62_payoff_score"],
+        "standalone_context_score": scores["v62_standalone_context_score"],
+        "repair_needed": sb["v62_repair_needed_before_creator_qa"],
+        "creator_qa_reasons": reasons,
+        "preview": v18_preview_text(text, 260),
+    })
+    return clip
+
+
+def v62_score_clips_before_creator_qa(job_id, clips, captions, stage="pre_creator_qa"):
+    scored = []
+    for idx, clip in enumerate(safe_dict_list(clips)):
+        clip_start = safe_float(clip.get("start"))
+        clip_end = safe_float(clip.get("end"), clip_start)
+        clip_captions = get_captions_for_clip(captions, clip_start, clip_end)
+        scored.append(v62_score_clip_for_creator_qa(job_id, clip, clip_captions, idx, stage))
+    return scored
+
+
+def v61_clean_editorial_window(segments, start, end, asr_stability_chunks):
+    text = get_nearby_text(segments, start, end, window=0)
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    if not text:
+        return False, "empty_window", text
+    if end <= start or end - start > 60:
+        return False, "invalid_or_too_long_window", text
+    if is_bad_transcript_clip(text):
+        return False, "bad_transcript_window", text
+    if is_ad_segment(text):
+        return False, "ad_window", text
+    if _v7_is_drift(text):
+        return False, "topic_drift_window", text
+    if v38_text_quality_is_severe(text):
+        return False, "severe_text_quality_window", text
+    if v42_repetition_or_filler_spike(text):
+        return False, "filler_or_repetition_window", text
+    local_asr = v48_candidate_asr_stability(start, end, asr_stability_chunks)
+    if str(local_asr.get("local_asr_confidence_label") or "unknown") == "unstable":
+        return False, "unstable_asr_window", text
+    semantic = v48_semantic_asr_confidence(text)
+    if str(semantic.get("semantic_asr_confidence_label") or "unknown") == "degraded_semantics":
+        return False, "semantic_degraded_window", text
+    return True, "", text
+
+
+def v61_payoff_anchor_score(text):
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    low = text.lower()
+    if not text:
+        return 0, []
+    reasons = []
+    score = 0
+    anchor = v52_payoff_anchor_signal(text, {
+        "local_asr_confidence_label": "clean",
+        "semantic_asr_confidence_label": "clean_semantics",
+    })
+    if anchor.get("v52_payoff_anchor_detected"):
+        score += 24
+        reasons.append(anchor.get("v52_payoff_anchor_reason") or "v52_anchor")
+    v62 = v62_hook_payoff_scores(text)
+    if v62["v62_payoff_score"] > 0:
+        score += min(32, v62["v62_payoff_score"])
+        reasons.append("explicit_payoff_score")
+    if any(p in low for p in [
+        "this is why", "that is why", "this means", "that means", "therefore",
+        "result", "impact", "finally", "in the end", "because of this",
+        "so the reason", "the reason is",
+    ]):
+        score += 20
+        reasons.append("payoff_language")
+    if any(p in low for p in ["but", "however", "suddenly", "problem", "risk", "question", "why"]):
+        score += 8
+        reasons.append("tension_or_question")
+    if v42_repetition_or_filler_spike(text) or v38_text_quality_is_severe(text):
+        score -= 40
+        reasons.append("quality_penalty")
+    return round(score, 2), reasons[:6]
+
+
+def v61_generate_payoff_native_candidates(segments, job_id=None, max_candidates=18):
+    segments = safe_dict_list(segments or [])
+    asr_stability_chunks = v48_build_asr_stability_chunks(segments)
+    candidates = []
+    seen = set()
+
+    for idx, seg in enumerate(segments):
+        seg_start = safe_float(seg.get("start"))
+        seg_end = safe_float(seg.get("end"), seg_start)
+        seg_text = re.sub(r"\s+", " ", str(seg.get("text") or "")).strip()
+        if not seg_text or seg_end <= seg_start:
+            continue
+        ok, reason, _ = v61_clean_editorial_window(segments, seg_start, seg_end, asr_stability_chunks)
+        if not ok and reason not in {"invalid_or_too_long_window"}:
+            continue
+        anchor_score, anchor_reasons = v61_payoff_anchor_score(seg_text)
+        if anchor_score < 24:
+            continue
+
+        v61_editorial_log(job_id, {
+            "event": "V61_PAYOFF_ANCHOR_FOUND",
+            "anchor_index": idx,
+            "start": round(seg_start, 2),
+            "end": round(seg_end, 2),
+            "score": anchor_score,
+            "reasons": anchor_reasons,
+            "preview": v18_preview_text(seg_text, 220),
+        })
+
+        best = None
+        best_rank = None
+        for left in range(idx, max(-1, idx - 6), -1):
+            start = safe_float(segments[left].get("start"))
+            if seg_end - start > 60:
+                continue
+            if left < idx and _v7_topic_shift(str(segments[left].get("text", "")), seg_text):
+                break
+            for right in range(idx, min(len(segments), idx + 5)):
+                end = safe_float(segments[right].get("end"), seg_end)
+                duration = end - start
+                if duration < 10 or duration > 60:
+                    continue
+                if right > idx and _v7_topic_shift(seg_text, str(segments[right].get("text", ""))):
+                    break
+                clean, clean_reason, text = v61_clean_editorial_window(segments, start, end, asr_stability_chunks)
+                if not clean:
+                    continue
+                start_text, end_text = v50_repaired_text_boundaries(text)
+                scores = v62_hook_payoff_scores(text, start_text, end_text)
+                if scores["v62_payoff_score"] <= 0 or scores["v62_standalone_context_score"] < 8:
+                    continue
+                rank = (
+                    scores["v62_payoff_score"],
+                    scores["v62_standalone_context_score"],
+                    scores["v62_hook_score"],
+                    -abs(duration - 38),
+                    -duration,
+                )
+                if best is None or rank > best_rank:
+                    best = (start, end, text, scores)
+                    best_rank = rank
+
+        if not best:
+            continue
+        start, end, text, scores = best
+        key = (round(start, 1), round(end, 1))
+        if key in seen:
+            continue
+        seen.add(key)
+        niche = v10_detect_creator_niche(text)
+        candidate_score = 120 + scores["v62_payoff_score"] + scores["v62_standalone_context_score"] + scores["v62_hook_score"]
+        candidate = {
+            "start": round(start, 2),
+            "end": round(end, 2),
+            "text": text,
+            "score": round(candidate_score, 2),
+            "title": v9_editorial_title(text, set()),
+            "hashtags": v40_niche_hashtags(niche, text),
+            "niche": niche,
+            "score_breakdown": {
+                "v61_payoff_native_candidate": True,
+                "v61_anchor_index": idx,
+                "v61_anchor_score": anchor_score,
+                "v61_anchor_reasons": anchor_reasons,
+                **scores,
+            },
+        }
+        v61_editorial_log(job_id, {
+            "event": "V61_PAYOFF_CANDIDATE_CREATED",
+            "start": candidate["start"],
+            "end": candidate["end"],
+            "duration": round(end - start, 2),
+            "score": candidate["score"],
+            "hook_score": scores["v62_hook_score"],
+            "payoff_score": scores["v62_payoff_score"],
+            "standalone_context_score": scores["v62_standalone_context_score"],
+            "preview": v18_preview_text(text, 260),
+        })
+        candidates.append(candidate)
+        if len(candidates) >= max_candidates:
+            break
+
+    return sorted(candidates, key=lambda x: safe_float(x.get("score")), reverse=True)
+
+
+def v63_generate_story_complete_windows(segments, job_id=None, max_candidates=14):
+    segments = safe_dict_list(segments or [])
+    asr_stability_chunks = v48_build_asr_stability_chunks(segments)
+    candidates = []
+    seen = set()
+
+    for start_idx in range(len(segments)):
+        start = safe_float(segments[start_idx].get("start"))
+        setup_text = str(segments[start_idx].get("text", "") or "")
+        if not setup_text.strip():
+            continue
+        for end_idx in range(start_idx + 1, min(len(segments), start_idx + 10)):
+            end = safe_float(segments[end_idx].get("end"), start)
+            duration = end - start
+            if duration < 14:
+                continue
+            if duration > 60:
+                break
+            if _v7_topic_shift(setup_text, str(segments[end_idx].get("text", ""))):
+                break
+            clean, reason, text = v61_clean_editorial_window(segments, start, end, asr_stability_chunks)
+            if not clean:
+                continue
+            words = text.split()
+            if len(words) < 22:
+                continue
+            thirds = max(1, len(words) // 3)
+            first = " ".join(words[:thirds])
+            middle = " ".join(words[thirds:thirds * 2])
+            final = " ".join(words[thirds * 2:])
+            setup_score = v7_context_quality_score(first)
+            tension_score = 0
+            if any(p in middle.lower() for p in [
+                "but", "however", "why", "how", "what", "problem", "risk",
+                "suddenly", "question", "because",
+            ]):
+                tension_score += 16
+            payoff_score, payoff_reasons = v61_payoff_anchor_score(final)
+            full_scores = v62_hook_payoff_scores(text, first, final)
+            if setup_score < 4 or tension_score <= 0 or full_scores["v62_payoff_score"] <= 0:
+                continue
+            key = (round(start, 1), round(end, 1))
+            if key in seen:
+                continue
+            seen.add(key)
+            niche = v10_detect_creator_niche(text)
+            score = 110 + setup_score + tension_score + full_scores["v62_payoff_score"] + full_scores["v62_standalone_context_score"]
+            candidate = {
+                "start": round(start, 2),
+                "end": round(end, 2),
+                "text": text,
+                "score": round(score, 2),
+                "title": v9_editorial_title(text, set()),
+                "hashtags": v40_niche_hashtags(niche, text),
+                "niche": niche,
+                "score_breakdown": {
+                    "v63_story_complete_window": True,
+                    "v63_setup_score": round(setup_score, 2),
+                    "v63_tension_score": round(tension_score, 2),
+                    "v63_payoff_reasons": payoff_reasons,
+                    **full_scores,
+                },
+            }
+            v61_editorial_log(job_id, {
+                "event": "V63_STORY_WINDOW_CREATED",
+                "start": candidate["start"],
+                "end": candidate["end"],
+                "duration": round(duration, 2),
+                "score": candidate["score"],
+                "setup_score": round(setup_score, 2),
+                "tension_score": round(tension_score, 2),
+                "payoff_score": full_scores["v62_payoff_score"],
+                "preview": v18_preview_text(text, 280),
+            })
+            candidates.append(candidate)
+            break
+        if len(candidates) >= max_candidates:
+            break
+
+    return sorted(candidates, key=lambda x: safe_float(x.get("score")), reverse=True)
+
+
 def v49_log_asr_segment_salvage(job_id, event, candidate_index, start, end, local_asr, salvage):
     local_asr = local_asr if isinstance(local_asr, dict) else {}
     salvage = salvage if isinstance(salvage, dict) else {}
@@ -6087,6 +6458,58 @@ def v60_collect_context_side(segments, base_start, base_end, asr_stability_chunk
     return None
 
 
+def v60_nearest_context_diagnostics(segments, base_start, base_end, asr_stability_chunks):
+    diagnostics = {
+        "setup": {"found": False, "reason": "no_previous_segment", "preview": ""},
+        "payoff": {"found": False, "reason": "no_next_segment", "preview": ""},
+    }
+    ordered = safe_dict_list(segments or [])
+    base_start = safe_float(base_start)
+    base_end = safe_float(base_end, base_start)
+
+    for seg in reversed(ordered):
+        seg_start = safe_float(seg.get("start"))
+        seg_end = safe_float(seg.get("end"), seg_start)
+        if seg_end > base_start + 0.01:
+            continue
+        text = v50_2_context_piece_text(ordered, seg_start, base_start)
+        ok, reason = v60_context_piece_ok(text)
+        local_asr = v48_candidate_asr_stability(seg_start, base_start, asr_stability_chunks)
+        if str(local_asr.get("local_asr_confidence_label") or "unknown") != "clean":
+            reason = "nearest_setup_local_asr_not_clean"
+        diagnostics["setup"] = {
+            "found": ok and reason != "nearest_setup_local_asr_not_clean",
+            "reason": "" if ok and reason != "nearest_setup_local_asr_not_clean" else reason,
+            "start": round(seg_start, 2),
+            "end": round(base_start, 2),
+            "local_asr_confidence_label": local_asr.get("local_asr_confidence_label"),
+            "preview": v18_preview_text(text, 220),
+        }
+        break
+
+    for seg in ordered:
+        seg_start = safe_float(seg.get("start"))
+        seg_end = safe_float(seg.get("end"), seg_start)
+        if seg_start < base_end - 0.01:
+            continue
+        text = v50_2_context_piece_text(ordered, base_end, seg_end)
+        ok, reason = v60_context_piece_ok(text)
+        local_asr = v48_candidate_asr_stability(base_end, seg_end, asr_stability_chunks)
+        if str(local_asr.get("local_asr_confidence_label") or "unknown") != "clean":
+            reason = "nearest_payoff_local_asr_not_clean"
+        diagnostics["payoff"] = {
+            "found": ok and reason != "nearest_payoff_local_asr_not_clean",
+            "reason": "" if ok and reason != "nearest_payoff_local_asr_not_clean" else reason,
+            "start": round(base_end, 2),
+            "end": round(seg_end, 2),
+            "local_asr_confidence_label": local_asr.get("local_asr_confidence_label"),
+            "preview": v18_preview_text(text, 220),
+        }
+        break
+
+    return diagnostics
+
+
 def v60_payoff_bonus(text):
     v43_bonus, _ = v43_hinglish_payoff_bonus(text)
     v44_bonus, _, _ = v44_semantic_payoff_score(text)
@@ -6157,6 +6580,7 @@ def v60_expand_context_before_creator_qa(job_id, clips, segments, captions):
                 "end": base_end,
                 "reason": "global_low_confidence_asr",
                 "before_reasons": before_reasons,
+                "preview": v18_preview_text(base_text, 260),
             })
             repaired.append(clip)
             continue
@@ -6172,6 +6596,7 @@ def v60_expand_context_before_creator_qa(job_id, clips, segments, captions):
                 "end": base_end,
                 "reason": "base_local_asr_not_clean",
                 "before_reasons": before_reasons,
+                "preview": v18_preview_text(base_text, 260),
             })
             repaired.append(clip)
             continue
@@ -6201,9 +6626,11 @@ def v60_expand_context_before_creator_qa(job_id, clips, segments, captions):
         if setup_context and payoff_context:
             variants.append((setup_context, payoff_context))
         if not variants:
+            diagnostics = v60_nearest_context_diagnostics(segments, base_start, base_end, asr_stability_chunks)
             sb["v60_context_expansion_attempted"] = True
             sb["v60_context_expansion_applied"] = False
             sb["v60_context_expansion_reason"] = "no_clean_setup_or_payoff_context"
+            sb["v60_nearest_context_diagnostics"] = diagnostics
             v60_log_context_expansion({
                 "ts": time.time(),
                 "job_id": job_id,
@@ -6213,6 +6640,8 @@ def v60_expand_context_before_creator_qa(job_id, clips, segments, captions):
                 "end": base_end,
                 "reason": "no_clean_setup_or_payoff_context",
                 "before_reasons": before_reasons,
+                "nearest_context_diagnostics": diagnostics,
+                "preview": v18_preview_text(base_text, 260),
             })
             repaired.append(clip)
             continue
@@ -6336,6 +6765,8 @@ def v60_expand_context_before_creator_qa(job_id, clips, segments, captions):
                 "end": base_end,
                 "reason": skipped_reason,
                 "before_reasons": before_reasons,
+                "nearest_context_diagnostics": v60_nearest_context_diagnostics(segments, base_start, base_end, asr_stability_chunks),
+                "preview": v18_preview_text(base_text, 260),
             })
             repaired.append(clip)
 
@@ -6431,6 +6862,109 @@ def log_creator_qa_zero_safe_clips(job_id, rejections):
         print(f"creator QA zero-safe logging failed: {e}")
 
     return row
+
+
+def log_creator_qa_zero_diagnostic_preview(job_id, rejections, limit=6):
+    rows = []
+    for idx, row in enumerate(safe_dict_list(rejections)[:limit]):
+        preview_row = {
+            "ts": time.time(),
+            "job_id": job_id,
+            "event": "CREATOR_QA_ZERO_DIAGNOSTIC_PREVIEW",
+            "candidate_index": idx,
+            "start": row.get("start"),
+            "end": row.get("end"),
+            "reasons": row.get("reasons", []),
+            "metadata_reasons": row.get("metadata_reasons", []),
+            "preview": v18_preview_text(row.get("preview"), 320),
+        }
+        rows.append(preview_row)
+        print(
+            "CREATOR_QA_ZERO_DIAGNOSTIC_PREVIEW "
+            f"job_id={job_id} index={idx} start={preview_row['start']} end={preview_row['end']} "
+            f"reasons={preview_row['reasons']} preview={preview_row['preview']}"
+        )
+    if rows:
+        try:
+            Path("analytics").mkdir(exist_ok=True)
+            with (Path("analytics") / "creator_qa.jsonl").open("a", encoding="utf-8") as f:
+                for row in rows:
+                    f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        except Exception as e:
+            print(f"creator QA diagnostic preview logging failed: {e}")
+    return rows
+
+
+def v64_creator_safe_fallback(job_id, segments, captions, visual_intelligence=None):
+    v61_editorial_log(job_id, {
+        "event": "V64_ZERO_SAFE_FALLBACK_START",
+        "segments_count": len(safe_dict_list(segments)),
+    })
+    payoff_native = v61_generate_payoff_native_candidates(
+        segments,
+        job_id=job_id,
+        max_candidates=24,
+    )
+    story_windows = v63_generate_story_complete_windows(
+        segments,
+        job_id=job_id,
+        max_candidates=18,
+    )
+    fallback_viral = merge_viral_candidates(
+        safe_dict_list(payoff_native),
+        safe_dict_list(story_windows),
+    )
+    fallback_clips = []
+    fallback_rejections = []
+    try:
+        if fallback_viral:
+            fallback_clips = build_final_clips(
+                fallback_viral,
+                segments,
+                visual_intelligence or {},
+                job_id=job_id,
+            )
+            fallback_clips = v62_score_clips_before_creator_qa(
+                job_id,
+                fallback_clips,
+                captions,
+                stage="v64_pre_creator_qa",
+            )
+            fallback_clips = v60_expand_context_before_creator_qa(
+                job_id,
+                fallback_clips,
+                segments,
+                captions,
+            )
+            fallback_clips = v62_score_clips_before_creator_qa(
+                job_id,
+                fallback_clips,
+                captions,
+                stage="v64_pre_creator_qa_v60",
+            )
+            fallback_clips, fallback_rejections = apply_creator_qa(
+                job_id,
+                fallback_clips,
+                captions,
+            )
+    except Exception as e:
+        fallback_rejections = [{
+            "event": "V64_ZERO_SAFE_FALLBACK_ERROR",
+            "reasons": ["v64_exception"],
+            "error": str(e),
+        }]
+        print(f"V64_ZERO_SAFE_FALLBACK_ERROR job_id={job_id} error={e}")
+
+    v61_editorial_log(job_id, {
+        "event": "V64_ZERO_SAFE_FALLBACK_RESULT",
+        "payoff_native_candidates": len(payoff_native),
+        "story_complete_candidates": len(story_windows),
+        "fallback_viral_candidates": len(fallback_viral),
+        "approved": len(fallback_clips),
+        "rejected": len(fallback_rejections),
+        "top_rejection_reasons": creator_qa_top_reasons(fallback_rejections),
+    })
+    return fallback_clips, fallback_rejections
 
 
 def find_test_video():
@@ -7289,12 +7823,28 @@ def run_pipeline(job_id, file_path, JOBS):
         JOBS[job_id]["progress"] = 45
         print("ðŸ”¥ STEP 3: Viral analysis")
         arc_candidates = build_story_arc_candidates(segments)
+        payoff_native_candidates = v61_generate_payoff_native_candidates(
+            segments,
+            job_id=job_id,
+            max_candidates=18,
+        )
+        story_complete_candidates = v63_generate_story_complete_windows(
+            segments,
+            job_id=job_id,
+            max_candidates=14,
+        )
         viral = merge_viral_candidates(
-            arc_candidates,
+            safe_dict_list(payoff_native_candidates)
+            + safe_dict_list(story_complete_candidates)
+            + safe_dict_list(arc_candidates),
             safe_dict_list(analyze_video(segments))
         )
 
-        print(f"ðŸ”¥ Viral segments: {len(viral)}")
+        print(
+            f"ðŸ”¥ Viral segments: {len(viral)} "
+            f"v61_payoff_native={len(payoff_native_candidates)} "
+            f"v63_story_complete={len(story_complete_candidates)}"
+        )
 
         JOBS[job_id]["stage"] = "Clip Generation"
         JOBS[job_id]["progress"] = 65
@@ -7308,7 +7858,9 @@ def run_pipeline(job_id, file_path, JOBS):
 
         clips_before_creator_qa = len(clips)
         v20_log_clip_intelligence(job_id, clips, stage="pre_creator_qa")
+        clips = v62_score_clips_before_creator_qa(job_id, clips, captions, stage="pre_creator_qa")
         clips = v60_expand_context_before_creator_qa(job_id, clips, segments, captions)
+        clips = v62_score_clips_before_creator_qa(job_id, clips, captions, stage="pre_creator_qa_v60")
         v20_log_clip_intelligence(job_id, clips, stage="pre_creator_qa_v60")
         clips, creator_qa_rejections = apply_creator_qa(job_id, clips, captions)
         print(
@@ -7316,6 +7868,63 @@ def run_pipeline(job_id, file_path, JOBS):
             f"before={clips_before_creator_qa} after={len(clips)} "
             f"rejected={len(creator_qa_rejections)}"
         )
+
+        if not clips and creator_qa_rejections:
+            log_creator_qa_zero_diagnostic_preview(job_id, creator_qa_rejections)
+            fallback_clips, fallback_rejections = v64_creator_safe_fallback(
+                job_id,
+                segments,
+                captions,
+                JOBS.get(job_id, {}).get("visual_intelligence", {}),
+            )
+            if fallback_clips:
+                clips = fallback_clips
+                creator_qa_rejections = fallback_rejections
+                print(
+                    "V64_ZERO_SAFE_FALLBACK_RESULT_CONTINUE "
+                    f"job_id={job_id} approved={len(clips)} rejected={len(creator_qa_rejections)}"
+                )
+            else:
+                if fallback_rejections:
+                    creator_qa_rejections = fallback_rejections
+                log_creator_qa_zero_diagnostic_preview(job_id, creator_qa_rejections)
+                zero_qa_row = log_creator_qa_zero_safe_clips(job_id, creator_qa_rejections)
+                JOBS[job_id]["status"] = "completed"
+                JOBS[job_id]["stage"] = "Completed"
+                JOBS[job_id]["progress"] = 100
+
+                result = {
+                    "status": "done",
+                    "message": "No creator-safe clips found",
+                    "summary": {
+                        "text_preview": v18_preview_text(text, 900),
+                        "segments_count": len(segments),
+                        "captions_count": len(captions),
+                        "viral_segments_count": len(viral),
+                        "asr_mode": asr_meta["asr_mode"],
+                        "asr_quality_score": asr_meta["asr_quality_score"],
+                        "low_confidence_asr": asr_meta["low_confidence_asr"],
+                        "clips_before_creator_qa": clips_before_creator_qa,
+                        "clips_count": 0,
+                        "rejected_by_creator_qa": len(creator_qa_rejections),
+                        "top_rejection_reasons": zero_qa_row["top_rejection_reasons"],
+                    },
+                    "clips": [],
+                    "final_clips": [],
+                    "creator_qa": {
+                        "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+                        "message": "No creator-safe clips found",
+                        "asr_mode": asr_meta["asr_mode"],
+                        "asr_quality_score": asr_meta["asr_quality_score"],
+                        "low_confidence_asr": asr_meta["low_confidence_asr"],
+                        "rejections": creator_qa_rejections,
+                        "top_rejection_reasons": zero_qa_row["top_rejection_reasons"],
+                    }
+                }
+
+                JOBS[job_id]["result"] = result
+                print("No creator-safe clips found")
+                return result
 
         if not clips and creator_qa_rejections:
             zero_qa_row = log_creator_qa_zero_safe_clips(job_id, creator_qa_rejections)
