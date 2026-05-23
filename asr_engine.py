@@ -409,36 +409,79 @@ def transcript_quality_score(text, segments=None):
     return max(0, min(100, 100 - penalty)), reasons
 
 
+def parse_reason_count(reason: str) -> int | None:
+    try:
+        value = str(reason or "").split("=", 1)[1]
+    except Exception:
+        return None
+    value = value.split(":", 1)[0].strip()
+    match = re.match(r"[-+]?\d+", value)
+    if not match:
+        return None
+    try:
+        return int(match.group(0))
+    except Exception:
+        return None
+
+
+def parse_reason_float(reason: str) -> float | None:
+    try:
+        value = str(reason or "").split("=", 1)[1]
+    except Exception:
+        return None
+    value = value.split(":", 1)[0].strip()
+    match = re.match(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)", value)
+    if not match:
+        return None
+    try:
+        return float(match.group(0))
+    except Exception:
+        return None
+
+
 def asr_estimated_penalty_for_reason(reason):
     reason = str(reason or "")
     if reason.startswith("malformed_phrases="):
-        return int(reason.split("=", 1)[1]) * 18
+        count = parse_reason_count(reason)
+        return (count or 0) * 18
     if reason.startswith("junk_repetition="):
-        return int(reason.split("=", 1)[1]) * 20
+        count = parse_reason_count(reason)
+        return (count or 0) * 20
     if reason.startswith("replacement_chars="):
-        return min(40, int(reason.split("=", 1)[1]) * 10)
+        count = parse_reason_count(reason)
+        return min(40, (count or 0) * 10)
     if reason.startswith("devanagari_repeated_token_ratio="):
-        return min(45, int(float(reason.split("=", 1)[1]) * 90))
+        value = parse_reason_float(reason)
+        return min(45, int((value or 0) * 90))
     if reason.startswith("repeated_hindi_phrase="):
         return 24 if reason.endswith("\u0688") else 18
     if reason.startswith("ultra_short_repeated_segments="):
-        return min(32, int(reason.split("=", 1)[1]) * 8)
+        count = parse_reason_count(reason)
+        return min(32, (count or 0) * 8)
     if reason.startswith("weak_continuation_fragments="):
-        return min(24, int(reason.split("=", 1)[1]) * 8)
+        count = parse_reason_count(reason)
+        return min(24, (count or 0) * 8)
     if reason.startswith("incomplete_fragments="):
-        return min(30, int(reason.split("=", 1)[1]) * 15)
+        count = parse_reason_count(reason)
+        return min(30, (count or 0) * 15)
     if reason.startswith("broken_translation_structures="):
-        return min(45, int(reason.split("=", 1)[1]) * 14)
+        count = parse_reason_count(reason)
+        return min(45, (count or 0) * 14)
     if reason.startswith("helper_word_heavy="):
-        return int(float(reason.split("=", 1)[1]) * 24)
+        value = parse_reason_float(reason)
+        return int((value or 0) * 24)
     if reason.startswith("repeated_helper_phrases="):
-        return min(30, int(reason.split("=", 1)[1]) * 6)
+        count = parse_reason_count(reason)
+        return min(30, (count or 0) * 6)
     if reason.startswith("unnatural_noun_chains="):
-        return min(24, int(reason.split("=", 1)[1]) * 12)
+        count = parse_reason_count(reason)
+        return min(24, (count or 0) * 12)
     if reason.startswith("short_broken_fragments="):
-        return int(float(reason.split("=", 1)[1]) * 35)
+        value = parse_reason_float(reason)
+        return int((value or 0) * 35)
     if reason.startswith("word_repetition="):
-        return int(float(reason.split("=", 1)[1]) * 40)
+        value = parse_reason_float(reason)
+        return int((value or 0) * 40)
     return 0
 
 
@@ -677,7 +720,7 @@ def calibrate_chunked_faster_whisper_quality(raw_quality, raw_reasons, text, raw
 
     for reason in raw_reasons:
         if reason.startswith("repeated_helper_phrases="):
-            count = int(reason.split("=", 1)[1])
+            count = parse_reason_count(reason) or 0
             penalty = min(8, max(0, count // 80))
             if penalty:
                 calibrated_penalty += penalty
@@ -688,10 +731,11 @@ def calibrate_chunked_faster_whisper_quality(raw_quality, raw_reasons, text, raw
         if reason.startswith("helper_word_heavy="):
             penalty = min(6, asr_estimated_penalty_for_reason(reason))
             calibrated_penalty += penalty
-            calibrated_reasons.append(f"helper_word_heavy_calibrated={reason.split('=', 1)[1]}:penalty={penalty}")
+            value = parse_reason_float(reason)
+            calibrated_reasons.append(f"helper_word_heavy_calibrated={value if value is not None else 0}:penalty={penalty}")
             continue
         if reason.startswith("replacement_chars="):
-            count = int(reason.split("=", 1)[1])
+            count = parse_reason_count(reason) or 0
             if word_count > 5000:
                 penalty = min(18, max(4, count))
             else:
@@ -754,10 +798,11 @@ def asr_quality_artifact_counts(reasons):
     for reason in reasons or []:
         reason = str(reason)
         if reason.startswith("replacement_chars="):
-            try:
-                counts["replacement_chars"] += int(reason.split("=", 1)[1])
-            except ValueError:
+            count = parse_reason_count(reason)
+            if count is None:
                 counts["replacement_chars"] += 1
+            else:
+                counts["replacement_chars"] += count
         elif reason.startswith("repeated_hindi_phrase="):
             counts["repeated_hindi_phrase"] += 1
     return counts
