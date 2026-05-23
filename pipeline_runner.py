@@ -1905,6 +1905,431 @@ def v66_generate_reframed_candidates(segments, job_id=None, max_candidates=12):
     return sorted(candidates, key=lambda x: safe_float(x.get("score")), reverse=True)
 
 
+def v67_sentence_parts(text):
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    return [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
+
+
+def v67_story_unit_scores(text):
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    low = text.lower()
+    terms = v66_core_terms(text)
+    setup_terms = [
+        "india", "china", "europe", "america", "russia", "government",
+        "country", "market", "company", "economy", "military", "trade",
+        "technology", "policy", "strategy", "border", "security",
+    ]
+    tension_terms = [
+        "but", "however", "against", "versus", "risk", "threat", "danger",
+        "problem", "conflict", "crisis", "dependence", "competition",
+        "pressure", "challenge", "cost", "control",
+    ]
+    payoff_terms = [
+        "this means", "that means", "therefore", "because", "result",
+        "impact", "consequence", "so", "finally", "in the end", "why",
+        "changed", "future", "will", "could", "strategy",
+    ]
+
+    setup_score = min(35, len(terms) * 4 + sum(5 for t in setup_terms if t in low))
+    tension_score = min(35, sum(7 for t in tension_terms if t in low))
+    payoff_score = min(40, sum(7 for t in payoff_terms if t in low))
+    standalone_score = safe_float(v7_context_quality_score(text)) + min(18, len(_v8_word_set(text)) / 2)
+    story_score = setup_score + tension_score + payoff_score + max(0, min(20, standalone_score))
+
+    return {
+        "v67_setup_score": round(setup_score, 2),
+        "v67_tension_score": round(tension_score, 2),
+        "v67_payoff_score": round(payoff_score, 2),
+        "v67_standalone_score": round(standalone_score, 2),
+        "v67_story_score": round(story_score, 2),
+        "v67_core_terms": terms[:8],
+    }
+
+
+def v67_story_unit_complete(scores):
+    scores = scores if isinstance(scores, dict) else {}
+    return (
+        safe_float(scores.get("v67_setup_score")) >= 12
+        and safe_float(scores.get("v67_tension_score")) >= 7
+        and safe_float(scores.get("v67_payoff_score")) >= 10
+        and safe_float(scores.get("v67_standalone_score")) >= 6
+    )
+
+
+def v67_generate_synthetic_hook(text, scores=None):
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    low = text.lower()
+    terms = v66_core_terms(text)
+    primary = terms[0].title() if terms else "This story"
+    secondary = terms[1].title() if len(terms) > 1 else ""
+
+    if "china" in low and "india" in low and any(w in low for w in ["depend", "dependence", "alternative", "instead"]):
+        return "India is trying to reduce dependence on China using this strategy"
+    if "europe" in low and "india" in low and "china" in low:
+        return "Why Europe is suddenly looking at India instead of China"
+    if any(w in low for w in ["risk", "threat", "danger", "security"]):
+        return f"Why {primary} has become a serious risk"
+    if any(w in low for w in ["future", "will", "could", "next"]):
+        return f"How {primary} could change what happens next"
+    if any(w in low for w in ["because", "reason", "why"]):
+        return f"The real reason {primary} matters right now"
+    if secondary:
+        return f"Why {primary} and {secondary} matter in this story"
+    return f"Why {primary} matters in this story"
+
+
+def v67_make_story_candidate(segments, start_idx, end_idx, job_id=None, source="v67_story_unit"):
+    if start_idx < 0 or end_idx >= len(segments) or end_idx < start_idx:
+        return None
+    start = safe_float(segments[start_idx].get("start"))
+    end = safe_float(segments[end_idx].get("end"), start)
+    duration = end - start
+    if duration <= 0 or duration > 60:
+        return None
+    text = get_nearby_text(segments, start, end, window=0)
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    if not text:
+        return None
+    asr_stability_chunks = v48_build_asr_stability_chunks(segments)
+    clean, clean_reason, text = v61_clean_editorial_window(segments, start, end, asr_stability_chunks)
+    if not clean:
+        v61_editorial_log(job_id, {
+            "event": "V67_STORY_UNIT_SKIPPED",
+            "start": round(start, 2),
+            "end": round(end, 2),
+            "duration": round(duration, 2),
+            "reason": clean_reason,
+            "preview": v18_preview_text(text, 240),
+        })
+        return None
+    scores = v67_story_unit_scores(text)
+    if not v67_story_unit_complete(scores):
+        missing = []
+        if safe_float(scores.get("v67_setup_score")) < 12:
+            missing.append("setup")
+        if safe_float(scores.get("v67_tension_score")) < 7:
+            missing.append("tension")
+        if safe_float(scores.get("v67_payoff_score")) < 10:
+            missing.append("payoff")
+        if safe_float(scores.get("v67_standalone_score")) < 6:
+            missing.append("standalone_context")
+        v61_editorial_log(job_id, {
+            "event": "V67_STORY_UNIT_SKIPPED",
+            "start": round(start, 2),
+            "end": round(end, 2),
+            "duration": round(duration, 2),
+            "reason": "incomplete_story_unit",
+            "missing": missing,
+            **scores,
+            "preview": v18_preview_text(text, 240),
+        })
+        return None
+
+    hook = v67_generate_synthetic_hook(text, scores)
+    start_text, end_text = v50_repaired_text_boundaries(text)
+    v62_scores = v62_hook_payoff_scores(text, start_text, end_text)
+    reframe = v66_informational_reframe_scores(text, v10_detect_creator_niche(text))
+    alignment = v66_title_alignment_score(hook, text)
+    candidate = {
+        "start": round(start, 2),
+        "end": round(end, 2),
+        "text": text,
+        "score": round(160 + scores["v67_story_score"] + safe_float(v62_scores.get("v62_payoff_score")), 2),
+        "title": hook,
+        "hook_text": hook,
+        "v67_story_unit": True,
+        "v67_synthetic_hook": hook,
+        "v67_context_bridge_applied": False,
+        "v67_story_score": scores["v67_story_score"],
+        "v67_payoff_score": scores["v67_payoff_score"],
+        "v67_standalone_score": scores["v67_standalone_score"],
+        "hashtags": v40_niche_hashtags(v10_detect_creator_niche(text), text),
+        "niche": v10_detect_creator_niche(text),
+        "score_breakdown": {
+            "v67_story_unit": True,
+            "v67_source": source,
+            "v67_synthetic_hook": hook,
+            "v67_context_bridge_applied": False,
+            **scores,
+            **v62_scores,
+            **reframe,
+            **alignment,
+            "start_text": start_text,
+            "end_text": end_text,
+        },
+    }
+    v61_editorial_log(job_id, {
+        "event": "V67_STORY_UNIT_FOUND",
+        "start": candidate["start"],
+        "end": candidate["end"],
+        "duration": round(duration, 2),
+        "score": candidate["score"],
+        "hook": hook,
+        **scores,
+        "preview": v18_preview_text(text, 300),
+    })
+    v61_editorial_log(job_id, {
+        "event": "V67_SYNTHETIC_HOOK_CREATED",
+        "start": candidate["start"],
+        "end": candidate["end"],
+        "hook": hook,
+        "title_alignment_score": alignment["v66_title_alignment_score"],
+        "preview": v18_preview_text(text, 220),
+    })
+    return candidate
+
+
+def v67_detect_story_units(segments, job_id=None, max_candidates=14):
+    segments = safe_dict_list(segments or [])
+    candidates = []
+    seen = set()
+    if not segments:
+        return candidates
+
+    for start_idx in range(len(segments)):
+        for end_idx in range(start_idx + 2, min(len(segments), start_idx + 10)):
+            start = safe_float(segments[start_idx].get("start"))
+            end = safe_float(segments[end_idx].get("end"), start)
+            duration = end - start
+            if duration < 14:
+                continue
+            if duration > 60:
+                break
+            candidate = v67_make_story_candidate(segments, start_idx, end_idx, job_id=job_id)
+            if not candidate:
+                continue
+            key = (round(candidate["start"], 1), round(candidate["end"], 1))
+            if key in seen:
+                continue
+            seen.add(key)
+            candidates.append(candidate)
+            break
+        if len(candidates) >= max_candidates:
+            break
+
+    return sorted(candidates, key=lambda x: safe_float(x.get("score")), reverse=True)
+
+
+def v67_payoff_validation(clip):
+    clip = clip if isinstance(clip, dict) else {}
+    sb = clip.setdefault("score_breakdown", {})
+    text = re.sub(r"\s+", " ", str(clip.get("expanded_text") or clip.get("source_text") or clip.get("text") or "")).strip()
+    start_text = str(sb.get("start_text") or "").strip()
+    end_text = str(sb.get("end_text") or "").strip()
+    if not start_text or not end_text:
+        start_text, end_text = v50_repaired_text_boundaries(text)
+        sb["start_text"] = start_text
+        sb["end_text"] = end_text
+    scores = v67_story_unit_scores(text)
+    missing = []
+    if safe_float(scores.get("v67_setup_score")) < 12 or len(v66_core_terms(text)) < 2:
+        missing.append("clear_subject_entity")
+    if safe_float(scores.get("v67_tension_score")) < 7:
+        missing.append("stakes_or_consequence")
+    if safe_float(scores.get("v67_payoff_score")) < 10 or end_text.lower().endswith((
+        "and", "but", "because", "so", "then", "that", "if", "in", "to", "from", "with", "for"
+    )):
+        missing.append("final_landing_payoff")
+    ok = not missing
+    sb.update({
+        "v67_story_unit": bool(sb.get("v67_story_unit") or clip.get("v67_story_unit")),
+        "v67_story_score": scores["v67_story_score"],
+        "v67_payoff_score": scores["v67_payoff_score"],
+        "v67_standalone_score": scores["v67_standalone_score"],
+        "v67_payoff_validation_pass": ok,
+        "v67_payoff_validation_missing": missing,
+    })
+    clip["v67_story_unit"] = bool(sb.get("v67_story_unit"))
+    clip["v67_story_score"] = scores["v67_story_score"]
+    clip["v67_payoff_score"] = scores["v67_payoff_score"]
+    clip["v67_standalone_score"] = scores["v67_standalone_score"]
+    return ok, missing, scores
+
+
+def v67_apply_context_bridge(job_id, clip, segments, reason="preflight"):
+    clip = clip if isinstance(clip, dict) else {}
+    segments = safe_dict_list(segments or [])
+    sb = clip.setdefault("score_breakdown", {})
+    start = safe_float(clip.get("start"))
+    end = safe_float(clip.get("end"), start)
+    current_idx = None
+    for idx, seg in enumerate(segments):
+        if safe_float(seg.get("start")) <= start <= safe_float(seg.get("end"), start):
+            current_idx = idx
+            break
+    if current_idx is None or current_idx <= 0:
+        sb["v67_context_bridge_applied"] = False
+        clip["v67_context_bridge_applied"] = False
+        v61_editorial_log(job_id, {
+            "event": "V67_CONTEXT_BRIDGE_SKIPPED",
+            "start": clip.get("start"),
+            "end": clip.get("end"),
+            "reason": "no_previous_segment",
+            "preview": v18_preview_text(clip.get("expanded_text") or clip.get("source_text"), 220),
+        })
+        return clip, False
+
+    best_start = start
+    best_text = ""
+    for back in (2, 1):
+        prev_idx = max(0, current_idx - back)
+        candidate_start = safe_float(segments[prev_idx].get("start"))
+        if end - candidate_start > 60:
+            continue
+        if start - candidate_start > 2.5:
+            continue
+        prev_text = " ".join(str(segments[i].get("text", "")).strip() for i in range(prev_idx, current_idx))
+        ok, why = v60_context_piece_ok(prev_text)
+        if ok:
+            best_start = candidate_start
+            best_text = prev_text
+            break
+
+    if best_start >= start:
+        sb["v67_context_bridge_applied"] = False
+        clip["v67_context_bridge_applied"] = False
+        v61_editorial_log(job_id, {
+            "event": "V67_CONTEXT_BRIDGE_SKIPPED",
+            "start": clip.get("start"),
+            "end": clip.get("end"),
+            "reason": "no_clean_bridge_context",
+            "preview": v18_preview_text(clip.get("expanded_text") or clip.get("source_text"), 220),
+        })
+        return clip, False
+
+    clip["start"] = round(best_start, 2)
+    bridge_text = get_nearby_text(segments, best_start, end, window=0)
+    clip["expanded_text"] = re.sub(r"\s+", " ", str(bridge_text or clip.get("expanded_text") or "")).strip()
+    sb["v67_context_bridge_applied"] = True
+    sb["v67_context_bridge_reason"] = reason
+    sb["v67_context_bridge_seconds"] = round(start - best_start, 2)
+    sb["v67_context_bridge_text_preview"] = v18_preview_text(best_text, 180)
+    clip["v67_context_bridge_applied"] = True
+    v61_editorial_log(job_id, {
+        "event": "V67_CONTEXT_BRIDGE_APPLIED",
+        "start": clip.get("start"),
+        "end": clip.get("end"),
+        "bridge_seconds": sb["v67_context_bridge_seconds"],
+        "reason": reason,
+        "preview": v18_preview_text(clip.get("expanded_text"), 260),
+    })
+    return clip, True
+
+
+def v67_creator_qa_preflight(job_id, clips, segments, captions):
+    repaired = []
+    for idx, clip in enumerate(safe_dict_list(clips)):
+        clip_start = safe_float(clip.get("start"))
+        clip_end = safe_float(clip.get("end"), clip_start)
+        clip_captions = get_captions_for_clip(captions, clip_start, clip_end)
+        reasons = creator_qa_rejection_reasons(copy.deepcopy(clip), clip_captions)
+        likely = [r for r in reasons if r in {"no_hook_no_payoff", "weak_standalone_context", "incomplete_ending"}]
+        sb = clip.setdefault("score_breakdown", {})
+        ok, missing, scores = v67_payoff_validation(clip)
+        if not ok:
+            likely.extend(m for m in missing if m not in likely)
+        v61_editorial_log(job_id, {
+            "event": "V67_CREATOR_QA_PREFLIGHT",
+            "candidate_index": idx,
+            "start": clip.get("start"),
+            "end": clip.get("end"),
+            "likely_failure_reasons": likely,
+            "payoff_validation_pass": ok,
+            **scores,
+            "preview": v18_preview_text(clip.get("expanded_text") or clip.get("source_text"), 260),
+        })
+        if likely:
+            if "weak_standalone_context" in likely or "clear_subject_entity" in likely:
+                clip, _ = v67_apply_context_bridge(job_id, clip, segments, reason="preflight_context")
+                clip = v62_score_clip_for_creator_qa(job_id, clip, get_captions_for_clip(captions, safe_float(clip.get("start")), safe_float(clip.get("end"))), idx, "v67_preflight_repaired")
+                ok, missing, scores = v67_payoff_validation(clip)
+            if ok and (clip.get("v67_synthetic_hook") or sb.get("v67_synthetic_hook")):
+                hook = clip.get("v67_synthetic_hook") or sb.get("v67_synthetic_hook")
+                clip["title"] = hook
+                clip["hook_text"] = hook
+                sb["hook_bonus"] = max(safe_float(sb.get("hook_bonus")), 8)
+                sb["v67_visual_hook_bonus"] = 8
+        if ok:
+            v61_editorial_log(job_id, {
+                "event": "V67_PAYOFF_VALIDATION_PASS",
+                "candidate_index": idx,
+                "start": clip.get("start"),
+                "end": clip.get("end"),
+                **scores,
+                "preview": v18_preview_text(clip.get("expanded_text") or clip.get("source_text"), 220),
+            })
+            repaired.append(clip)
+        else:
+            v61_editorial_log(job_id, {
+                "event": "V67_PAYOFF_VALIDATION_FAIL",
+                "candidate_index": idx,
+                "start": clip.get("start"),
+                "end": clip.get("end"),
+                "missing": missing,
+                **scores,
+                "preview": v18_preview_text(clip.get("expanded_text") or clip.get("source_text"), 220),
+            })
+    return repaired
+
+
+def v67_zero_safe_story_fallback(job_id, segments, captions, visual_intelligence=None):
+    v61_editorial_log(job_id, {
+        "event": "V67_ZERO_SAFE_STORY_FALLBACK_START",
+        "segments_count": len(safe_dict_list(segments)),
+    })
+    story_units = v67_detect_story_units(segments, job_id=job_id, max_candidates=8)
+    fallback_clips = []
+    fallback_rejections = []
+    try:
+        if story_units:
+            fallback_clips = build_final_clips(
+                story_units,
+                segments,
+                visual_intelligence or {},
+                job_id=job_id,
+            )
+            fallback_clips = v62_score_clips_before_creator_qa(
+                job_id,
+                fallback_clips,
+                captions,
+                stage="v67_fallback_pre_creator_qa",
+            )
+            fallback_clips = v60_expand_context_before_creator_qa(
+                job_id,
+                fallback_clips,
+                segments,
+                captions,
+            )
+            fallback_clips = v62_score_clips_before_creator_qa(
+                job_id,
+                fallback_clips,
+                captions,
+                stage="v67_fallback_pre_creator_qa_v60",
+            )
+            fallback_clips = v67_creator_qa_preflight(job_id, fallback_clips, segments, captions)
+            fallback_clips, fallback_rejections = apply_creator_qa(
+                job_id,
+                fallback_clips,
+                captions,
+            )
+    except Exception as e:
+        fallback_rejections = [{
+            "event": "V67_ZERO_SAFE_STORY_FALLBACK_ERROR",
+            "reasons": ["v67_exception"],
+            "error": str(e),
+        }]
+        print(f"V67_ZERO_SAFE_STORY_FALLBACK_ERROR job_id={job_id} error={e}")
+
+    v61_editorial_log(job_id, {
+        "event": "V67_ZERO_SAFE_STORY_FALLBACK_RESULT",
+        "story_units": len(story_units),
+        "approved": len(fallback_clips),
+        "rejected": len(fallback_rejections),
+        "top_rejection_reasons": creator_qa_top_reasons(fallback_rejections),
+    })
+    return fallback_clips, fallback_rejections
+
+
 def v49_log_asr_segment_salvage(job_id, event, candidate_index, start, end, local_asr, salvage):
     local_asr = local_asr if isinstance(local_asr, dict) else {}
     salvage = salvage if isinstance(salvage, dict) else {}
@@ -6069,7 +6494,14 @@ def build_final_clips(viral, segments, visual_intelligence=None, job_id=None):
             and replayability >= -12
         )
 
-        clip_title = v9_editorial_title(combined_text, set())
+        inherited_breakdown = v.get("score_breakdown", {}) if isinstance(v.get("score_breakdown"), dict) else {}
+        clip_title = (
+            v.get("v67_synthetic_hook")
+            or inherited_breakdown.get("v67_synthetic_hook")
+            or v.get("hook_text")
+            or v.get("title")
+            or v9_editorial_title(combined_text, set())
+        )
         asr_stability_adjustment = v48_asr_stability_score_adjustment(local_asr)
         semantic_asr = v48_semantic_asr_confidence(combined_text)
         semantic_asr_score_adjustment = v48_semantic_asr_score_adjustment(semantic_asr)
@@ -6239,6 +6671,16 @@ def build_final_clips(viral, segments, visual_intelligence=None, job_id=None):
             "source_text": text,
             "expanded_text": combined_text,
             "title": clip_title,
+            "hook_text": v.get("hook_text") or inherited_breakdown.get("v67_synthetic_hook") or clip_title,
+            "v67_story_unit": bool(v.get("v67_story_unit") or inherited_breakdown.get("v67_story_unit")),
+            "v67_synthetic_hook": v.get("v67_synthetic_hook") or inherited_breakdown.get("v67_synthetic_hook") or "",
+            "v67_context_bridge_applied": bool(
+                v.get("v67_context_bridge_applied")
+                or inherited_breakdown.get("v67_context_bridge_applied")
+            ),
+            "v67_story_score": safe_float(v.get("v67_story_score") or inherited_breakdown.get("v67_story_score")),
+            "v67_payoff_score": safe_float(v.get("v67_payoff_score") or inherited_breakdown.get("v67_payoff_score")),
+            "v67_standalone_score": safe_float(v.get("v67_standalone_score") or inherited_breakdown.get("v67_standalone_score")),
             "hashtags": (
                 v40_niche_hashtags(detected_niche, combined_text)
             ),
@@ -8286,6 +8728,11 @@ def run_pipeline(job_id, file_path, JOBS):
             job_id=job_id,
             max_candidates=14,
         )
+        v67_story_units = v67_detect_story_units(
+            segments,
+            job_id=job_id,
+            max_candidates=14,
+        )
         v66_reframed_candidates = v66_generate_reframed_candidates(
             segments,
             job_id=job_id,
@@ -8294,6 +8741,7 @@ def run_pipeline(job_id, file_path, JOBS):
         viral = merge_viral_candidates(
             safe_dict_list(payoff_native_candidates)
             + safe_dict_list(story_complete_candidates)
+            + safe_dict_list(v67_story_units)
             + safe_dict_list(v66_reframed_candidates)
             + safe_dict_list(arc_candidates),
             safe_dict_list(analyze_video(segments))
@@ -8303,6 +8751,7 @@ def run_pipeline(job_id, file_path, JOBS):
             f"ðŸ”¥ Viral segments: {len(viral)} "
             f"v61_payoff_native={len(payoff_native_candidates)} "
             f"v63_story_complete={len(story_complete_candidates)} "
+            f"v67_story_units={len(v67_story_units)} "
             f"v66_reframed={len(v66_reframed_candidates)}"
         )
 
@@ -8321,6 +8770,7 @@ def run_pipeline(job_id, file_path, JOBS):
         clips = v62_score_clips_before_creator_qa(job_id, clips, captions, stage="pre_creator_qa")
         clips = v60_expand_context_before_creator_qa(job_id, clips, segments, captions)
         clips = v62_score_clips_before_creator_qa(job_id, clips, captions, stage="pre_creator_qa_v60")
+        clips = v67_creator_qa_preflight(job_id, clips, segments, captions)
         v20_log_clip_intelligence(job_id, clips, stage="pre_creator_qa_v60")
         clips, creator_qa_rejections = apply_creator_qa(job_id, clips, captions)
         print(
@@ -8363,44 +8813,60 @@ def run_pipeline(job_id, file_path, JOBS):
                 else:
                     if v66_fallback_rejections:
                         creator_qa_rejections = v66_fallback_rejections
-                    log_creator_qa_zero_diagnostic_preview(job_id, creator_qa_rejections)
-                    zero_qa_row = log_creator_qa_zero_safe_clips(job_id, creator_qa_rejections)
-                    JOBS[job_id]["status"] = "completed"
-                    JOBS[job_id]["stage"] = "Completed"
-                    JOBS[job_id]["progress"] = 100
+                    v67_fallback_clips, v67_fallback_rejections = v67_zero_safe_story_fallback(
+                        job_id,
+                        segments,
+                        captions,
+                        JOBS.get(job_id, {}).get("visual_intelligence", {}),
+                    )
+                    if v67_fallback_clips:
+                        clips = v67_fallback_clips
+                        creator_qa_rejections = v67_fallback_rejections
+                        print(
+                            "V67_ZERO_SAFE_STORY_FALLBACK_RESULT_CONTINUE "
+                            f"job_id={job_id} approved={len(clips)} rejected={len(creator_qa_rejections)}"
+                        )
+                    else:
+                        if v67_fallback_rejections:
+                            creator_qa_rejections = v67_fallback_rejections
+                        log_creator_qa_zero_diagnostic_preview(job_id, creator_qa_rejections)
+                        zero_qa_row = log_creator_qa_zero_safe_clips(job_id, creator_qa_rejections)
+                        JOBS[job_id]["status"] = "completed"
+                        JOBS[job_id]["stage"] = "Completed"
+                        JOBS[job_id]["progress"] = 100
 
-                    result = {
-                        "status": "done",
-                        "message": "No creator-safe clips found",
-                        "summary": {
-                            "text_preview": v18_preview_text(text, 900),
-                            "segments_count": len(segments),
-                            "captions_count": len(captions),
-                            "viral_segments_count": len(viral),
-                            "asr_mode": asr_meta["asr_mode"],
-                            "asr_quality_score": asr_meta["asr_quality_score"],
-                            "low_confidence_asr": asr_meta["low_confidence_asr"],
-                            "clips_before_creator_qa": clips_before_creator_qa,
-                            "clips_count": 0,
-                            "rejected_by_creator_qa": len(creator_qa_rejections),
-                            "top_rejection_reasons": zero_qa_row["top_rejection_reasons"],
-                        },
-                        "clips": [],
-                        "final_clips": [],
-                        "creator_qa": {
-                            "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+                        result = {
+                            "status": "done",
                             "message": "No creator-safe clips found",
-                            "asr_mode": asr_meta["asr_mode"],
-                            "asr_quality_score": asr_meta["asr_quality_score"],
-                            "low_confidence_asr": asr_meta["low_confidence_asr"],
-                            "rejections": creator_qa_rejections,
-                            "top_rejection_reasons": zero_qa_row["top_rejection_reasons"],
+                            "summary": {
+                                "text_preview": v18_preview_text(text, 900),
+                                "segments_count": len(segments),
+                                "captions_count": len(captions),
+                                "viral_segments_count": len(viral),
+                                "asr_mode": asr_meta["asr_mode"],
+                                "asr_quality_score": asr_meta["asr_quality_score"],
+                                "low_confidence_asr": asr_meta["low_confidence_asr"],
+                                "clips_before_creator_qa": clips_before_creator_qa,
+                                "clips_count": 0,
+                                "rejected_by_creator_qa": len(creator_qa_rejections),
+                                "top_rejection_reasons": zero_qa_row["top_rejection_reasons"],
+                            },
+                            "clips": [],
+                            "final_clips": [],
+                            "creator_qa": {
+                                "event": "CREATOR_QA_ZERO_SAFE_CLIPS",
+                                "message": "No creator-safe clips found",
+                                "asr_mode": asr_meta["asr_mode"],
+                                "asr_quality_score": asr_meta["asr_quality_score"],
+                                "low_confidence_asr": asr_meta["low_confidence_asr"],
+                                "rejections": creator_qa_rejections,
+                                "top_rejection_reasons": zero_qa_row["top_rejection_reasons"],
+                            }
                         }
-                    }
 
-                    JOBS[job_id]["result"] = result
-                    print("No creator-safe clips found")
-                    return result
+                        JOBS[job_id]["result"] = result
+                        print("No creator-safe clips found")
+                        return result
 
         if not clips and creator_qa_rejections:
             zero_qa_row = log_creator_qa_zero_safe_clips(job_id, creator_qa_rejections)
@@ -8503,7 +8969,12 @@ def run_pipeline(job_id, file_path, JOBS):
 
                 transform_input = {
                     "title": clip.get("title") or v9_editorial_title(clip.get("expanded_text", clip.get("source_text", "")), set()),
-                    "hook_text": clip.get("title") or v9_editorial_title(clip.get("expanded_text", clip.get("source_text", "")), set()),
+                    "hook_text": (
+                        clip.get("hook_text")
+                        or clip.get("v67_synthetic_hook")
+                        or clip.get("title")
+                        or v9_editorial_title(clip.get("expanded_text", clip.get("source_text", "")), set())
+                    ),
                     "niche": clip.get("niche", "general"),
                     "text": clip.get("expanded_text", clip.get("source_text", "")),
                 }
@@ -8576,6 +9047,12 @@ def run_pipeline(job_id, file_path, JOBS):
                 "transformation_note",
                 "Adds editorial presentation value; does not guarantee platform monetization.",
             )
+            creator_pack["v67_story_unit"] = bool(clip.get("v67_story_unit"))
+            creator_pack["v67_synthetic_hook"] = clip.get("v67_synthetic_hook", "")
+            creator_pack["v67_context_bridge_applied"] = bool(clip.get("v67_context_bridge_applied"))
+            creator_pack["v67_story_score"] = clip.get("v67_story_score", 0)
+            creator_pack["v67_payoff_score"] = clip.get("v67_payoff_score", 0)
+            creator_pack["v67_standalone_score"] = clip.get("v67_standalone_score", 0)
             enhanced_clips.append({
                 "clip_number": i + 1,
                 "start": clip.get("start"),
@@ -8605,6 +9082,12 @@ def run_pipeline(job_id, file_path, JOBS):
                     "transformation_note",
                     "Adds editorial presentation value; does not guarantee platform monetization.",
                 ),
+                "v67_story_unit": bool(clip.get("v67_story_unit")),
+                "v67_synthetic_hook": clip.get("v67_synthetic_hook", ""),
+                "v67_context_bridge_applied": bool(clip.get("v67_context_bridge_applied")),
+                "v67_story_score": clip.get("v67_story_score", 0),
+                "v67_payoff_score": clip.get("v67_payoff_score", 0),
+                "v67_standalone_score": clip.get("v67_standalone_score", 0),
                 "source_text": v18_preview_text(clip.get("source_text", ""), 260),
                 "expanded_text": v18_preview_text(clip.get("expanded_text", ""), 520),
                 "title": clean_title,
